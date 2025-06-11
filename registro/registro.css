@@ -28,3 +28,12 @@
   .card {
     border-radius: 1.5rem !important; /* Más redondeado aún para el contenedor */
   }
+
+  /* ...código existente... */
+
+body {
+  background-image: url(wf.png); /* Cambia 'fondo.jpg' por el nombre de tu imagen */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
