@@ -1,0 +1,78 @@
+body, html {
+    height: 100%;
+  }
+  
+  .menu-lateral {
+    height: 100vh;
+    background-color: #f8f9fa;
+    padding-top: 20px;
+   
+  }
+  
+  .contenido-principal {
+    padding: 20px;
+  }
+  
+  
+  .nav-link {
+    color: #000;
+  }
+  
+  
+
+  .contenido-principal {
+    padding: 20px;
+    background-color: #2ecc71;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    color: white;
+
+  
+  }
+  .icono-menu {
+    font-size: 1.5rem; /* Ajusta este valor según cómo los quieras de grandes */
+  }
+  .menu-lateral .nav-link{
+    font-size: 1.3rem; /* Puedes subirlo a 1.3rem, 1.4rem, etc., según necesites */
+
+  }
+  .menu-lateral .nav-link:hover {
+    background-color: #2ecc71; /* Fondo verde al pasar el mouse */
+    color: white; 
+  }
+  .logowf {
+    margin-left:-7px; /* Juega con este valor para moverlo a la derecha o izquierda */
+    gap: 1px;
+    margin-top:-25px; /* Ajusta según sea necesario */
+
+  }
+  .titulologo {
+    font-size: 29px; /* Aumenta este valor según lo grande que quieras el texto */
+    font-weight: bold;
+    margin: 0;
+    color: #2ecc71; /* O blanco si el fondo es oscuro */
+  }
+
+  .perfilusuario {
+    font-size: 21px;
+    top: 10px; /* Ajusta según sea necesario */
+    right: 10px; /* Ajusta según sea necesario */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10; /* Asegura que esté por encima del contenido */ /* Espacio entre el icono y el texto */
+    line-height: 1; /* Reduce espacio vertical */
+}
+.perfilusuario .bi-person-circle {
+    font-size: 60px !important; /* Forzar el tamaño */
+    margin: 0;
+
+}
+.perfilusuario span {
+    margin-bottom: 2px; /* Acerca el texto al ícono */
+    color: white; /* Visibilidad sobre fondo */
+}
+
