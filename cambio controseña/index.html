@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña - WalletFlow</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="background-container">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="form-card">
+                <div class="header">
+                    <div class="logo">
+                        <img src="img/edd13b3b-4aaf-46c9-8e72-93d418a11da4.png" alt="WF Coin" class="wf-coin">
+                        <h1 class="brand-name">WalletFlow</h1>
+                    </div>
+                    <h2 id="step-title">Recuperar Contraseña</h2>
+                </div>
+
+                <div class="form-content">
+                    <!-- Paso 1: Email -->
+                    <div class="step-container active" id="step-email">
+                        <p class="step-description">Ingresa tu correo electrónico para recibir un código de recuperación.</p>
+                        <form id="email-form">
+                            <div class="input-group">
+                                <label for="recovery-email">Correo Electrónico</label>
+                                <input type="email" id="recovery-email" placeholder="correo@ejemplo.com" required>
+                            </div>
+                            <button type="submit" class="btn-primary" id="send-code-btn">
+                                <span class="btn-text">Enviar Código</span>
+                                <div class="loading-spinner hidden">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Paso 2: Código -->
+                    <div class="step-container" id="step-code">
+                        <p class="step-description">Ingresa el código que enviamos a tu correo electrónico.</p>
+                        <form id="code-form">
+                            <div class="input-group">
+                                <label for="recovery-code">Código de Recuperación</label>
+                                <input type="text" id="recovery-code" placeholder="Ingresa el código" required>
+                            </div>
+                            <button type="submit" class="btn-primary" id="verify-code-btn">
+                                <span class="btn-text">Verificar Código</span>
+                                <div class="loading-spinner hidden">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Paso 3: Nueva Contraseña -->
+                    <div class="step-container" id="step-password">
+                        <p class="step-description">Crea una nueva contraseña.</p>
+                        <form id="password-form">
+                            <div class="input-group">
+                                <label for="new-password">Nueva Contraseña</label>
+                                <input type="password" id="new-password" placeholder="Mínimo 12 caracteres" required>
+                                <div class="password-requirements">
+                                    <p>La contraseña debe tener:</p>
+                                    <ul>
+                                        <li id="req-length">
+                                            <i class="fas fa-times"></i>
+                                            Al menos 12 caracteres
+                                        </li>
+                                        <li id="req-uppercase">
+                                            <i class="fas fa-times"></i>
+                                            Al menos una letra mayúscula
+                                        </li>
+                                        <li id="req-number">
+                                            <i class="fas fa-times"></i>
+                                            Al menos un número
+                                        </li>
+                                        <li id="req-symbol">
+                                            <i class="fas fa-times"></i>
+                                            Al menos un símbolo (!, @, #, etc.)
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="confirm-password">Confirmar Nueva Contraseña</label>
+                                <input type="password" id="confirm-password" placeholder="Repite tu contraseña" required>
+                                <div class="password-match hidden" id="password-match">
+                                    <i class="fas fa-check"></i>
+                                    Las contraseñas coinciden
+                                </div>
+                                <div class="password-no-match hidden" id="password-no-match">
+                                    <i class="fas fa-times"></i>
+                                    Las contraseñas no coinciden
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary" id="reset-password-btn" disabled>
+                                <span class="btn-text">Restablecer Contraseña</span>
+                                <div class="loading-spinner hidden">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="back-link">
+                        <a href="#" id="back-to-login">
+                            <i class="fas fa-arrow-left"></i>
+                            Volver al inicio de sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <script src="script.js"></script>
+</body>
+</html>
