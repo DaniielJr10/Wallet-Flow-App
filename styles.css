@@ -1,343 +1,290 @@
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+/* Variables CSS para colores personalizados */
+:root {
+  --primary-color: #059669;
+  --primary-hover: #047857;
+  --primary-light: rgba(5, 150, 105, 0.1);
+  --primary-border: rgba(5, 150, 105, 0.2);
+  --success-color: #059669;
+  --danger-color: #ef4444;
+}
 
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        line-height: 1.6;
-        color: #333;
-    }
+/* Override Bootstrap primary colors */
+.btn-primary {
+  --bs-btn-bg: var(--primary-color);
+  --bs-btn-border-color: var(--primary-color);
+  --bs-btn-hover-bg: var(--primary-hover);
+  --bs-btn-hover-border-color: var(--primary-hover);
+  --bs-btn-active-bg: var(--primary-hover);
+  --bs-btn-active-border-color: var(--primary-hover);
+  --bs-btn-disabled-bg: #9ca3af;
+  --bs-btn-disabled-border-color: #9ca3af;
+}
 
-    .background-container {
-        min-height: 100vh;
-        background-image: url('img/fondo.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-    }
+.btn-link {
+  --bs-btn-color: var(--primary-color);
+  --bs-btn-hover-color: var(--primary-hover);
+}
 
-    .overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.4);
-        z-index: 1;
-    }
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.25);
+}
 
-    .container {
-        position: relative;
-        z-index: 2;
-        width: 100%;
-        max-width: 400px;
-    }
+.alert-success {
+  --bs-alert-bg: var(--primary-light);
+  --bs-alert-border-color: var(--primary-border);
+  --bs-alert-color: var(--primary-hover);
+}
 
-    .form-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 16px;
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-        overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
+/* Background and layout */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
-    .header {
-        text-align: center;
-        padding: 32px 24px 24px;
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
-    }
+.background-container {
+  min-height: 100vh;
+  background-image: url("img/fondo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
 
-    .logo {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 20px;
-        gap: 12px;
-    }
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
 
-    .wf-coin {
-        width: 80px;
-        height: 80px;
-        object-fit: contain;
-        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
-    }
+.container-fluid {
+  position: relative;
+  z-index: 2;
+}
 
-    .brand-name {
-        font-size: 28px;
-        font-weight: 700;
-        color: #1f2937;
-        margin: 0;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        background: linear-gradient(135deg, #059669 0%, #047857 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
+/* Form card styling */
+.form-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
 
-    #step-title {
-        font-size: 20px;
-        font-weight: 600;
-        color: #374151;
-        margin: 0;
-    }
+.header {
+  padding: 2rem 1.5rem 1.5rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+}
 
-    .form-content {
-        padding: 24px;
-    }
+.wf-coin {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
+}
 
-    .step-container {
-        display: none;
-    }
+.brand-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
-    .step-container.active {
-        display: block;
-        animation: fadeIn 0.3s ease-in-out;
-    }
+.step-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
 
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+/* Step animations */
+.step-container {
+  display: none;
+}
 
-    .step-description {
-        text-align: center;
-        color: #6b7280;
-        margin-bottom: 24px;
-        font-size: 14px;
-        line-height: 1.5;
-    }
+.step-container.active {
+  display: block;
+  animation: fadeIn 0.3s ease-in-out;
+}
 
-    .input-group {
-        margin-bottom: 20px;
-    }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    .input-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: #374151;
-        font-size: 14px;
-    }
+/* Custom form styling */
+.form-control-lg {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+}
 
-    .input-group input {
-        width: 100%;
-        padding: 12px 16px;
-        border: 2px solid #e5e7eb;
-        border-radius: 8px;
-        font-size: 16px;
-        transition: all 0.2s ease;
-        background: white;
-    }
+.form-control:invalid {
+  border-color: var(--danger-color);
+}
 
-    .input-group input:focus {
-        outline: none;
-        border-color: #059669;
-        box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
-    }
+/* Loading spinner positioning */
+.btn .loading-spinner {
+  right: 1rem !important;
+}
 
-    .input-group input:invalid {
-        border-color: #ef4444;
-    }
+/* Password requirements styling */
+.password-requirements li.met {
+  color: var(--success-color) !important;
+}
 
-    .btn-primary {
-        width: 100%;
-        padding: 12px 24px;
-        background: #059669;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
+.password-requirements li.met i:before {
+  content: "\f00c";
+}
 
-    .btn-primary:hover:not(:disabled) {
-        background: #047857;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
-    }
+/* Code input special styling */
+#recovery-code {
+  font-family: 'Courier New', monospace;
+}
 
-    .btn-primary:disabled {
-        background: #9ca3af;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-    }
+/* Countdown styling */
+#countdown {
+  font-weight: bold;
+  color: var(--danger-color) !important;
+}
 
-    .loading-spinner {
-        display: none;
-    }
+/* Back link styling */
+.back-link a {
+  color: var(--primary-color);
+  transition: color 0.2s ease;
+}
 
-    .loading-spinner.show {
-        display: inline-block;
-    }
+.back-link a:hover {
+  color: var(--primary-hover);
+}
 
-    .btn-text.hide {
-        display: none;
-    }
+/* Success animations */
+@keyframes checkmark {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 
-    .password-requirements {
-        margin-top: 12px;
-        padding: 16px;
-        background: #f9fafb;
-        border-radius: 8px;
-        border: 1px solid #e5e7eb;
-    }
+.password-requirements li.met i {
+  animation: checkmark 0.3s ease-in-out;
+}
 
-    .password-requirements p {
-        font-size: 14px;
-        font-weight: 500;
-        color: #374151;
-        margin-bottom: 8px;
-    }
+/* Brand name hover animation */
+@keyframes textGlow {
+  0%, 100% { 
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  }
+  50% { 
+    text-shadow: 0 2px 8px rgba(5, 150, 105, 0.3); 
+  }
+}
 
-    .password-requirements ul {
-        list-style: none;
-        padding: 0;
-    }
+.brand-name:hover {
+  animation: textGlow 2s ease-in-out infinite;
+}
 
-    .password-requirements li {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 13px;
-        margin-bottom: 4px;
-        color: #ef4444;
-    }
+/* Button hover effects */
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
 
-    .password-requirements li.met {
-        color: #059669;
-    }
+.btn-primary:disabled {
+  transform: none;
+  box-shadow: none;
+}
 
-    .password-requirements li i {
-        width: 16px;
-        font-size: 12px;
-    }
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .header {
+    padding: 1.5rem 1rem 1rem;
+  }
+  
+  .form-content {
+    padding: 1.5rem !important;
+  }
+  
+  .wf-coin {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .brand-name {
+    font-size: 1.5rem;
+  }
+  
+  .step-title {
+    font-size: 1.125rem;
+  }
+}
 
-    .password-requirements li.met i:before {
-        content: "\f00c";
-    }
+/* Utility classes */
+.d-none {
+  display: none !important;
+}
 
-    .password-match,
-    .password-no-match {
-        margin-top: 8px;
-        font-size: 13px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
+.active {
+  display: block !important;
+}
 
-    .password-match {
-        color: #059669;
-    }
+/* Custom alert styling to match theme */
+.alert {
+  border-radius: 8px;
+  border: 1px solid;
+}
 
-    .password-no-match {
-        color: #ef4444;
-    }
+.alert-success {
+  background-color: var(--primary-light);
+  border-color: var(--primary-border);
+  color: var(--primary-hover);
+}
 
-    .password-match.show,
-    .password-no-match.show {
-        display: flex;
-    }
+.alert-danger {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #dc2626;
+}
 
-    .back-link {
-        text-align: center;
-        margin-top: 24px;
-        padding-top: 20px;
-        border-top: 1px solid #e5e7eb;
-    }
+/* Form validation styling */
+.was-validated .form-control:valid {
+  border-color: var(--success-color);
+}
 
-    .back-link a {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        color: #059669;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
-        transition: color 0.2s ease;
-    }
+.was-validated .form-control:invalid {
+  border-color: var(--danger-color);
+}
 
-    .back-link a:hover {
-        color: #047857;
-    }
+/* Loading state styling */
+.btn-text.hide {
+  opacity: 0;
+}
 
-    .hidden {
-        display: none !important;
-    }
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease;
+}
 
-    /* Responsive Design */
-    @media (max-width: 480px) {
-        .container {
-            padding: 10px;
-        }
-        
-        .form-card {
-            margin: 0;
-        }
-        
-        .header {
-            padding: 24px 20px 20px;
-        }
-        
-        .form-content {
-            padding: 20px;
-        }
-        
-        .wf-coin {
-            width: 70px;
-            height: 70px;
-        }
-        
-        .brand-name {
-            font-size: 24px;
-        }
-    }
-
-    /* Success Animation */
-    @keyframes checkmark {
-        0% {
-            transform: scale(0);
-        }
-        50% {
-            transform: scale(1.2);
-        }
-        100% {
-            transform: scale(1);
-        }
-    }
-
-    .password-requirements li.met i {
-        animation: checkmark 0.3s ease-in-out;
-    }
-
-    /* Brand name animation */
-    @keyframes textGlow {
-        0%, 100% { text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
-        50% { text-shadow: 0 2px 8px rgba(5, 150, 105, 0.3); }
-    }
-
-    .brand-name:hover {
-        animation: textGlow 2s ease-in-out infinite;
-    }
+.btn, .form-control, .alert {
+  transition: all 0.2s ease;
+}
