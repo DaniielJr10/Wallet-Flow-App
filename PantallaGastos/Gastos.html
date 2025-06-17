@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gastos - Wallet Flow</title>
+  <link rel="stylesheet" href="Gastos.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Gastos</h1>
+    </header>
+
+    <section class="filtros">
+      <label for="mes">Mes:</label>
+      <select id="mes">
+        <option value="enero">Enero</option>
+        <option value="febrero">Febrero</option>
+        <option value="marzo">Marzo</option>
+        <option value="abril">Abril</option>
+        <option value="mayo">Mayo</option>
+        <option value="junio">Junio</option>
+        <option value="julio">Julio</option>
+        <option value="agosto">Agosto</option>
+        <option value="septiembre">Septiembre</option>
+        <option value="octubre">Octubre</option>
+        <option value="noviembre">Noviembre</option>
+        <option value="diciembre">Diciembre</option>
+      </select>
+
+      <label for="categoria">Categoría:</label>
+      <select id="categoria" onchange="actualizarGraficoPorCategoria()">
+        <option value="todos">Selecciona</option>
+        <option value="alimentacion">Alimentación</option>
+        <option value="transporte">Transporte</option>
+        <option value="servicios">Servicios</option>
+        <option value="entretenimiento">Entretenimiento</option>
+      </select>
+    </section>
+
+    <section class="resumen">
+      <div class="tarjeta">
+        <p>Total de Gastos</p>
+        <h3>$240.000</h3>
+      </div>
+      <div class="tarjeta">
+        <p>Gasto Promedio Diario</p>
+        <h3>$12.670</h3>
+      </div>
+      <div class="tarjeta">
+        <p>Mayor Categoría</p>
+        <h3>Transporte</h3>
+      </div>
+    </section>
+
+    <section class="grafico">
+      <canvas id="graficoGastos"></canvas>
+    </section>
+
+    <section class="gastos-diarios">
+      <h3>Gastos Diarios</h3>
+      <ul>
+        <li>Busetas - $5.000</li>
+        <li>Almuerzo - $12.000</li>
+        <li>Entrada Cine - $34.000</li>
+      </ul>
+    </section>
+
+    <section class="lista-gastos">
+      <h3>Lista de Gastos</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Descripción</th>
+            <th>Categoría</th>
+            <th>Método de Pago</th>
+            <th>Monto</th>
+            <th>Gasto Recurrente</th> <th>Cuenta Asociada</th>  <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+            
+          <tr>
+            <td>07/05/2025</td>
+            <td>Gasolina</td>
+            <td>Transporte</td>
+            <td>Efectivo</td>
+            <td>$30.000</td>
+            <td>No</td> <td>Ninguna</td> <td>
+              <button class="editar">✏️</button>
+              <button class="eliminar">🗑️</button>
+            </td>
+          </tr>
+  
+        </tbody>
+      </table>
+
+    </section>
+
+    <footer>
+      <button>Volver</button>
+    </footer>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('graficoGastos').getContext('2d');
+    let grafico = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Alimentación', 'Transporte', 'Servicios', 'Entretenimiento'],
+        datasets: [{
+          label: 'Gastos por Categoría',
+          data: [25, 40, 20, 15],
+          backgroundColor: ['#00c2ff', '#2ecc71', '#f39c12', '#e74c3c']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+
+    function actualizarGraficoPorCategoria() {
+      const categoria = document.getElementById('categoria').value;
+
+      const datosOriginales = {
+        alimentacion: [100],
+        transporte: [180],
+        servicios: [60],
+        entretenimiento: [90],
+        todos: [100, 180, 60, 90]
+      };
+
+      const etiquetas = {
+        alimentacion: ['Alimentación'],
+        transporte: ['Transporte'],
+        servicios: ['Servicios'],
+        entretenimiento: ['Entretenimiento'],
+        todos: ['Alimentación', 'Transporte', 'Servicios', 'Entretenimiento']
+      };
+
+      const colores = {
+        alimentacion: ['#00c2ff'],
+        transporte: ['#2ecc71'],
+        servicios: ['#f39c12'],
+        entretenimiento: ['#e74c3c'],
+        todos: ['#00c2ff', '#2ecc71', '#f39c12', '#e74c3c']
+      };
+
+      grafico.data.labels = etiquetas[categoria];
+      grafico.data.datasets[0].data = datosOriginales[categoria];
+      grafico.data.datasets[0].backgroundColor = colores[categoria];
+      grafico.update();
+    }
+  </script>
+  <script>
+
+  document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('eliminar')) {
+      const fila = e.target.closest('tr');
+      const descripcion = fila.cells[1].textContent;
+      const confirmar = confirm(`¿Estás seguro de que deseas eliminar el gasto: "${descripcion}"?`);
+      if (confirmar) {
+        fila.remove();
+   
+      }
+    }
+  });
+</script>
+<div class="modal-overlay" id="modalEdicion" style="display: none;">
+  <div class="modal-form">
+    <form id="formEditar">
+      <h2>Editar Gasto</h2>
+
+      <div class="form-step" id="step1">
+
+
+        <label>Categoría</label>
+        <select id="editCategoria" required>
+          <option value="alimentacion">Alimentación</option>
+          <option value="transporte">Transporte</option>
+          <option value="servicios">Servicios</option>
+          <option value="entretenimiento">Entretenimiento</option>
+        </select>
+
+        <label>Método de Pago</label>
+        <select id="editMetodo" required>
+          <option value="efectivo">Efectivo</option>
+          <option value="tarjeta_credito">Tarjeta de Crédito</option>
+          <option value="tarjeta_debito">Tarjeta de Débito</option>
+          <option value="transferencia">Transferencia</option>
+        </select>
+
+        <label>Monto</label>
+        <input type="number" id="editMonto" required>
+
+        <label>Fecha</label>
+        <input type="date" id="editFecha" required>
+        
+        <button type="button" class="nav-btn next-step-btn" aria-label="Siguiente">➡️</button>
+      </div>
+
+      <div class="form-step hidden" id="step2">
+
+        <label for="editDescripcion">Descripción</label>
+        <textarea id="editDescripcion" name="descripcion"></textarea>
+
+        <div class="checkbox-options">
+    <div class="checkbox-item">
+        <label class="checkbox-label">
+            Gasto Recurrente
+            <input type="checkbox" id="checkRecurrente" onchange="toggleFrecuencia()">
+        </label>
+        <div class="frecuencia-options" id="frecuenciaOptions">
+            <select id="frecuencia">
+                <option value="">Seleccionar frecuencia</option>
+                <option value="diario">Diario</option>
+                <option value="semanal">Semanal</option>
+                <option value="mensual">Mensual</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="checkbox-item">
+        <label class="checkbox-label">
+            Cuenta Asociada
+            <input type="checkbox" id="checkCuenta" onchange="toggleCuenta()">
+        </label>
+        <div class="frecuencia-options" id="cuentaAsociadaOptions">
+            <select id="cuentaAsociada">
+                <option value="">Seleccionar cuenta</option>
+                <option value="bancolombia">Bancolombia</option>
+                <option value="davivienda">Davivienda</option>
+                <option value="nequi">Nequi</option>
+                <option value="efectivo">Efectivo</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+        <div class="botones">
+          <button type="submit" id="guardar">Guardar</button>
+          <button type="button" onclick="cerrarModal()">Cancelar</button>
+          <button type="reset">Limpiar</button>
+        </div>
+        <div class="flecha-container">
+        <button type="button" class="nav-btn prev-step-btn" aria-label="Anterior">⬅️</button>
+    </div>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+<script src="EditarGasto.js"></script>
+</html>
