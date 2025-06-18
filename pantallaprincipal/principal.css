@@ -33,18 +33,18 @@ body, html {
   
   }
   .icono-menu {
-    font-size: 1.5rem; /* Ajusta este valor según cómo los quieras de grandes */
+    font-size: 1.5rem; 
   }
   .menu-lateral .nav-link{
-    font-size: 1.3rem; /* Puedes subirlo a 1.3rem, 1.4rem, etc., según necesites */
+    font-size: 1.3rem; 
 
   }
   .menu-lateral .nav-link:hover {
-    background-color: #2ecc71; /* Fondo verde al pasar el mouse */
+    background-color: #2ecc71; 
     color: white; 
   }
   .logowf {
-    margin-left:-7px; /* Juega con este valor para moverlo a la derecha o izquierda */
+    margin-left:-7px; 
     gap: 1px;
     margin-top:-25px; /* Ajusta según sea necesario */
 
@@ -59,7 +59,7 @@ body, html {
   .perfilusuario {
     font-size: 21px;
     top: 10px; /* Ajusta según sea necesario */
-    right: 10px; /* Ajusta según sea necesario */
+    right: 30px; /* Ajusta según sea necesario */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -76,3 +76,13 @@ body, html {
     color: white; /* Visibilidad sobre fondo */
 }
 
+
+.agregar {
+    position: absolute;
+    bottom: 30px;
+    right: 30px; /* Mueve el botón más a la izquierda, ajusta el valor según lo que necesites */
+    z-index: 20;
+}
+.agregar .bi-plus-circle {
+    font-size: 2rem; /* Agranda el icono */
+}
