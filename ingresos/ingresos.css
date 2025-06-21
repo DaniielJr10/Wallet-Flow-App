@@ -1,0 +1,26 @@
+h1 {
+ background-color: #2ecc71;
+    color: white;
+}
+.titulo {
+    background-color: #2ecc71;
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+}
+body {
+    background-color: #f8f9fa;
+  }
+  
+  h2 {
+    font-weight: bold;
+  }
+  
+  h5 {
+    margin-bottom: 10px;
+  }
+  
+  .display-6 {
+    font-size: 2rem;
+  }
+  
