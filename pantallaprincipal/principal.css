@@ -22,8 +22,7 @@ body, html {
 
   .contenido-principal {
     padding: 20px;
-    background-color: #2ecc71;
-
+    background-image:url(fondosuave.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -53,7 +52,7 @@ body, html {
     font-size: 29px; /* Aumenta este valor según lo grande que quieras el texto */
     font-weight: bold;
     margin: 0;
-    color: #2ecc71; /* O blanco si el fondo es oscuro */
+    color: #2e6835; /* O blanco si el fondo es oscuro */
   }
 
   .perfilusuario {
@@ -86,3 +85,30 @@ body, html {
 .agregar .bi-plus-circle {
     font-size: 2rem; /* Agranda el icono */
 }
+
+
+.menu-opciones {
+  position: absolute;
+  bottom: 70px; /* para que esté justo encima del botón */
+  right: 20px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 220px;
+  z-index: 1000;
+}
+
+.menu-opciones .titulo-menu {
+  background-color: #2e6835;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 8px;
+}
+

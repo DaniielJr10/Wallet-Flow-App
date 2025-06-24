@@ -17,7 +17,7 @@
         
       
       <!-- Menú lateral -->
-      <div class="col-md-2 menu-lateral">
+      <div id="menuLateral" class="col-md-2 menu-lateral">
      <!-- Título Wallet Flow -->
      <div class="logowf d-flex align-items-center p-3">
     
@@ -86,15 +86,30 @@
            </a>
            </div>
 
-        <!-- Opción de agregar algo(+) -->
-        <div class="agregar position-absolute bottom-0 m-3">
-          <a href="#" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i>
-          </a>
-          </div>
+       <!-- Opción de agregar algo(+) -->
+<div class="agregar position-absolute bottom-0 m-3">
+  <a href="#" class="btn btn-primary" id="botonAgregar">
+    <i class="bi bi-plus-circle"></i>
+  </a>
+</div>
+  
+  <!-- Menú desplegable oculto -->
+<div id="menuOpciones" class="menu-opciones d-none">
+  <div class="titulo-menu">
+    Agregar Nuevo
+  </div>
+  <a href="#" class="btn btn-light d-block mb-2">Ingreso</a>
+  <a href="#" class="btn btn-light d-block mb-2">Gasto</a>
+  <a href="#" class="btn btn-light d-block mb-2">Ahorro</a>
+  <a href="#" class="btn btn-light d-block mb-2">Deuda</a>
+  <a href="#" class="btn btn-light d-block mb-2">Inversión</a>
+  <a href="#" class="btn btn-light d-block mb-2">Cuenta</a>
+  <a href="#" class="btn btn-light d-block mb-2">Objetivo</a>
+</div>
 
+</div>
 
-     </div> 
+ 
       
 
 
