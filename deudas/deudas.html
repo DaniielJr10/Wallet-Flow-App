@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deudas - Wallet Flow</title>
+    <link rel="stylesheet" href="deudas.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Deudas</h1>
+        </header>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Section Header -->
+            <div class="section-header">
+                <h2>Mis Deudas</h2>
+                <button class="nueva-deuda-btn" onclick="abrirModal('modalNuevaDeuda')">Nueva Deuda</button>
+            </div>
+
+            <!-- Deudas Container -->
+            <div class="deudas-container" id="deudasContainer">
+                <!-- Las deudas se cargarán dinámicamente -->
+            </div>
+
+            <!-- Volver Button -->
+            <div class="volver-container">
+                <button class="volver-btn">Volver</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nueva Deuda -->
+    <div class="modal-overlay" id="modalNuevaDeuda" style="display: none;">
+        <div class="modal-form">
+            <h2>Nueva Deuda</h2>
+            <form id="formNuevaDeuda">
+                <label>Nombre del Acreedor</label>
+                <input type="text" id="nombreAcreedor" required>
+
+                <label>Monto de la Deuda</label>
+                <input type="number" id="montoDeuda" required>
+
+                <label>Fecha de Inicio</label>
+                <input type="date" id="fechaInicio" required>
+
+                <label>Fecha de Vencimiento</label>
+                <input type="date" id="fechaVencimiento" required>
+
+                <label>Monto Pagado</label>
+                <input type="number" id="montoPagado" value="0">
+
+                <label>Tasa de Interés (%)</label>
+                <input type="number" id="tasaInteres" step="0.01" required>
+
+                <label>Descripción</label>
+                <textarea id="descripcion" required></textarea>
+
+                <label>Estado de la Deuda</label>
+                <select id="estadoDeuda" required>
+                    <option value="">Seleccionar Estado</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="pagada">Pagada</option>
+                    <option value="vencida">Vencida</option>
+                </select>
+
+                <div class="botones">
+                    <button type="button" onclick="cerrarModal('modalNuevaDeuda')">Cancelar</button>
+                    <button type="submit">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Deuda -->
+    <div class="modal-overlay" id="modalEditarDeuda" style="display: none;">
+        <div class="modal-form">
+            <h2>Editar Deuda</h2>
+            <form id="formEditarDeuda">
+                <label>Nombre del Acreedor</label>
+                <input type="text" id="editNombreAcreedor" required>
+
+                <label>Monto de la Deuda</label>
+                <input type="number" id="editMontoDeuda" required>
+
+                <label>Fecha de Inicio</label>
+                <input type="date" id="editFechaInicio" required>
+
+                <label>Fecha de Vencimiento</label>
+                <input type="date" id="editFechaVencimiento" required>
+
+                <label>Monto Pagado</label>
+                <input type="number" id="editMontoPagado" required>
+
+                <label>Tasa de Interés (%)</label>
+                <input type="number" id="editTasaInteres" step="0.01" required>
+
+                <label>Descripción</label>
+                <textarea id="editDescripcion" required></textarea>
+
+                <label>Estado de la Deuda</label>
+                <select id="editEstadoDeuda" required>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="pagada">Pagada</option>
+                    <option value="vencida">Vencida</option>
+                </select>
+
+                <div class="botones">
+                    <button type="button" onclick="cerrarModal('modalEditarDeuda')">Cancelar</button>
+                    <button type="submit">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Registrar Pago -->
+    <div class="modal-overlay" id="modalRegistrarPago" style="display: none;">
+        <div class="modal-form modal-pago">
+            <h2>Registrar Pago</h2>
+            <form id="formRegistrarPago">
+                <label>Monto del Pago</label>
+                <input type="number" id="montoPago" required>
+
+                <label>Fecha del Pago</label>
+                <input type="date" id="fechaPago" required>
+
+                <label>Método de Pago</label>
+                <select id="metodoPago" required>
+                    <option value="">Selecciona un método</option>
+                    <option value="efectivo">Efectivo</option>
+                    <option value="transferencia">Transferencia</option>
+                    <option value="tarjeta">Tarjeta</option>
+                </select>
+
+                <div class="botones">
+                    <button type="button" onclick="cerrarModal('modalRegistrarPago')">Cancelar</button>
+                    <button type="submit">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Eliminación -->
+    <div class="modal-overlay" id="modalEliminar" style="display: none;">
+        <div class="modal-form modal-eliminar">
+            <p>¿Está seguro de que desea eliminar esta Deuda?<br>Esta acción no se puede deshacer.</p>
+            <div class="botones">
+                <button type="button" onclick="cerrarModal('modalEliminar')">Volver</button>
+                <button type="button" class="btn-eliminar" onclick="confirmarEliminacion()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Validación -->
+    <div class="modal-overlay" id="modalValidacion" style="display: none;">
+        <div class="modal-form modal-validacion">
+            <p>TIENES QUE RELLENAR TODOS LOS CAMPOS</p>
+        </div>
+    </div>
+
+    <script src="deudas.js"></script>
+</body>
+</html>
