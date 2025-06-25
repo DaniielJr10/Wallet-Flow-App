@@ -37,6 +37,9 @@
     <div class="modal-overlay" id="modalNuevaDeuda" style="display: none;">
         <div class="modal-form">
             <h2>Nueva Deuda</h2>
+            <div class="validation-message" id="validacionNueva" style="display: none;">
+                TIENES QUE RELLENAR TODOS LOS CAMPOS
+            </div>
             <form id="formNuevaDeuda">
                 <label>Nombre del Acreedor</label>
                 <input type="text" id="nombreAcreedor" required>
@@ -79,6 +82,9 @@
     <div class="modal-overlay" id="modalEditarDeuda" style="display: none;">
         <div class="modal-form">
             <h2>Editar Deuda</h2>
+            <div class="validation-message" id="validacionEditar" style="display: none;">
+                TIENES QUE RELLENAR TODOS LOS CAMPOS
+            </div>
             <form id="formEditarDeuda">
                 <label>Nombre del Acreedor</label>
                 <input type="text" id="editNombreAcreedor" required>
@@ -120,6 +126,9 @@
     <div class="modal-overlay" id="modalRegistrarPago" style="display: none;">
         <div class="modal-form modal-pago">
             <h2>Registrar Pago</h2>
+            <div class="validation-message" id="validacionPago" style="display: none;">
+                TIENES QUE RELLENAR TODOS LOS CAMPOS
+            </div>
             <form id="formRegistrarPago">
                 <label>Monto del Pago</label>
                 <input type="number" id="montoPago" required>
@@ -151,13 +160,6 @@
                 <button type="button" onclick="cerrarModal('modalEliminar')">Volver</button>
                 <button type="button" class="btn-eliminar" onclick="confirmarEliminacion()">Eliminar</button>
             </div>
-        </div>
-    </div>
-
-    <!-- Modal Validación -->
-    <div class="modal-overlay" id="modalValidacion" style="display: none;">
-        <div class="modal-form modal-validacion">
-            <p>TIENES QUE RELLENAR TODOS LOS CAMPOS</p>
         </div>
     </div>
 
