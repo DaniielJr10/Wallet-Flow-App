@@ -1,289 +1,164 @@
-// Variables globales
+// Datos iniciales
 let deudas = [
-    {
-        id: 1,
-        nombre: "Préstamo Personal",
-        acreedor: "Banco BBVA",
-        montoTotal: 10000000,
-        montoPagado: 3550000,
-        fechaInicio: "2024-03-12",
-        fechaVencimiento: "2025-03-12",
-        tasaInteres: 12,
-        descripcion: "Préstamo Personal",
-        estado: "pendiente"
-    },
-    {
-        id: 2,
-        nombre: "Tarjeta de Crédito",
-        acreedor: "Banco Internacional",
-        montoTotal: 2000000,
-        montoPagado: 1400000,
-        fechaInicio: "2024-01-15",
-        fechaVencimiento: "2025-01-15",
-        tasaInteres: 24,
-        descripcion: "Tarjeta de Crédito",
-        estado: "pendiente"
-    }
+    {id: 1, nombre: "Préstamo Personal", acreedor: "Banco BBVA", montoTotal: 10000000, montoPagado: 3550000, fechaInicio: "2024-03-12", fechaVencimiento: "2025-03-12", tasaInteres: 12, descripcion: "Préstamo Personal", estado: "pendiente"},
+    {id: 2, nombre: "Tarjeta de Crédito", acreedor: "Banco Internacional", montoTotal: 2000000, montoPagado: 1400000, fechaInicio: "2024-01-15", fechaVencimiento: "2025-01-15", tasaInteres: 24, descripcion: "Tarjeta de Crédito", estado: "pendiente"}
 ];
 
-let deudaEditandoId = null;
-let deudaEliminandoId = null;
+let editandoId = null;
 
-// Funciones principales
-function inicializar() {
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
     cargarDeudas();
-    configurarEventos();
-}
+    
+    // Evento para el botón Volver
+    document.querySelector('.volver-btn').addEventListener('click', function() {
+        // CAMBIA AQUÍ EL NOMBRE DEL ARCHIVO AL QUE QUIERES REDIRIGIR
+        window.location.href = 'inicio.html'; // Cambia por tu archivo
+    });
+    
+    // Eventos de formularios
+    document.getElementById('formNuevaDeuda').onsubmit = (e) => {
+        e.preventDefault();
+        if (!validar('formNuevaDeuda')) return mostrarError('validacionNueva');
+        
+        deudas.push({
+            id: Date.now(),
+            nombre: document.getElementById('descripcion').value,
+            acreedor: document.getElementById('nombreAcreedor').value,
+            montoTotal: +document.getElementById('montoDeuda').value,
+            montoPagado: +document.getElementById('montoPagado').value || 0,
+            fechaInicio: document.getElementById('fechaInicio').value,
+            fechaVencimiento: document.getElementById('fechaVencimiento').value,
+            tasaInteres: +document.getElementById('tasaInteres').value,
+            descripcion: document.getElementById('descripcion').value,
+            estado: document.getElementById('estadoDeuda').value
+        });
+        
+        cargarDeudas();
+        cerrarModal('modalNuevaDeuda');
+    };
+    
+    document.getElementById('formEditarDeuda').onsubmit = (e) => {
+        e.preventDefault();
+        if (!validar('formEditarDeuda')) return mostrarError('validacionEditar');
+        
+        const deuda = deudas.find(d => d.id === editandoId);
+        deuda.nombre = document.getElementById('editDescripcion').value;
+        deuda.acreedor = document.getElementById('editNombreAcreedor').value;
+        deuda.montoTotal = +document.getElementById('editMontoDeuda').value;
+        deuda.montoPagado = +document.getElementById('editMontoPagado').value;
+        deuda.fechaInicio = document.getElementById('editFechaInicio').value;
+        deuda.fechaVencimiento = document.getElementById('editFechaVencimiento').value;
+        deuda.tasaInteres = +document.getElementById('editTasaInteres').value;
+        deuda.descripcion = document.getElementById('editDescripcion').value;
+        deuda.estado = document.getElementById('editEstadoDeuda').value;
+        
+        cargarDeudas();
+        cerrarModal('modalEditarDeuda');
+    };
+    
+    document.getElementById('formRegistrarPago').onsubmit = (e) => {
+        e.preventDefault();
+        if (!validar('formRegistrarPago')) return mostrarError('validacionPago');
+        
+        const deuda = deudas.find(d => d.id === editandoId);
+        deuda.montoPagado += +document.getElementById('montoPago').value;
+        if (deuda.montoPagado >= deuda.montoTotal) {
+            deuda.estado = 'pagada';
+            deuda.montoPagado = deuda.montoTotal;
+        }
+        
+        cargarDeudas();
+        cerrarModal('modalRegistrarPago');
+    };
+});
 
 function cargarDeudas() {
-    const container = document.getElementById('deudasContainer');
-    container.innerHTML = '';
-
-    deudas.forEach(deuda => {
-        const deudaElement = crearElementoDeuda(deuda);
-        container.appendChild(deudaElement);
-    });
-}
-
-function crearElementoDeuda(deuda) {
-    const div = document.createElement('div');
-    div.className = 'deuda-card';
-    
-    const montoRestante = deuda.montoTotal - deuda.montoPagado;
-    
-    div.innerHTML = `
-        <div class="deuda-header">
-            <div class="deuda-titulo">${deuda.nombre}</div>
-            <div class="estado-badge ${deuda.estado}">${capitalizar(deuda.estado)}</div>
-        </div>
-        
-        <div class="deuda-info">
-            <div class="info-item">
-                <span class="info-label">Total:</span>
-                <span class="info-value">$${formatearNumero(deuda.montoTotal)}</span>
+    document.getElementById('deudasContainer').innerHTML = deudas.map(d => `
+        <div class="deuda-card">
+            <div class="deuda-header">
+                <div class="deuda-titulo">${d.nombre}</div>
+                <div class="estado-badge ${d.estado}">${d.estado.charAt(0).toUpperCase() + d.estado.slice(1)}</div>
             </div>
-            <div class="info-item">
-                <span class="info-label">Pagado:</span>
-                <span class="info-value">$${formatearNumero(deuda.montoPagado)}</span>
+            <div class="deuda-info">
+                <div class="info-item"><span class="info-label">Total:</span><span class="info-value">$${d.montoTotal.toLocaleString()}</span></div>
+                <div class="info-item"><span class="info-label">Pagado:</span><span class="info-value">$${d.montoPagado.toLocaleString()}</span></div>
+                <div class="info-item"><span class="info-label">Restante:</span><span class="info-value">$${(d.montoTotal - d.montoPagado).toLocaleString()}</span></div>
             </div>
-            <div class="info-item">
-                <span class="info-label">Restante:</span>
-                <span class="info-value">$${formatearNumero(montoRestante)}</span>
-            </div>
-        </div>
-        
-        <div class="deuda-detalles">
-            <div class="detalle-column">
-                <div class="detalle-item">
-                    <span class="detalle-label">Acreedor:</span>
-                    <span class="detalle-value">${deuda.acreedor}</span>
+            <div class="deuda-detalles">
+                <div class="detalle-column">
+                    <div class="detalle-item"><span class="detalle-label">Acreedor:</span><span class="detalle-value">${d.acreedor}</span></div>
+                    <div class="detalle-item"><span class="detalle-label">Inicio:</span><span class="detalle-value">${formatFecha(d.fechaInicio)}</span></div>
                 </div>
-                <div class="detalle-item">
-                    <span class="detalle-label">Inicio:</span>
-                    <span class="detalle-value">${formatearFecha(deuda.fechaInicio)}</span>
+                <div class="detalle-column">
+                    <div class="detalle-item"><span class="detalle-label">Interés:</span><span class="detalle-value">${d.tasaInteres}%</span></div>
+                    <div class="detalle-item"><span class="detalle-label">Vencimiento:</span><span class="detalle-value">${formatFecha(d.fechaVencimiento)}</span></div>
                 </div>
             </div>
-            <div class="detalle-column">
-                <div class="detalle-item">
-                    <span class="detalle-label">Interés:</span>
-                    <span class="detalle-value">${deuda.tasaInteres}%</span>
-                </div>
-                <div class="detalle-item">
-                    <span class="detalle-label">Vencimiento:</span>
-                    <span class="detalle-value">${formatearFecha(deuda.fechaVencimiento)}</span>
-                </div>
+            <div class="deuda-acciones">
+                <button class="btn-accion btn-registrar" onclick="abrirPago(${d.id})">Registrar Pago</button>
+                <button class="btn-accion btn-editar" onclick="abrirEditar(${d.id})">Editar</button>
+                <button class="btn-accion btn-eliminar" onclick="abrirEliminar(${d.id})">Eliminar</button>
             </div>
         </div>
-        
-        <div class="deuda-acciones">
-            <button class="btn-accion btn-registrar" onclick="abrirRegistrarPago(${deuda.id})">Registrar Pago</button>
-            <button class="btn-accion btn-editar" onclick="abrirEditarDeuda(${deuda.id})">Editar</button>
-            <button class="btn-accion btn-eliminar" onclick="abrirEliminarDeuda(${deuda.id})">Eliminar</button>
-        </div>
-    `;
-    return div;
+    `).join('');
 }
 
-// Funciones de modal
-function abrirModal(modalId) {
-    document.getElementById(modalId).style.display = 'flex';
+function abrirModal(id) {
+    document.getElementById(id).style.display = 'flex';
+    document.querySelectorAll('.validation-message').forEach(v => v.style.display = 'none');
 }
 
-function cerrarModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
-    limpiarFormularios();
+function cerrarModal(id) {
+    document.getElementById(id).style.display = 'none';
+    document.getElementById(id).querySelector('form').reset();
 }
 
-function abrirRegistrarPago(deudaId) {
-    deudaEditandoId = deudaId;
-    const fechaHoy = new Date().toISOString().split('T')[0];
-    document.getElementById('fechaPago').value = fechaHoy;
+function abrirPago(id) {
+    editandoId = id;
+    document.getElementById('fechaPago').value = new Date().toISOString().split('T')[0];
     abrirModal('modalRegistrarPago');
 }
 
-function abrirEditarDeuda(deudaId) {
-    const deuda = deudas.find(d => d.id === deudaId);
-    if (!deuda) return;
-
-    deudaEditandoId = deudaId;
+function abrirEditar(id) {
+    const d = deudas.find(deuda => deuda.id === id);
+    editandoId = id;
     
-    document.getElementById('editNombreAcreedor').value = deuda.acreedor;
-    document.getElementById('editMontoDeuda').value = deuda.montoTotal;
-    document.getElementById('editFechaInicio').value = deuda.fechaInicio;
-    document.getElementById('editFechaVencimiento').value = deuda.fechaVencimiento;
-    document.getElementById('editMontoPagado').value = deuda.montoPagado;
-    document.getElementById('editTasaInteres').value = deuda.tasaInteres;
-    document.getElementById('editDescripcion').value = deuda.descripcion;
-    document.getElementById('editEstadoDeuda').value = deuda.estado;
+    document.getElementById('editNombreAcreedor').value = d.acreedor;
+    document.getElementById('editMontoDeuda').value = d.montoTotal;
+    document.getElementById('editFechaInicio').value = d.fechaInicio;
+    document.getElementById('editFechaVencimiento').value = d.fechaVencimiento;
+    document.getElementById('editMontoPagado').value = d.montoPagado;
+    document.getElementById('editTasaInteres').value = d.tasaInteres;
+    document.getElementById('editDescripcion').value = d.descripcion;
+    document.getElementById('editEstadoDeuda').value = d.estado;
     
     abrirModal('modalEditarDeuda');
 }
 
-function abrirEliminarDeuda(deudaId) {
-    deudaEliminandoId = deudaId;
+function abrirEliminar(id) {
+    editandoId = id;
     abrirModal('modalEliminar');
 }
 
 function confirmarEliminacion() {
-    if (deudaEliminandoId) {
-        deudas = deudas.filter(d => d.id !== deudaEliminandoId);
-        cargarDeudas();
-        cerrarModal('modalEliminar');
-        deudaEliminandoId = null;
-    }
+    deudas = deudas.filter(d => d.id !== editandoId);
+    cargarDeudas();
+    cerrarModal('modalEliminar');
 }
 
-// Configurar eventos de formularios
-function configurarEventos() {
-    // Formulario nueva deuda
-    document.getElementById('formNuevaDeuda').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (!validarFormulario('formNuevaDeuda')) {
-            mostrarValidacion();
-            return;
-        }
-        
-        const nuevaDeuda = {
-            id: Date.now(),
-            nombre: document.getElementById('descripcion').value,
-            acreedor: document.getElementById('nombreAcreedor').value,
-            montoTotal: parseInt(document.getElementById('montoDeuda').value),
-            montoPagado: parseInt(document.getElementById('montoPagado').value) || 0,
-            fechaInicio: document.getElementById('fechaInicio').value,
-            fechaVencimiento: document.getElementById('fechaVencimiento').value,
-            tasaInteres: parseFloat(document.getElementById('tasaInteres').value),
-            descripcion: document.getElementById('descripcion').value,
-            estado: document.getElementById('estadoDeuda').value
-        };
-        
-        deudas.push(nuevaDeuda);
-        cargarDeudas();
-        cerrarModal('modalNuevaDeuda');
-    });
-
-    // Formulario editar deuda
-    document.getElementById('formEditarDeuda').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (!validarFormulario('formEditarDeuda')) {
-            mostrarValidacion();
-            return;
-        }
-        
-        const deuda = deudas.find(d => d.id === deudaEditandoId);
-        if (deuda) {
-            deuda.nombre = document.getElementById('editDescripcion').value;
-            deuda.acreedor = document.getElementById('editNombreAcreedor').value;
-            deuda.montoTotal = parseInt(document.getElementById('editMontoDeuda').value);
-            deuda.fechaInicio = document.getElementById('editFechaInicio').value;
-            deuda.fechaVencimiento = document.getElementById('editFechaVencimiento').value;
-            deuda.montoPagado = parseInt(document.getElementById('editMontoPagado').value);
-            deuda.tasaInteres = parseFloat(document.getElementById('editTasaInteres').value);
-            deuda.descripcion = document.getElementById('editDescripcion').value;
-            deuda.estado = document.getElementById('editEstadoDeuda').value;
-            
-            cargarDeudas();
-            cerrarModal('modalEditarDeuda');
-        }
-    });
-
-    // Formulario registrar pago
-    document.getElementById('formRegistrarPago').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (!validarFormulario('formRegistrarPago')) {
-            mostrarValidacion();
-            return;
-        }
-        
-        const montoPago = parseInt(document.getElementById('montoPago').value);
-        const deuda = deudas.find(d => d.id === deudaEditandoId);
-        
-        if (deuda) {
-            deuda.montoPagado += montoPago;
-            
-            // Actualizar estado si está completamente pagada
-            if (deuda.montoPagado >= deuda.montoTotal) {
-                deuda.estado = 'pagada';
-                deuda.montoPagado = deuda.montoTotal; // No exceder el monto total
-            }
-            
-            cargarDeudas();
-            cerrarModal('modalRegistrarPago');
-        }
-    });
-
-    // Cerrar modales al hacer clic fuera
-    document.querySelectorAll('.modal-overlay').forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-                limpiarFormularios();
-            }
-        });
-    });
+function validar(formId) {
+    const inputs = document.getElementById(formId).querySelectorAll('[required]');
+    return Array.from(inputs).every(input => input.value.trim());
 }
 
-// Funciones de utilidad
-function validarFormulario(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
-    
-    for (let input of inputs) {
-        if (!input.value.trim()) {
-            return false;
-        }
-    }
-    return true;
+function mostrarError(id) {
+    const el = document.getElementById(id);
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 3000);
 }
 
-function mostrarValidacion() {
-    abrirModal('modalValidacion');
-    setTimeout(() => {
-        cerrarModal('modalValidacion');
-    }, 2000);
+function formatFecha(fecha) {
+    const [a, m, d] = fecha.split('-');
+    return `${d}/${m}/${a}`;
 }
-
-function limpiarFormularios() {
-    document.getElementById('formNuevaDeuda').reset();
-    document.getElementById('formEditarDeuda').reset();
-    document.getElementById('formRegistrarPago').reset();
-    deudaEditandoId = null;
-}
-
-function formatearNumero(numero) {
-    return numero.toLocaleString('es-CO');
-}
-
-function formatearFecha(fecha) {
-    const [año, mes, dia] = fecha.split('-');
-    return `${dia}/${mes}/${año}`;
-}
-
-function capitalizar(texto) {
-    return texto.charAt(0).toUpperCase() + texto.slice(1);
-}
-
-// Inicializar la aplicación
-document.addEventListener('DOMContentLoaded', inicializar);
