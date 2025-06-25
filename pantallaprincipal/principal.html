@@ -1,156 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pantalla Principal</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pantalla Principal</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-    <link rel="stylesheet" href="principal.css">
+  <!-- Bootstrap y Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  
+  <!-- Estilos -->
+  <link rel="stylesheet" href="principal.css" />
 </head>
 <body>
- 
+
+  <!-- Botón para mostrar menú lateral en móviles -->
+  <button class="btn btn-success d-md-none m-2" type="button" data-bs-toggle="collapse" data-bs-target="#menuLateral">
+    <i class="bi bi-list"></i> Menú
+  </button>
+
   <div class="container-fluid">
     <div class="row">
-        
-      
       <!-- Menú lateral -->
-      <div id="menuLateral" class="col-md-2 menu-lateral">
-     <!-- Título Wallet Flow -->
-     <div class="logowf d-flex align-items-center p-3">
-    
-      <img src="../registro/Logo_Wallet_Flow-removebg-preview.png" alt="Logo" width="73" height="73">
-        <h4 class="titulologo">Wallet Flow</h4>
-      </div>
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-house-door-fill me-2 icono-menu"></i>Inicio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-cash-stack me-2 icono-menu"></i>Ingresos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-cart-fill me-2 icono-menu"></i>Gastos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-piggy-bank-fill me-2 icono-menu"></i>Ahorros</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-credit-card-2-back-fill me-2 icono-menu"></i>Deudas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-graph-up-arrow me-2 icono-menu"></i>Inversiones</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-bank me-2 icono-menu"></i>Cuentas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-bullseye me-2 icono-menu"></i>Objetivos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-lightbulb-fill me-2 icono-menu"></i>Consejos</a>
-          
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-wrench me-2 icono-menu"></i>Herramientas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-question-circle-fill me-2 icono-menu"></i>Ayuda</a>
-        </li>
-        <li class="nav-item">
-           <a class="nav-link" href="#"><i class="bi bi-gear-fill me-2 icono-menu"></i>Configuración</a>
-        </li>
-        <li class="nav-item">
-         <a class="nav-link" href="#"><i class="bi bi-box-arrow-right me-2 icono-menu"></i>Cerrar sesión</a>
-        </li>
+      <div id="menuLateral" class="col-md-2 collapse d-md-block menu-lateral">
+        <div class="logowf d-flex align-items-center p-3">
+          <img src="../registro/Logo_Wallet_Flow-removebg-preview.png" alt="Logo" width="80" height="80">
+          <h4 class="titulologo">Wallet Flow</h4>
+        </div>
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-house-door-fill me-2 icono-menu"></i>Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-stack me-2 icono-menu"></i>Ingresos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cart-fill me-2 icono-menu"></i>Gastos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-piggy-bank-fill me-2 icono-menu"></i>Ahorros</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-credit-card-2-back-fill me-2 icono-menu"></i>Deudas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-graph-up-arrow me-2 icono-menu"></i>Inversiones</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bank me-2 icono-menu"></i>Cuentas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bullseye me-2 icono-menu"></i>Objetivos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-lightbulb-fill me-2 icono-menu"></i>Consejos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-wrench me-2 icono-menu"></i>Herramientas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-question-circle-fill me-2 icono-menu"></i>Ayuda</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear-fill me-2 icono-menu"></i>Configuración</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-box-arrow-right me-2 icono-menu"></i>Cerrar sesión</a></li>
         </ul>
-      
-
-      
       </div>
-
-
 
       <!-- Contenido principal -->
       <div class="col-md-10 contenido-principal">
         <h2>Contenido principal</h2>
-        <p>Wallet Flow el mejor jajajsjjajajs la k.</p>
-        
-         <!-- Opción de perfil -->
-          <div class="perfilusuario position-absolute">
+        <p>Wallet Flow: tu mejor herramienta financiera.</p>
+
+        <!-- Perfil -->
+        <div class="perfilusuario position-absolute">
           <span class="me-2">Perfil</span>
-           <a href="#" class="perfil-icono">
-            <i class="bi bi-person-circle" style="font-size: 1.8rem;"></i>
-           </a>
-           </div>
+          <a href="#" class="perfil-icono"><i class="bi bi-person-circle"></i></a>
+        </div>
 
-       <!-- Opción de agregar algo(+) -->
-<div class="agregar position-absolute bottom-0 m-3">
-  <a href="#" class="btn btn-primary" id="botonAgregar">
-    <i class="bi bi-plus-circle"></i>
-  </a>
-</div>
-  
-  <!-- Menú desplegable oculto -->
-<div id="menuOpciones" class="menu-opciones d-none">
-  <div class="titulo-menu">
-    Agregar Nuevo
-  </div>
-  <a href="#" class="btn btn-light d-block mb-2">Ingreso</a>
-  <a href="#" class="btn btn-light d-block mb-2">Gasto</a>
-  <a href="#" class="btn btn-light d-block mb-2">Ahorro</a>
-  <a href="#" class="btn btn-light d-block mb-2">Deuda</a>
-  <a href="#" class="btn btn-light d-block mb-2">Inversión</a>
-  <a href="#" class="btn btn-light d-block mb-2">Cuenta</a>
-  <a href="#" class="btn btn-light d-block mb-2">Objetivo</a>
-</div>
+        <!-- Botón flotante -->
+        <div class="agregar position-absolute bottom-0 m-3">
+          <a href="#" class="btn btn-primary" id="botonAgregar"><i class="bi bi-plus-circle"></i></a>
+        </div>
 
-</div>
-
- 
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <!-- Menú emergente -->
+        <div id="menuOpciones" class="menu-opciones d-none">
+          <div class="titulo-menu">Agregar Nuevo</div>
+          <a href="#" class="btn btn-light d-block mb-2">Ingreso</a>
+          <a href="#" class="btn btn-light d-block mb-2">Gasto</a>
+          <a href="#" class="btn btn-light d-block mb-2">Ahorro</a>
+          <a href="#" class="btn btn-light d-block mb-2">Deuda</a>
+          <a href="#" class="btn btn-light d-block mb-2">Inversión</a>
+          <a href="#" class="btn btn-light d-block mb-2">Cuenta</a>
+          <a href="#" class="btn btn-light d-block mb-2">Objetivo</a>
+        </div>
+      </div>
     </div>
   </div>
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="principal.js"></script>
 </body>
 </html>
