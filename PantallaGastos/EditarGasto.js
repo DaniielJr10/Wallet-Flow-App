@@ -72,10 +72,12 @@ if (prevStepBtn) {
 
 function mostrarModal() {
     document.getElementById('modalEdicion').style.display = 'block';
+    document.getElementById('menuLateral').classList.add('blur');
 }
 
 function cerrarModal() {
     modal.style.display = 'none';
+    document.getElementById('menuLateral').classList.remove('blur');
     const filaEditando = document.querySelector('tr.editando');
     if (filaEditando) {
         filaEditando.classList.remove('editando');

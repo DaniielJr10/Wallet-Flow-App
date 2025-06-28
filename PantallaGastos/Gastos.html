@@ -5,14 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gastos - Wallet Flow</title>
   <link rel="stylesheet" href="Gastos.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./BarraLateral/BarraLateral.css" />
 </head>
 <body>
+  <div id="menuLateral" class="col-md-2 collapse d-md-block menu-lateral">
+        <div class="logowf d-flex align-items-center p-3">
+          <img src="./BarraLateral/Logo_Wallet_Flow-removebg-preview.png" alt="Logo" width="80" height="80">
+          <h4 class="titulologo">Wallet Flow</h4>
+        </div>
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-house-door-fill me-2 icono-menu"></i>Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-stack me-2 icono-menu"></i>Ingresos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cart-fill me-2 icono-menu"></i>Gastos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-piggy-bank-fill me-2 icono-menu"></i>Ahorros</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-credit-card-2-back-fill me-2 icono-menu"></i>Deudas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-graph-up-arrow me-2 icono-menu"></i>Inversiones</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bank me-2 icono-menu"></i>Cuentas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bullseye me-2 icono-menu"></i>Objetivos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-lightbulb-fill me-2 icono-menu"></i>Consejos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-wrench me-2 icono-menu"></i>Herramientas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-question-circle-fill me-2 icono-menu"></i>Ayuda</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear-fill me-2 icono-menu"></i>Configuración</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-box-arrow-right me-2 icono-menu"></i>Cerrar sesión</a></li>
+        </ul>
+      </div>
   <div class="container">
     <header>
       <h1>Gastos</h1>
     </header>
-
+    
     <section class="filtros">
       <label for="mes">Mes:</label>
       <select id="mes">
@@ -29,7 +52,7 @@
         <option value="noviembre">Noviembre</option>
         <option value="diciembre">Diciembre</option>
       </select>
-
+      
       <label for="categoria">Categoría:</label>
       <select id="categoria" onchange="actualizarGraficoPorCategoria()">
         <option value="todos">Selecciona</option>
@@ -39,7 +62,7 @@
         <option value="entretenimiento">Entretenimiento</option>
       </select>
     </section>
-
+    
     <section class="resumen">
       <div class="tarjeta">
         <p>Total de Gastos</p>
@@ -54,11 +77,11 @@
         <h3>Transporte</h3>
       </div>
     </section>
-
+    
     <section class="grafico">
       <canvas id="graficoGastos"></canvas>
     </section>
-
+    
     <section class="lista-gastos">
       <h3>Lista de Gastos</h3>
       <table>
@@ -73,7 +96,7 @@
           </tr>
         </thead>
         <tbody>
-            
+          
           <tr>
             <td>07/05/2025</td>
             <td>Gasolina</td>
@@ -85,17 +108,18 @@
               <button class="eliminar">🗑️</button>
             </td>
           </tr>
-  
+          
         </tbody>
       </table>
-
+      
     </section>
-
+    
     <footer>
       <button>Volver</button>
     </footer>
   </div>
-
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     const ctx = document.getElementById('graficoGastos').getContext('2d');
     let grafico = new Chart(ctx, {
@@ -114,18 +138,18 @@
           legend: {
             position: 'bottom',
             labels: {
-            font: {
-              size: 22
-            },
-            padding: 20
+              font: {
+                size: 22
+              },
+              padding: 20
+            }
           }
         }
       }
-    }
-  });
+    });
     function actualizarGraficoPorCategoria() {
       const categoria = document.getElementById('categoria').value;
-
+      
       const datosOriginales = {
         alimentacion: [100],
         transporte: [180],
@@ -133,7 +157,7 @@
         entretenimiento: [90],
         todos: [100, 180, 60, 90]
       };
-
+      
       const etiquetas = {
         alimentacion: ['Alimentación'],
         transporte: ['Transporte'],
@@ -141,7 +165,7 @@
         entretenimiento: ['Entretenimiento'],
         todos: ['Alimentación', 'Transporte', 'Servicios', 'Entretenimiento']
       };
-
+      
       const colores = {
         alimentacion: ['#00c2ff'],
         transporte: ['#2ecc71'],
@@ -149,35 +173,35 @@
         entretenimiento: ['#e74c3c'],
         todos: ['#00c2ff', '#2ecc71', '#f39c12', '#e74c3c']
       };
-
+      
       grafico.data.labels = etiquetas[categoria];
       grafico.data.datasets[0].data = datosOriginales[categoria];
       grafico.data.datasets[0].backgroundColor = colores[categoria];
       grafico.update();
     }
-  </script>
+    </script>
   <script>
-
-  document.addEventListener('click', function (e) {
-    if (e.target.classList.contains('eliminar')) {
-      const fila = e.target.closest('tr');
-      const descripcion = fila.cells[1].textContent;
-      const confirmar = confirm(`¿Estás seguro de que deseas eliminar el gasto: "${descripcion}"?`);
-      if (confirmar) {
-        fila.remove();
-   
+    
+    document.addEventListener('click', function (e) {
+      if (e.target.classList.contains('eliminar')) {
+        const fila = e.target.closest('tr');
+        const descripcion = fila.cells[1].textContent;
+        const confirmar = confirm(`¿Estás seguro de que deseas eliminar el gasto: "${descripcion}"?`);
+        if (confirmar) {
+          fila.remove();
+          
+        }
       }
-    }
-  });
-</script>
+    });
+  </script>
 <div class="modal-overlay" id="modalEdicion" style="display: none;">
   <div class="modal-form">
     <form id="formEditar">
       <h2>Editar Gasto</h2>
-
+      
       <div class="form-step" id="step1">
-
-
+        
+        
         <label>Categoría</label>
         <select id="editCategoria" required>
           <option value="alimentacion">Alimentación</option>
@@ -185,7 +209,7 @@
           <option value="servicios">Servicios</option>
           <option value="entretenimiento">Entretenimiento</option>
         </select>
-
+        
         <label>Método de Pago</label>
         <select id="editMetodo" required>
           <option value="efectivo">Efectivo</option>
@@ -193,66 +217,67 @@
           <option value="tarjeta_debito">Tarjeta de Débito</option>
           <option value="transferencia">Transferencia</option>
         </select>
-
+        
         <label>Monto</label>
         <input type="number" id="editMonto" required>
-
+        
         <label>Fecha</label>
         <input type="date" id="editFecha" required>
         
         <button type="button" class="nav-btn next-step-btn" aria-label="Siguiente">➡️</button>
       </div>
-
+      
       <div class="form-step hidden" id="step2">
-
+        
         <label for="editDescripcion">Descripción</label>
         <textarea id="editDescripcion" name="descripcion"></textarea>
-
+        
         <div class="checkbox-options">
-    <div class="checkbox-item">
-        <label class="checkbox-label">
-            Gasto Recurrente
-            <input type="checkbox" id="checkRecurrente" onchange="toggleFrecuencia()">
-        </label>
-        <div class="frecuencia-options" id="frecuenciaOptions">
-            <select id="frecuencia">
+          <div class="checkbox-item">
+            <label class="checkbox-label">
+              Gasto Recurrente
+              <input type="checkbox" id="checkRecurrente" onchange="toggleFrecuencia()">
+            </label>
+            <div class="frecuencia-options" id="frecuenciaOptions">
+              <select id="frecuencia">
                 <option value="">Seleccionar frecuencia</option>
                 <option value="diario">Diario</option>
                 <option value="semanal">Semanal</option>
                 <option value="mensual">Mensual</option>
-            </select>
-        </div>
-    </div>
-    
-    <div class="checkbox-item">
-        <label class="checkbox-label">
-            Cuenta Asociada
-            <input type="checkbox" id="checkCuenta" onchange="toggleCuenta()">
-        </label>
-        <div class="frecuencia-options" id="cuentaAsociadaOptions">
-            <select id="cuentaAsociada">
+              </select>
+            </div>
+          </div>
+          
+          <div class="checkbox-item">
+            <label class="checkbox-label">
+              Cuenta Asociada
+              <input type="checkbox" id="checkCuenta" onchange="toggleCuenta()">
+            </label>
+            <div class="frecuencia-options" id="cuentaAsociadaOptions">
+              <select id="cuentaAsociada">
                 <option value="">Seleccionar cuenta</option>
                 <option value="bancolombia">Bancolombia</option>
                 <option value="davivienda">Davivienda</option>
                 <option value="nequi">Nequi</option>
                 <option value="efectivo">Efectivo</option>
-            </select>
+              </select>
+            </div>
+          </div>
         </div>
-    </div>
-</div>
-
+        
         <div class="botones">
           <button type="submit" id="guardar">Guardar</button>
           <button type="button" onclick="cerrarModal()">Cancelar</button>
           <button type="reset">Limpiar</button>
         </div>
         <div class="flecha-container">
-        <button type="button" class="nav-btn prev-step-btn" aria-label="Anterior">⬅️</button>
-    </div>
+          <button type="button" class="nav-btn prev-step-btn" aria-label="Anterior">⬅️</button>
+        </div>
       </div>
     </form>
   </div>
 </div>
 </body>
 <script src="EditarGasto.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>

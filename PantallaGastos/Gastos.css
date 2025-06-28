@@ -1,5 +1,5 @@
-/* styles.css */
-
+/* --- RESET Y ESTILOS BASE --- */
+/* Elimina márgenes y paddings por defecto y define la fuente y color de fondo general */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f0f2f5;
@@ -7,15 +7,18 @@ body {
   padding: 0;
 }
 
+/* --- CONTENEDOR PRINCIPAL --- */
+/* Centra el contenido, le da fondo blanco, bordes redondeados y sombra */
 .container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px;
+  max-width: 1200px; /* Ancho máximo del contenido */
+  margin: auto;      /* Centra horizontalmente */
+  padding: 20px;     /* Espaciado interno */
   background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
 }
 
+/* --- CABECERA (TÍTULO PRINCIPAL) --- */
 header h1 {
   text-align: center;
   color: #fff;
@@ -25,18 +28,22 @@ header h1 {
   font-size: 28px;
 }
 
+/* --- FILTROS DE BÚSQUEDA --- */
+/* Contenedor de los filtros (mes, categoría, etc.) */
 .filtros {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
+  display: flex;         /* Los hijos se alinean en fila */
+  flex-wrap: wrap;       /* Permite que los filtros bajen si no caben */
+  gap: 15px;             /* Espacio entre filtros */
   margin: 20px 0;
-  align-items: center;
+  align-items: center;   /* Centra verticalmente los filtros */
 }
 
+/* Estilo para las etiquetas de los filtros */
 .filtros label {
   font-weight: bold;
 }
 
+/* Estilo para los selectores de los filtros */
 .filtros select {
   padding: 5px;
   font-size: 16px;
@@ -44,6 +51,8 @@ header h1 {
   border: 1px solid #ccc;
 }
 
+/* --- RESUMEN DE GASTOS (TARJETAS) --- */
+/* Contenedor de las tarjetas de resumen */
 .resumen {
   display: flex;
   flex-wrap: wrap;
@@ -52,20 +61,24 @@ header h1 {
   justify-content: space-between;
 }
 
+/* Cada tarjeta de resumen */
 .tarjeta {
   background-color: #ecf0f1;
   padding: 15px;
   border-radius: 8px;
-  flex: 1 1 30%;
+  flex: 1 1 30%;      /* Ocupa al menos 30% del ancho, pero puede crecer */
   min-width: 150px;
   text-align: center;
 }
 
+/* --- GRÁFICO DE GASTOS --- */
+/* Contenedor del gráfico */
 .grafico {
   text-align: center;
   margin: 100px 0;
 }
 
+/* El canvas del gráfico ocupa todo el ancho disponible */
 canvas {
   max-width: 100%;
   height: auto;
@@ -73,30 +86,36 @@ canvas {
   max-height: 400px;
 }
 
-.gastos-diarios ul {
-  list-style: none;
-  padding: 10px;
-  background-color: #fafafa;
-  border-radius: 8px;
-  margin: 20px 0;
-}
-
+/* --- TABLA DE LISTA DE GASTOS --- */
+/* Tabla de gastos */
 .lista-gastos table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse; /* Quita espacios entre celdas */
   margin-top: 80px;
 }
 
+/* Celdas y cabeceras de la tabla */
 .lista-gastos th, .lista-gastos td {
   border: 1px solid #ccc;
   padding: 10px;
   text-align: center;
 }
 
+/* Cabecera de la tabla */
 .lista-gastos th {
   background-color: #e0e0e0;
 }
 
+/* Título de la sección de lista de gastos */
+.lista-gastos h3 {
+  text-align: center;
+  margin-bottom: -40px;
+  color: #2e6835;
+  margin-top: 100px !important;
+}
+
+/* --- BOTONES DE ACCIÓN EN LA TABLA --- */
+/* Botones de editar y eliminar dentro de la tabla */
 button.editar,
 button.eliminar {
   background: none;
@@ -105,6 +124,8 @@ button.eliminar {
   cursor: pointer;
 }
 
+/* --- BOTÓN AGREGAR Y BOTÓN DEL FOOTER --- */
+/* Botón para agregar gasto y botón de volver en el footer */
 button.agregar,
 footer button {
   display: block;
@@ -118,238 +139,213 @@ footer button {
   font-size: 16px;
 }
 
+/* Efecto hover para los botones principales */
 button.agregar:hover,
 footer button:hover {
   background-color: #24532b;
 }
 
-@media screen and (max-width: 768px) {
-  .resumen {
-    flex-direction: column;
-  }
-
-  .tarjeta {
-    width: 100%;
-  }
-
-  .filtros {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
+/* --- MODAL DE EDICIÓN DE GASTO --- */
+/* Fondo oscuro que cubre toda la pantalla cuando el modal está abierto */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
   z-index: 998;
 }
 
+/* Contenedor del formulario del modal */
 .modal-form {
- background: #e6e6e6;
-    padding: 20px 20px 80px 20px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 300px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 999;
-}
-.form-step {
-  display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.form-step.hidden {
-  display: none;
+  background: #e6e6e6;
+  padding: 20px 20px 80px 20px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 300px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
 }
 
+/* Cada paso del formulario dentro del modal */
+.form-step {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Oculta los pasos que no están activos */
+.form-step.hidden,
 .hidden {
   display: none;
 }
 
+/* --- INPUTS DEL MODAL --- */
+/* Estilo general para inputs, selects y textarea del modal */
 .modal-form input,
-.modal-form select {
-    width: 100%;
-    padding: 10px;
-    border: 3px solid #ccc;
-    border-radius: 70px;
-    background-color: white;
-    box-sizing: border-box;
+.modal-form select,
+.modal-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 3px solid #ccc;
+  border-radius: 70px;
+  background-color: white;
+  box-sizing: border-box;
 }
 
+/* Fuente para el input de fecha */
 .modal-form input[type="date"] {
-    font-family: inherit;
+  font-family: inherit;
 }
 
+/* Título del modal */
 .modal-form h2 {
-    text-align: center;
-    margin: 0;
-    padding: 15px 0;
-    color: #333;
-    font-size: 20px;
-    background-color: #2e6835;
-    color: white;
-    border-radius: 20px 20px 0 0;
-    position: relative;
-    top: -20px;
-    left: -20px;
-    width: calc(100% + 40px);
+  text-align: center;
+  margin: 0;
+  padding: 15px 0;
+  font-size: 20px;
+  background-color: #2e6835;
+  color: white;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+  top: -20px;
+  left: -20px;
+  width: calc(100% + 40px);
 }
 
-.nav-btn.next-step-btn{
-    position: absolute;
-    bottom: 5px;
-    right: 20px; /* Cambiado de left a right */
-    background: none;
-    border: none;
-    font-size: 40px; /* Aumentado el tamaño de la fuente */
-    cursor: pointer;
-    color: #2e6835;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease;
+/* --- BOTONES DE NAVEGACIÓN DEL MODAL --- */
+/* Botones de siguiente y anterior en el modal */
+.nav-btn.next-step-btn,
+.nav-btn.prev-step-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 40px;
+  cursor: pointer;
+  color: #2e6835;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
 }
 
-.nav-btn.prev-step-btn{
-    position: absolute;
-    bottom: -5px;
-    right: 20px; /* Cambiado de left a right */
-    background: none;
-    border: none;
-    font-size: 40px; /* Aumentado el tamaño de la fuente */
-    cursor: pointer;
-    color: #2e6835;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease;
+/* Ajuste para el botón de paso anterior */
+.nav-btn.prev-step-btn {
+  bottom: -5px;
 }
 
-
-.next-btn:hover {
-    transform: scale(1.1);
-    transition: transform 0.2s ease;
+/* Efecto al pasar el mouse sobre los botones de navegación */
+.next-btn:hover,
+.nav-btn.next-step-btn:hover,
+.nav-btn.prev-step-btn:hover {
+  transform: scale(1.1);
 }
 
+/* --- OPCIONES DE GASTO RECURRENTE Y CUENTA ASOCIADA --- */
+/* Contenedor de opciones recurrentes */
 #recurrenteOptions {
-    align-items: center;
-    justify-content: space-between;
-    margin: 15px 0;
-    padding: 5px 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0;
+  padding: 5px 10px;
 }
 
-.botones {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin: 20px 0;
-    padding: 10px;
-}
-
+/* Contenedor de los checkboxes */
 .checkbox-options {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 0;
 }
 
+/* Etiquetas de los checkboxes */
 .checkbox-options label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
 }
 
+/* Checkbox en sí */
 .checkbox-options input[type="checkbox"] {
-    width: 15px;
-    height: 20px;
-    margin: 0;
-    cursor: pointer;
+  width: 15px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
 }
 
+/* Opciones de frecuencia (ocultas por defecto) */
 .frecuencia-options {
-    padding-left: -10px;
-    margin-top: 5px;
-    display: none;
+  margin-top: 5px;
+  display: none;
 }
 
+/* Opciones de frecuencia visibles */
 .frecuencia-options.visible {
-    display: block;
+  display: block;
 }
 
-/* Estilos para los botones */
+/* --- BOTONES DEL MODAL (GUARDAR, CANCELAR, LIMPIAR) --- */
+/* Contenedor de los botones del modal */
 .botones {
-       display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin: 10px 0;  /* Reducido de 20px a 10px */
-    padding: 10px;
-    position: absolute;
-    bottom: 40px;  /* Subir los botones */
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 40px);
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 10px 0;
+  padding: 10px;
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
 }
 
+/* Estilo general para los botones del modal */
 .botones button {
-    padding: 8px 16px;
-    border-radius: 15px;
-    cursor: pointer;
-    font-size: 14px;
-    min-width: 80px;
-    transition: transform 0.2s ease;
+  padding: 8px 16px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 14px;
+  min-width: 80px;
+  transition: transform 0.2s ease;
 }
 
+/* Botón guardar */
 button[type="submit"] {
-    background-color: #2e6835;
-    color: white;
-    border: none;
+  background-color: #2e6835;
+  color: white;
+  border: none;
 }
 
+/* Botón cancelar */
 button[type="button"] {
-    background-color: #dc3545;
-    color: white;
-    border: none;
+  background-color: #dc3545;
+  color: white;
+  border: none;
 }
 
+/* Botón limpiar */
 button[type="reset"] {
-    background-color: #b1afaa;
-    color: #333;
-    border: none;
+  background-color: #b1afaa;
+  color: #333;
+  border: none;
 }
 
-.next-btn {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    background-color: #ffffff;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    color: #2e6835;
-}
-.next-btn:hover {
-    transform: scale(1.1);
-}
-
-.lista-gastos h3 {
-    text-align: center;
-    margin-bottom: -40px;
-    color: #2e6835;
-     margin-top: 100px !important
+/* --- RESPONSIVE: ADAPTA EL DISEÑO EN PANTALLAS PEQUEÑAS --- */
+@media screen and (max-width: 768px) {
+  .resumen {
+    flex-direction: column;
+  }
+  .tarjeta {
+    width: 100%;
+  }
+  .filtros {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
