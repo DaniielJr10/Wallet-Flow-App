@@ -194,5 +194,11 @@ function toggleCuenta() {
     }
 }
 
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    cerrarModal();
+  }
+});
+
 document.getElementById('checkRecurrente')?.addEventListener('change', toggleFrecuencia);
 document.getElementById('checkCuenta')?.addEventListener('change', toggleCuenta);

@@ -59,15 +59,6 @@
       <canvas id="graficoGastos"></canvas>
     </section>
 
-    <section class="gastos-diarios">
-      <h3>Gastos Diarios</h3>
-      <ul>
-        <li>Busetas - $5.000</li>
-        <li>Almuerzo - $12.000</li>
-        <li>Entrada Cine - $34.000</li>
-      </ul>
-    </section>
-
     <section class="lista-gastos">
       <h3>Lista de Gastos</h3>
       <table>
@@ -121,12 +112,17 @@
         responsive: true,
         plugins: {
           legend: {
-            position: 'bottom'
+            position: 'bottom',
+            labels: {
+            font: {
+              size: 22
+            },
+            padding: 20
           }
         }
       }
-    });
-
+    }
+  });
     function actualizarGraficoPorCategoria() {
       const categoria = document.getElementById('categoria').value;
 

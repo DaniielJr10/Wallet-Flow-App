@@ -63,7 +63,7 @@ header h1 {
 
 .grafico {
   text-align: center;
-  margin: 30px 0;
+  margin: 100px 0;
 }
 
 canvas {
@@ -84,7 +84,7 @@ canvas {
 .lista-gastos table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 80px;
 }
 
 .lista-gastos th, .lista-gastos td {
@@ -345,4 +345,11 @@ button[type="reset"] {
 }
 .next-btn:hover {
     transform: scale(1.1);
+}
+
+.lista-gastos h3 {
+    text-align: center;
+    margin-bottom: -40px;
+    color: #2e6835;
+     margin-top: 100px !important
 }
