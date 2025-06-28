@@ -220,7 +220,7 @@ footer button:hover {
 .nav-btn.next-step-btn,
 .nav-btn.prev-step-btn {
   position: absolute;
-  bottom: 5px;
+  bottom: -1px;
   right: 20px;
   background: none;
   border: none;
@@ -236,7 +236,7 @@ footer button:hover {
 
 /* Ajuste para el botón de paso anterior */
 .nav-btn.prev-step-btn {
-  bottom: -5px;
+  bottom: -9px;
 }
 
 /* Efecto al pasar el mouse sobre los botones de navegación */
