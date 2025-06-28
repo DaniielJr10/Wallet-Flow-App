@@ -11,36 +11,38 @@ const prevStepBtn = document.querySelector('.prev-step-btn');
 editarBtns.forEach(btn => {
     btn.addEventListener('click', function() {
         const fila = btn.closest('tr');
-        // Marcar la fila que se está editando
         fila.classList.add('editando');
-        
+
         document.getElementById('editFecha').value = convertirFechaInversa(fila.cells[0].textContent);
         document.getElementById('editDescripcion').value = fila.cells[1].textContent === 'Sin descripción' ? '' : fila.cells[1].textContent;
         document.getElementById('editCategoria').value = fila.cells[2].textContent.toLowerCase();
         document.getElementById('editMetodo').value = fila.cells[3].textContent.toLowerCase().replace(" ", "_");
         document.getElementById('editMonto').value = fila.cells[4].textContent.replace('$', '').replace('.', '').trim();
 
-        // Leer los valores de Gasto Recurrente y Cuenta Asociada de la tabla
-        const esRecurrenteTabla = fila.cells[5].textContent.toLowerCase() === 'sí';
-        const cuentaAsociadaTabla = fila.cells[6].textContent;
-
+        // Leer los valores de Gasto Recurrente y Frecuencia de la tabla
+        const gastoRecurrenteTexto = fila.cells[5].textContent.trim();
+        const esRecurrenteTabla = gastoRecurrenteTexto.toLowerCase().startsWith('sí');
         document.getElementById('checkRecurrente').checked = esRecurrenteTabla;
-        toggleFrecuencia(); // Actualiza la visibilidad de las opciones de frecuencia
+        toggleFrecuencia();
 
+        // Si es recurrente, extraer la frecuencia del texto "Sí (Frecuencia)"
         if (esRecurrenteTabla) {
-            // Asume que si es recurrente, el valor de la frecuencia está en algún lugar,
-            // si no, necesitarás una forma de almacenarlo en la tabla o un valor predeterminado.
-            // Por ahora, lo dejamos en blanco o puedes establecer un valor por defecto si lo deseas.
-            // document.getElementById('frecuencia').value = 'semanal'; // Ejemplo
+            const match = gastoRecurrenteTexto.match(/\(([^)]+)\)/);
+            if (match && match[1]) {
+                document.getElementById('frecuencia').value = match[1].toLowerCase();
+            }
+        } else {
+            document.getElementById('frecuencia').value = '';
         }
 
+        // Cuenta asociada
+        const cuentaAsociadaTabla = fila.cells[6].textContent;
         document.getElementById('checkCuenta').checked = cuentaAsociadaTabla.toLowerCase() !== 'n/a';
-        toggleCuenta(); // Actualiza la visibilidad de las opciones de cuenta
-
+        toggleCuenta();
         if (cuentaAsociadaTabla.toLowerCase() !== 'n/a') {
-            document.getElementById('cuentaAsociada').value = cuentaAsociadaTabla.toLowerCase().replace(' ', ''); // Ajusta según tus valores
+            document.getElementById('cuentaAsociada').value = cuentaAsociadaTabla.toLowerCase().replace(' ', '');
         } else {
-             document.getElementById('cuentaAsociada').value = ''; // Limpiar si no hay cuenta asociada
+            document.getElementById('cuentaAsociada').value = '';
         }
 
         modal.style.display = 'block';
@@ -109,7 +111,11 @@ formEditar.addEventListener('submit', function(e) {
         filaEditando.cells[4].textContent = `$${nuevosDatos.monto}`;
         
         // Actualizar las nuevas columnas
-        filaEditando.cells[5].textContent = nuevosDatos.esRecurrente ? 'Sí' : 'No';
+         if (nuevosDatos.esRecurrente && nuevosDatos.frecuencia) {
+        filaEditando.cells[5].textContent = `Sí (${capitalizar(nuevosDatos.frecuencia)})`;
+    } else {
+        filaEditando.cells[5].textContent = 'No';
+    }
         filaEditando.cells[6].textContent = nuevosDatos.tieneCuentaAsociada && nuevosDatos.cuentaAsociada ? capitalizar(nuevosDatos.cuentaAsociada) : 'N/A';
         
         filaEditando.classList.remove('editando');
