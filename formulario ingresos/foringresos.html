@@ -1,0 +1,74 @@
+<!-- Formulario mejorado para nuevo ingreso -->
+<div id="modalAgregarIngreso" class="modal-overlay d-none">
+  <div class="modal-form">
+    <form id="formAgregarIngreso" autocomplete="off">
+      <h2>Agregar Ingreso</h2>
+      <div class="form-step" id="step1">
+        <label for="addCategoriaIngreso">Categoría</label>
+        <select id="addCategoriaIngreso" required>
+          <option value="salario">Salario</option>
+          <option value="venta">Venta</option>
+          <option value="freelance">Freelance</option>
+          <option value="otro">Otro</option>
+        </select>
+        <label for="addMetodoIngreso">Método de Pago</label>
+        <select id="addMetodoIngreso" required>
+          <option value="efectivo">Efectivo</option>
+          <option value="tarjeta_credito">Tarjeta de Crédito</option>
+          <option value="tarjeta_debito">Tarjeta de Débito</option>
+          <option value="transferencia">Transferencia</option>
+        </select>
+        <label for="addMontoIngreso">Monto</label>
+        <input type="number" id="addMontoIngreso" required min="0" step="0.01">
+        <label for="addFechaIngreso">Fecha</label>
+        <input type="date" id="addFechaIngreso" required>
+        <div class="siguiente-container">
+          <button type="button" class="nav-btn next-step-btn" aria-label="Siguiente">➡️</button>
+        </div>
+      </div>
+      <div class="form-step hidden" id="step2">
+        <label for="addDescripcionIngreso">Descripción</label>
+        <textarea id="addDescripcionIngreso" name="descripcion"></textarea>
+        <div class="checkbox-options">
+          <div class="checkbox-item">
+            <label class="checkbox-label" for="addCheckRecurrenteIngreso">
+              Ingreso Recurrente
+              <input type="checkbox" id="addCheckRecurrenteIngreso">
+            </label>
+            <div class="frecuencia-options" id="addFrecuenciaOptionsIngreso">
+              <select id="addFrecuenciaIngreso">
+                <option value="">Seleccionar frecuencia</option>
+                <option value="diario">Diario</option>
+                <option value="semanal">Semanal</option>
+                <option value="mensual">Mensual</option>
+              </select>
+            </div>
+          </div>
+          <div class="checkbox-item">
+            <label class="checkbox-label" for="addCheckCuentaIngreso">
+              Cuenta Asociada
+              <input type="checkbox" id="addCheckCuentaIngreso">
+            </label>
+            <div class="frecuencia-options" id="addCuentaAsociadaOptionsIngreso">
+              <select id="addCuentaAsociadaIngreso">
+                <option value="">Seleccionar cuenta</option>
+                <option value="bancolombia">Bancolombia</option>
+                <option value="davivienda">Davivienda</option>
+                <option value="nequi">Nequi</option>
+                <option value="efectivo">Efectivo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="botones">
+          <button type="submit" id="guardar">Guardar</button>
+          <button type="button" id="cancelarIngreso">Cancelar</button>
+          <button type="reset">Limpiar</button>
+        </div>
+        <div class="flecha-container">
+          <button type="button" class="nav-btn prev-step-btn" aria-label="Anterior">⬅️</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

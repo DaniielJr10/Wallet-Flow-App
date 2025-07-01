@@ -63,7 +63,7 @@
         <!-- Menú emergente -->
         <div id="menuOpciones" class="menu-opciones d-none">
           <div class="titulo-menu">Agregar Nuevo</div>
-          <a href="#" class="btn btn-light d-block mb-2">Ingreso</a>
+          <a href="#" class="btn btn-light d-block mb-2" id="btnNuevoIngreso">Ingreso</a>
           <a href="#" class="btn btn-light d-block mb-2">Gasto</a>
           <a href="#" class="btn btn-light d-block mb-2">Ahorro</a>
           <a href="#" class="btn btn-light d-block mb-2">Deuda</a>
@@ -71,6 +71,9 @@
           <a href="#" class="btn btn-light d-block mb-2">Cuenta</a>
           <a href="#" class="btn btn-light d-block mb-2">Objetivo</a>
         </div>
+
+        <!-- Modal de ingreso (se cargará dinámicamente) -->
+        <div id="contenedorModalIngreso"></div>
       </div>
     </div>
   </div>
@@ -78,5 +81,6 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="principal.js"></script>
+  <link rel="stylesheet" href="../formulario ingresos/foringresos.css" />
 </body>
 </html>
