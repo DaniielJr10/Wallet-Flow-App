@@ -1,0 +1,199 @@
+/* Estilos base para el formulario de deudas */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-form {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+h2 {
+  text-align: center;
+  color: #dc3545;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.form-step {
+  display: block;
+}
+
+.form-step.hidden {
+  display: none;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #dc3545;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.checkbox-options {
+  margin: 1rem 0;
+}
+
+.checkbox-item {
+  margin-bottom: 1rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+.frecuencia-options {
+  margin-top: 0.5rem;
+  margin-left: 1.5rem;
+  display: none;
+}
+
+.frecuencia-options.show {
+  display: block;
+}
+
+.siguiente-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.flecha-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 1rem;
+}
+
+.nav-btn {
+  background: #dc3545;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: #c82333;
+}
+
+.botones {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.botones button {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+#guardar {
+  background: #dc3545;
+  color: white;
+}
+
+#guardar:hover {
+  background: #c82333;
+}
+
+button[type="button"] {
+  background: #6c757d;
+  color: white;
+}
+
+button[type="button"]:hover {
+  background: #5a6268;
+}
+
+button[type="reset"] {
+  background: #ffc107;
+  color: #212529;
+}
+
+button[type="reset"]:hover {
+  background: #e0a800;
+}
+
+@media (max-width: 768px) {
+  .modal-form {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .botones {
+    flex-direction: column;
+  }
+
+  .botones button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
