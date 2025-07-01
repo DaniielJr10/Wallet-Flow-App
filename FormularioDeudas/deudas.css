@@ -1,199 +1,149 @@
-/* Estilos base para el formulario de deudas */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f5f5;
-}
-
+/* Fondo oscuro para el modal */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
+  z-index: 998;
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
+  justify-content: center;
 }
 
+/* Contenedor del formulario */
 .modal-form {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
+  background: #e6e6e6;
+  padding: 20px 20px 30px 20px;
+  border-radius: 20px;
   width: 90%;
-  max-width: 500px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  max-width: 350px;
   position: relative;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
 
-h2 {
+/* Título del formulario */
+.modal-form h2 {
   text-align: center;
-  color: #dc3545;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
+  margin: 0 0 20px 0;
+  padding: 15px 0;
+  font-size: 22px;
+  background-color: #2e6835;
+  color: white;
+  border-radius: 20px 20px 0 0;
 }
 
-.form-step {
-  display: block;
-}
-
-.form-step.hidden {
+/* Oculta los pasos que no están activos */
+.form-step.hidden,
+.hidden {
   display: none;
 }
 
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #333;
-}
-
-input,
-select,
-textarea {
+/* Inputs y selects */
+.modal-form input,
+.modal-form select,
+.modal-form textarea {
   width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 15px;
+  background-color: white;
+  margin-bottom: 10px;
+  box-sizing: border-box;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  border-color: #dc3545;
+/* Botones de navegación */
+.nav-btn.next-step-btn,
+.nav-btn.prev-step-btn {
+  background: none;
+  border: none;
+  font-size: 40px;
+  cursor: pointer;
+  color: #2e6835;
+  padding: 10px;
+  transition: transform 0.2s;
 }
 
-textarea {
-  resize: vertical;
-  min-height: 80px;
+.nav-btn.next-step-btn:hover,
+.nav-btn.prev-step-btn:hover {
+  transform: scale(1.1);
 }
 
+/* Opciones de checkboxes */
 .checkbox-options {
-  margin: 1rem 0;
-}
-
-.checkbox-item {
-  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 0;
 }
 
 .checkbox-label {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
   font-weight: 500;
 }
 
-.checkbox-label input[type="checkbox"] {
-  width: auto;
-  margin: 0;
+.checkbox-options input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
+/* Opciones de frecuencia y cuenta asociada */
 .frecuencia-options {
-  margin-top: 0.5rem;
-  margin-left: 1.5rem;
+  margin-top: 5px;
   display: none;
 }
 
-.frecuencia-options.show {
+.frecuencia-options.visible {
   display: block;
 }
 
-.siguiente-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1rem;
-}
-
-.flecha-container {
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 1rem;
-}
-
-.nav-btn {
-  background: #dc3545;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.nav-btn:hover {
-  background: #c82333;
-}
-
+/* Botones del formulario */
 .botones {
   display: flex;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 10px 0;
+  padding: 10px;
 }
 
 .botones button {
-  flex: 1;
-  padding: 0.75rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 8px 16px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 100px;
+  font-size: 14px;
+  min-width: 80px;
+  border: none;
+  transition: background 0.2s;
 }
 
-#guardar {
-  background: #dc3545;
+button[type="submit"] {
+  background-color: #2e6835;
   color: white;
-}
-
-#guardar:hover {
-  background: #c82333;
 }
 
 button[type="button"] {
-  background: #6c757d;
+  background-color: #dc3545;
   color: white;
 }
 
-button[type="button"]:hover {
-  background: #5a6268;
-}
-
 button[type="reset"] {
-  background: #ffc107;
-  color: #212529;
+  background-color: #b1afaa;
+  color: #333;
 }
 
-button[type="reset"]:hover {
-  background: #e0a800;
-}
-
-@media (max-width: 768px) {
+/* Responsive para pantallas pequeñas */
+@media screen and (max-width: 600px) {
   .modal-form {
-    width: 95%;
-    padding: 1.5rem;
+    max-width: 98vw;
+    padding: 10px 5px 60px 5px;
   }
+}
 
-  .botones {
-    flex-direction: column;
-  }
-
-  .botones button {
-    width: 100%;
-    margin-bottom: 0.5rem;
-  }
+.siguiente-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
 }
