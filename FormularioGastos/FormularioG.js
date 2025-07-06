@@ -29,10 +29,12 @@ if (prevStepBtn) {
 function toggleFrecuencia() {
     const check = document.getElementById('addCheckRecurrente');
     const opciones = document.getElementById('addFrecuenciaOptions');
-    if (check.checked) {
-        opciones.classList.add('visible');
-    } else {
-        opciones.classList.remove('visible');
+    if (check && opciones) {
+        if (check.checked) {
+            opciones.classList.add('visible');
+        } else {
+            opciones.classList.remove('visible');
+        }
     }
 }
 
@@ -40,10 +42,12 @@ function toggleFrecuencia() {
 function toggleCuenta() {
     const check = document.getElementById('addCheckCuenta');
     const opciones = document.getElementById('addCuentaAsociadaOptions');
-    if (check.checked) {
-        opciones.classList.add('visible');
-    } else {
-        opciones.classList.remove('visible');
+    if (check && opciones) {
+        if (check.checked) {
+            opciones.classList.add('visible');
+        } else {
+            opciones.classList.remove('visible');
+        }
     }
 }
 
@@ -55,24 +59,35 @@ function cerrarModal() {
     volverAlPasoAnterior();
 }
 
-// Envía el formulario (aquí puedes agregar tu lógica para guardar el gasto)
+// Envía el formulario y guarda el gasto en localStorage
 formAgregar.addEventListener('submit', function(e) {
     e.preventDefault();
-    // Aquí puedes obtener los valores y hacer lo que necesites
+    // Permitir 0, puntos y comas en el monto
+    let montoRaw = document.getElementById('addMonto').value.trim();
+    // Reemplaza puntos por nada y comas por punto para convertir a número
+    let monto = montoRaw.replace(/\./g, '').replace(',', '.');
+    monto = parseFloat(monto) || 0;
+
     const datos = {
         categoria: document.getElementById('addCategoria').value,
         metodo: document.getElementById('addMetodo').value,
-        monto: document.getElementById('addMonto').value,
+        monto: monto,
         fecha: document.getElementById('addFecha').value,
         descripcion: document.getElementById('addDescripcion').value,
-        esRecurrente: document.getElementById('addCheckRecurrente').checked,
-        frecuencia: document.getElementById('addFrecuencia').value,
-        tieneCuenta: document.getElementById('addCheckCuenta').checked,
-        cuenta: document.getElementById('addCuentaAsociada').value
+        esRecurrente: document.getElementById('addCheckRecurrente')?.checked || false,
+        frecuencia: document.getElementById('addFrecuencia')?.value || '',
+        tieneCuenta: document.getElementById('addCheckCuenta')?.checked || false,
+        cuenta: document.getElementById('addCuentaAsociada')?.value || ''
     };
-    // Por ahora solo mostramos los datos en consola
-    console.log('Gasto agregado:', datos);
+
+    // Guardar en localStorage
+    let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
+    gastos.push(datos);
+    localStorage.setItem('gastos', JSON.stringify(gastos));
+
     cerrarModal();
+    // Redirigir a la pantalla de gastos principal
+    window.location.href = '../PantallaGastos/Gastos.html';
 });
 
 // Permite cerrar el modal con la tecla ESC

@@ -3,11 +3,13 @@
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
-  background: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
+  background: rgba(0, 0, 0, 0.5); 
   z-index: 998;
   display: flex;
   align-items: center;
   justify-content: center;
+  
+
 }
 
 /* Contenedor del formulario */
@@ -47,8 +49,9 @@
   border: 2px solid #ccc;
   border-radius: 15px;
   background-color: white;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   box-sizing: border-box;
+  margin-top: 10px;
 }
 
 /* Botones de navegación */

@@ -39,6 +39,7 @@
     <section class="filtros">
       <label for="mes">Mes:</label>
       <select id="mes">
+        <option value="todos">Selecciona</option>
         <option value="enero">Enero</option>
         <option value="febrero">Febrero</option>
         <option value="marzo">Marzo</option>
@@ -55,7 +56,7 @@
       
       <label for="categoria">Categoría:</label>
       <select id="categoria" onchange="actualizarGraficoPorCategoria()">
-        <option value="todos">Selecciona</option>
+        <option value="todos">General</option>
         <option value="alimentacion">Alimentación</option>
         <option value="transporte">Transporte</option>
         <option value="servicios">Servicios</option>
@@ -95,21 +96,6 @@
             <th>Gasto Recurrente</th> <th>Cuenta Asociada</th>  <th>Acciones</th>
           </tr>
         </thead>
-        <tbody>
-          
-          <tr>
-            <td>07/05/2025</td>
-            <td>Gasolina</td>
-            <td>Transporte</td>
-            <td>Efectivo</td>
-            <td>$30.000</td>
-            <td>No</td> <td>Ninguna</td> <td>
-              <button class="editar">✏️</button>
-              <button class="eliminar">🗑️</button>
-            </td>
-          </tr>
-          
-        </tbody>
       </table>
       
     </section>
@@ -180,20 +166,6 @@
       grafico.update();
     }
     </script>
-  <script>
-    
-    document.addEventListener('click', function (e) {
-      if (e.target.classList.contains('eliminar')) {
-        const fila = e.target.closest('tr');
-        const descripcion = fila.cells[1].textContent;
-        const confirmar = confirm(`¿Estás seguro de que deseas eliminar el gasto: "${descripcion}"?`);
-        if (confirmar) {
-          fila.remove();
-          
-        }
-      }
-    });
-  </script>
 <div class="modal-overlay" id="modalEdicion" style="display: none;">
   <div class="modal-form">
     <form id="formEditar">
@@ -279,5 +251,6 @@
 </div>
 </body>
 <script src="EditarGasto.js"></script>
+<script src="UpdateTable.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>

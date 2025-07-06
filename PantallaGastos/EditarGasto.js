@@ -1,31 +1,30 @@
-const editarBtns = document.querySelectorAll('.editar');
 const modal = document.getElementById('modalEdicion');
-const formEditar = document.getElementById('formEditar');
 const step1 = document.getElementById('step1');
 const step2 = document.getElementById('step2');
-
-// Selecciona los nuevos botones de navegación
 const nextStepBtn = document.querySelector('.next-step-btn');
 const prevStepBtn = document.querySelector('.prev-step-btn');
+const formEditar = document.getElementById('formEditar');
 
-editarBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('editar')) {
+        const btn = e.target;
         const fila = btn.closest('tr');
         fila.classList.add('editando');
 
-        document.getElementById('editFecha').value = convertirFechaInversa(fila.cells[0].textContent);
-        document.getElementById('editDescripcion').value = fila.cells[1].textContent === 'Sin descripción' ? '' : fila.cells[1].textContent;
-        document.getElementById('editCategoria').value = fila.cells[2].textContent.toLowerCase();
-        document.getElementById('editMetodo').value = fila.cells[3].textContent.toLowerCase().replace(" ", "_");
-        document.getElementById('editMonto').value = fila.cells[4].textContent.replace('$', '').replace('.', '').trim();
+        // Ajusta los índices de las celdas según tu tabla
+        document.getElementById('editCategoria').value = fila.cells[0].textContent.toLowerCase();
+        document.getElementById('editMetodo').value = fila.cells[1].textContent.toLowerCase().replace(" ", "_");
+        const montoTexto = fila.cells[2].textContent.replace('$', '').replace(/\./g, '').replace(',', '.').trim();
+        const montoNumero = parseFloat(montoTexto) || 0;
+        document.getElementById('editMonto').value = montoNumero.toLocaleString('es-CO');
+        document.getElementById('editFecha').value = convertirFechaInversa(fila.cells[3].textContent);
+        document.getElementById('editDescripcion').value = fila.cells[4].textContent === 'Sin descripción' ? '' : fila.cells[4].textContent;
 
-        // Leer los valores de Gasto Recurrente y Frecuencia de la tabla
+        // Gasto recurrente y frecuencia
         const gastoRecurrenteTexto = fila.cells[5].textContent.trim();
         const esRecurrenteTabla = gastoRecurrenteTexto.toLowerCase().startsWith('sí');
         document.getElementById('checkRecurrente').checked = esRecurrenteTabla;
         toggleFrecuencia();
-
-        // Si es recurrente, extraer la frecuencia del texto "Sí (Frecuencia)"
         if (esRecurrenteTabla) {
             const match = gastoRecurrenteTexto.match(/\(([^)]+)\)/);
             if (match && match[1]) {
@@ -37,9 +36,9 @@ editarBtns.forEach(btn => {
 
         // Cuenta asociada
         const cuentaAsociadaTabla = fila.cells[6].textContent;
-        document.getElementById('checkCuenta').checked = cuentaAsociadaTabla.toLowerCase() !== 'n/a';
+        document.getElementById('checkCuenta').checked = cuentaAsociadaTabla.toLowerCase() !== 'ninguna';
         toggleCuenta();
-        if (cuentaAsociadaTabla.toLowerCase() !== 'n/a') {
+        if (cuentaAsociadaTabla.toLowerCase() !== 'ninguna') {
             document.getElementById('cuentaAsociada').value = cuentaAsociadaTabla.toLowerCase().replace(' ', '');
         } else {
             document.getElementById('cuentaAsociada').value = '';
@@ -48,7 +47,7 @@ editarBtns.forEach(btn => {
         modal.style.display = 'block';
         step1.classList.remove('hidden');
         step2.classList.add('hidden');
-    });
+    }
 });
 
 // Función para avanzar al siguiente paso
@@ -67,19 +66,18 @@ function volverAlPasoAnterior() {
 if (nextStepBtn) {
     nextStepBtn.addEventListener('click', irAlSiguientePaso);
 }
-
 if (prevStepBtn) {
     prevStepBtn.addEventListener('click', volverAlPasoAnterior);
 }
 
 function mostrarModal() {
     document.getElementById('modalEdicion').style.display = 'block';
-    document.getElementById('menuLateral').classList.add('blur');
+    document.getElementById('menuLateral')?.classList.add('blur');
 }
 
 function cerrarModal() {
     modal.style.display = 'none';
-    document.getElementById('menuLateral').classList.remove('blur');
+    document.getElementById('menuLateral')?.classList.remove('blur');
     const filaEditando = document.querySelector('tr.editando');
     if (filaEditando) {
         filaEditando.classList.remove('editando');
@@ -89,7 +87,7 @@ function cerrarModal() {
 
 formEditar.addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     const nuevosDatos = {
         categoria: document.getElementById('editCategoria').value,
         metodoPago: document.getElementById('editMetodo').value,
@@ -104,20 +102,17 @@ formEditar.addEventListener('submit', function(e) {
 
     const filaEditando = document.querySelector('tr.editando');
     if (filaEditando) {
-        filaEditando.cells[0].textContent = formatearFecha(nuevosDatos.fecha);
-        filaEditando.cells[1].textContent = nuevosDatos.descripcion || 'Sin descripción';
-        filaEditando.cells[2].textContent = capitalizar(nuevosDatos.categoria);
-        filaEditando.cells[3].textContent = capitalizar(nuevosDatos.metodoPago.replace('_', ' '));
-        filaEditando.cells[4].textContent = `$${nuevosDatos.monto}`;
-        
-        // Actualizar las nuevas columnas
-         if (nuevosDatos.esRecurrente && nuevosDatos.frecuencia) {
-        filaEditando.cells[5].textContent = `Sí (${capitalizar(nuevosDatos.frecuencia)})`;
-    } else {
-        filaEditando.cells[5].textContent = 'No';
-    }
-        filaEditando.cells[6].textContent = nuevosDatos.tieneCuentaAsociada && nuevosDatos.cuentaAsociada ? capitalizar(nuevosDatos.cuentaAsociada) : 'N/A';
-        
+        filaEditando.cells[0].textContent = capitalizar(nuevosDatos.categoria);
+        filaEditando.cells[1].textContent = capitalizar(nuevosDatos.metodoPago.replace('_', ' '));
+        filaEditando.cells[2].textContent = `$${nuevosDatos.monto}`;
+        filaEditando.cells[3].textContent = formatearFecha(nuevosDatos.fecha);
+        filaEditando.cells[4].textContent = nuevosDatos.descripcion || 'Sin descripción';
+        if (nuevosDatos.esRecurrente && nuevosDatos.frecuencia) {
+            filaEditando.cells[5].textContent = `Sí (${capitalizar(nuevosDatos.frecuencia)})`;
+        } else {
+            filaEditando.cells[5].textContent = 'No';
+        }
+        filaEditando.cells[6].textContent = nuevosDatos.tieneCuentaAsociada && nuevosDatos.cuentaAsociada ? capitalizar(nuevosDatos.cuentaAsociada) : 'Ninguna';
         filaEditando.classList.remove('editando');
     }
 
@@ -130,7 +125,7 @@ function formatearFecha(fecha) {
 }
 
 function capitalizar(texto) {
-    if (!texto) return ''; // Manejar caso de texto nulo o vacío
+    if (!texto) return '';
     return texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
 }
 
@@ -139,33 +134,18 @@ function convertirFechaInversa(fecha) {
     return `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
 }
 
-function toggleOpcionesExtra(tipo) {
-    const recurrenteOptions = document.getElementById('recurrenteOptions');
-    const cuentaOptions = document.getElementById('cuentaOptions');
-
-    if (tipo === 'recurrente') {
-        const checkRecurrente = document.getElementById('checkRecurrente');
-        recurrenteOptions.classList.toggle('hidden', !checkRecurrente.checked);
-    }
-
-    if (tipo === 'cuenta') {
-        const checkCuenta = document.getElementById('checkCuenta');
-        cuentaOptions.classList.toggle('hidden', !checkCuenta.checked);
-    }
-}
-
 function limpiarFormulario() {
     document.getElementById('editFecha').value = '';
     document.getElementById('editDescripcion').value = '';
     document.getElementById('editCategoria').value = 'alimentacion';
     document.getElementById('editMetodo').value = 'efectivo';
     document.getElementById('editMonto').value = '';
-    
+
     const checkRecurrente = document.getElementById('checkRecurrente');
     const checkCuenta = document.getElementById('checkCuenta');
     if (checkRecurrente) checkRecurrente.checked = false;
     if (checkCuenta) checkCuenta.checked = false;
-    
+
     // También limpiar los select de frecuencia y cuenta asociada
     const frecuenciaSelect = document.getElementById('frecuencia');
     if (frecuenciaSelect) frecuenciaSelect.value = '';
@@ -179,7 +159,6 @@ function limpiarFormulario() {
 function toggleFrecuencia() {
     const checkbox = document.getElementById('checkRecurrente');
     const frecuenciaOptions = document.getElementById('frecuenciaOptions');
-    
     if (checkbox && frecuenciaOptions) {
         if (checkbox.checked) {
             frecuenciaOptions.classList.add('visible');
@@ -192,7 +171,6 @@ function toggleFrecuencia() {
 function toggleCuenta() {
     const checkbox = document.getElementById('checkCuenta');
     const cuentaOptions = document.getElementById('cuentaAsociadaOptions');
-    
     if (checkbox && cuentaOptions) {
         if (checkbox.checked) {
             cuentaOptions.classList.add('visible');
@@ -203,9 +181,9 @@ function toggleCuenta() {
 }
 
 document.addEventListener('keydown', function(event) {
-  if (event.key === 'Escape') {
-    cerrarModal();
-  }
+    if (event.key === 'Escape') {
+        cerrarModal();
+    }
 });
 
 document.getElementById('checkRecurrente')?.addEventListener('change', toggleFrecuencia);
