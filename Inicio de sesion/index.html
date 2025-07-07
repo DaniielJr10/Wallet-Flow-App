@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wallet Flow</title>
+  <link rel="stylesheet" href="Styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="logo.png" alt="Wallet Flow" />
+    </div>
+    
+    <div id="login-form" class="form-box">
+      <h2>Inicia sesión</h2>
+      <input type="email" id="login-email" placeholder="Correo Electrónico" />
+      <input type="password" id="login-password" placeholder="Contraseña" />
+      <label><input type="checkbox" id="remember" /> Recordar mis datos</label>
+      <button onclick="login()">Iniciar Sesión</button>
+      <p class="link" onclick="showForgot()">¿Olvidaste tu contraseña?</p>
+      <p>¿No tienes una cuenta? <span class="link" onclick="showRegister()">Regístrate</span></p>
+    </div>
+
+    <div id="forgot-form" class="form-box hidden">
+      <h2>Recuperar Contraseña</h2>
+      <input type="email" id="forgot-email" placeholder="Correo Electrónico" />
+      <button onclick="sendRecoveryCode()">Enviar Código</button>
+      <p class="link" onclick="showLogin()">Volver a Iniciar sesión</p>
+    </div>
+
+    <div id="verify-form" class="form-box hidden">
+      <h2>Recuperar Contraseña</h2>
+      <input type="text" id="recovery-code" placeholder="Código de Recuperación" />
+      <button onclick="verifyCode()">Verificar Código</button>
+      <p class="link" onclick="showLogin()">Volver al inicio de sesión</p>
+    </div>
+
+    <div id="register-form" class="form-box hidden">
+        <h2>Crea tu cuenta</h2>
+        <input type="email" id="register-email" placeholder="Correo Electrónico" />
+        <input type="text" id="register-id" placeholder="Número de Identificación" />
+        <input type="text" id="register-firstname" placeholder="Nombre" />
+        <input type="text" id="register-lastname" placeholder="Apellido" />
+        <input type="date" id="register-birthdate" placeholder="Fecha de Nacimiento" />
+        <input type="text" id="register-username" placeholder="Nombre de Usuario" />
+        <input type="tel" id="register-phone" placeholder="Teléfono" />
+        <input type="password" id="register-password" placeholder="Contraseña" />
+        <input type="password" id="register-confirm-password" placeholder="Confirmar Contraseña" />
+        <button onclick="register()">Registrarte</button>
+        <p class="link" onclick="showLogin()">Volver al inicio de sesión</p>
+      </div>      
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
