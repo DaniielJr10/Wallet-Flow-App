@@ -1,0 +1,289 @@
+/* ----- ESTILOS GENERALES ----- */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ----- TÍTULO PRINCIPAL ----- */
+header h1 {
+  text-align: center;
+  color: #fff;
+  background-color: #2e6835;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+/* ----- SECCIÓN MIS AHORROS Y BOTÓN NUEVO ----- */
+.seccion-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0 30px;
+}
+
+.seccion-superior h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.btn-nuevo {
+  background-color: #2e6835;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-nuevo:hover {
+  background-color: #24532b;
+}
+
+/* ----- TARJETAS DE AHORRO ----- */
+.lista-ahorros {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.tarjeta-ahorro {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* ----- LADO IZQUIERDO: INFORMACIÓN ----- */
+.ahorro-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.ahorro-info h4 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.ahorro-info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.ahorro-info strong {
+  font-weight: bold;
+}
+
+/* ----- LADO DERECHO: CATEGORÍA Y AVANCE ----- */
+.ahorro-meta {
+  text-align: right;
+  min-width: 200px;
+}
+
+.ahorro-meta h5 {
+  margin: 0;
+  font-size: 16px;
+  color: #2e6835;
+  font-weight: bold;
+}
+
+.ahorro-meta p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+/* ----- BOTONES ----- */
+.acciones-ahorro {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.acciones-ahorro button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+
+.btn-azul {
+  background-color: #4a90e2;
+}
+
+.btn-azul:hover {
+  background-color: #357ac6;
+}
+
+.btn-verde {
+  background-color: #28a745;
+}
+
+.btn-verde:hover {
+  background-color: #218838;
+}
+
+.btn-rojo {
+  background-color: #dc3545;
+}
+
+.btn-rojo:hover {
+  background-color: #c82333;
+}
+
+/* ----- MODAL ----- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
+
+.modal-form {
+  background: #e6e6e6;
+  padding: 20px 20px 80px 20px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 320px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+}
+
+.modal-form h2 {
+  text-align: center;
+  margin: 0;
+  padding: 15px 0;
+  font-size: 20px;
+  background-color: #2e6835;
+  color: white;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+  top: -20px;
+  left: -20px;
+  width: calc(100% + 40px);
+}
+
+.form-step {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal-form input,
+.modal-form select,
+.modal-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 3px solid #ccc;
+  border-radius: 70px;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+/* Navegación modal */
+.nav-btn {
+  position: absolute;
+  bottom: -1px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  color: #2e6835;
+}
+
+/* Botones modal */
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.botones button {
+  padding: 8px 16px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 14px;
+  min-width: 80px;
+}
+
+button[type="submit"] {
+  background-color: #2e6835;
+  color: white;
+  border: none;
+}
+
+button[type="button"] {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+button[type="reset"] {
+  background-color: #b1afaa;
+  color: #333;
+  border: none;
+}
+
+/* Footer */
+footer {
+  margin-top: 50px;
+  text-align: center;
+}
+
+footer button {
+  background-color: #2e6835;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+footer button:hover {
+  background-color: #24532b;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .tarjeta-ahorro {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ahorro-meta {
+    text-align: left;
+  }
+}
