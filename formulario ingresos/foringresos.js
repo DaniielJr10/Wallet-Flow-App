@@ -75,8 +75,12 @@ function initFormularioIngreso() {
         tieneCuenta: checkCuenta.checked,
         cuenta: document.getElementById('addCuentaAsociadaIngreso').value
       };
-      console.log('Ingreso agregado:', datos);
-      // Aquí puedes mostrar un mensaje de éxito si lo deseas
+      // Guardar en localStorage
+      let ingresos = JSON.parse(localStorage.getItem('ingresos')) || [];
+      ingresos.push(datos);
+      localStorage.setItem('ingresos', JSON.stringify(ingresos));
+      // Mensaje de éxito (opcional)
+      alert('¡Ingreso guardado exitosamente!');
       cerrarModalIngreso();
     });
   }
