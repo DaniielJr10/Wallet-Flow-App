@@ -125,3 +125,26 @@ img {
   background-color: #2e6835;
  
 }
+.menu-opciones .btn {
+  background-color:#eaf8ed ;
+  color: black;
+  border-color: #2ecc71;
+}
+.menu-opciones .btn:hover {
+  background-color: #2ecc71;
+  color: #fff;
+  border-color: #2e6835;
+}
+.menu-opciones .btn:hover {
+  background-color: #2ecc71;
+  color: #fff;
+  border-color: #2e6835;
+}
+
+.titulo-menu {
+  text-align: center; /* Centra el texto */
+  border-radius: 7px;
+  font-size: 1.3rem;
+  margin-bottom: 18px;
+   padding: 6px; 
+}
