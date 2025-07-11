@@ -2,59 +2,62 @@
 
 /* Section Header */
 .section-header {
-  display: flex; /* Organiza título y botón en fila */
-  justify-content: space-between; /* Espacio entre elementos */
-  align-items: center; /* Alineación vertical */
-  margin-bottom: 30px; /* Espacio inferior */
+  display: flex; /* Organiza el título y elementos como botones en fila */
+  justify-content: space-between; /* Separa los elementos a extremos opuestos */
+  align-items: center; /* Centra verticalmente */
+  margin-bottom: 30px; /* Margen inferior para separar del contenido siguiente */
 }
 
 .section-header h2 {
-  font-size: 20px; /* Tamaño de fuente */
-  font-weight: bold; /* Negrita */
-  color: #333; /* Color oscuro */
+  font-size: 20px; /* Tamaño del texto del encabezado */
+  font-weight: bold; /* Texto en negrita */
+  color: #333; /* Color oscuro para el título */
 }
 
-/* Deuda Cards - Layout Vertical */
+/* Contenedor de las tarjetas de deudas */
 .deudas-container {
-  margin-bottom: 40px;
+  margin-bottom: 40px; /* Espacio inferior con otros elementos */
   display: flex;
-  flex-direction: column; /* Tarjetas apiladas */
-  gap: 20px; /* Espacio entre tarjetas */
+  flex-direction: column; /* Apila las tarjetas verticalmente */
+  gap: 20px; /* Espacio entre cada tarjeta */
 }
 
+/* Tarjeta individual de una deuda */
 .deuda-card {
-  background-color: white; /* Fondo blanco */
-  border-radius: 8px; /* Bordes redondeados */
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  position: relative;
+  background-color: white; /* Fondo blanco para contraste */
+  border-radius: 8px; /* Bordes redondeados suaves */
+  padding: 20px; /* Relleno interno */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  position: relative; /* Para posicionar elementos internos de forma absoluta si es necesario */
   width: 100%;
 }
 
-/* Encabezado dentro de la tarjeta */
+/* Encabezado dentro de cada tarjeta de deuda */
 .deuda-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 15px;
+  display: flex; /* Fila */
+  justify-content: space-between; /* Separación entre título y estado */
+  align-items: flex-start; /* Alinea desde la parte superior */
+  margin-bottom: 15px; /* Espacio debajo del encabezado */
 }
 
+/* Título de la deuda */
 .deuda-titulo {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
+  font-size: 18px; /* Tamaño del texto */
+  font-weight: bold; /* Texto en negrita */
+  color: #333; /* Color oscuro */
 }
 
-/* Estados de la deuda */
+/* Badges (etiquetas de estado de la deuda) */
 .estado-badge {
-  background-color: #f0ad4e;
-  color: #8b6914;
-  padding: 4px 12px;
-  border-radius: 4px;
+  background-color: #f0ad4e; /* Color de fondo por defecto (pendiente) */
+  color: #8b6914; /* Color del texto */
+  padding: 4px 12px; /* Relleno */
+  border-radius: 4px; /* Bordes redondeados */
   font-size: 12px;
   font-weight: bold;
 }
 
+/* Colores personalizados por estado */
 .estado-badge.pendiente {
   background-color: #f0ad4e;
   color: #8b6914;
@@ -85,36 +88,36 @@
   color: white;
 }
 
-/* Información principal de la deuda */
+/* Información principal de la deuda (en formato de 3 columnas) */
 .deuda-info {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* Tres columnas */
-  gap: 20px;
+  display: grid; /* Usa rejilla */
+  grid-template-columns: 1fr 1fr 1fr; /* Tres columnas iguales */
+  gap: 20px; /* Espacio entre columnas */
   margin-bottom: 15px;
-  font-size: 13px;
+  font-size: 13px; /* Tamaño base del texto */
 }
 
 .info-item {
-  text-align: left;
+  text-align: left; /* Alineación del texto a la izquierda */
 }
 
 .info-label {
-  color: #666;
+  color: #666; /* Color gris oscuro */
   font-weight: bold;
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 3px; /* Separación entre etiqueta y valor */
 }
 
 .info-value {
-  color: #333;
+  color: #333; /* Color del valor */
   font-weight: normal;
   font-size: 14px;
 }
 
-/* Detalles adicionales de la deuda */
+/* Detalles adicionales de la deuda (en formato de 2 columnas) */
 .deuda-detalles {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Dos columnas */
+  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
   gap: 15px;
   margin-bottom: 15px;
   font-size: 12px;
@@ -141,7 +144,7 @@
   color: #333;
 }
 
-/* Botones de acción dentro de cada tarjeta */
+/* Contenedor de botones (editar, eliminar, registrar) */
 .deuda-acciones {
   display: flex;
   gap: 10px;
@@ -158,26 +161,27 @@
   text-align: center;
 }
 
+/* Colores por tipo de acción */
 .btn-registrar {
-  background-color: #5bc0de;
+  background-color: #5bc0de; /* Azul claro */
   color: white;
 }
 
 .btn-editar {
-  background-color: #5cb85c;
+  background-color: #5cb85c; /* Verde */
   color: white;
 }
 
 .btn-eliminar {
-  background-color: #d9534f;
+  background-color: #d9534f; /* Rojo */
   color: white;
 }
 
 .btn-accion:hover {
-  opacity: 0.8; /* Efecto al pasar mouse */
+  opacity: 0.8; /* Efecto de opacidad al pasar el cursor */
 }
 
-/* Botón para volver */
+/* Botón para volver al menú o pantalla anterior */
 .volver-container {
   text-align: center;
   margin-top: 30px;
@@ -194,23 +198,24 @@
 }
 
 .volver-btn:hover {
-  background-color: #f5f5f5;
+  background-color: #f5f5f5; /* Cambia fondo al pasar el cursor */
 }
 
-/* Estilos para el modal */
+/* Modal general que oscurece el fondo */
 .modal-overlay {
-  position: fixed;
+  position: fixed; /* Ocupa toda la pantalla */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1000; /* Encima de todo */
 }
 
+/* Contenido del formulario dentro del modal */
 .modal-form {
   background-color: #e8e8e8;
   padding: 25px;
@@ -233,7 +238,7 @@
   font-weight: normal;
 }
 
-/* Mensaje de validación */
+/* Estilo para mensaje de error o advertencia en el modal */
 .validation-message {
   background-color: #d3d3d3;
   color: #333;
@@ -245,6 +250,7 @@
   font-weight: bold;
 }
 
+/* Campos de entrada del formulario */
 .modal-form label {
   display: block;
   margin-bottom: 8px;
@@ -266,10 +272,11 @@
 }
 
 .modal-form textarea {
-  resize: vertical;
+  resize: vertical; /* Permite redimensionar verticalmente */
   min-height: 80px;
 }
 
+/* Botones dentro del modal */
 .botones {
   display: flex;
   gap: 15px;
@@ -288,25 +295,25 @@
 }
 
 .botones button[type="submit"] {
-  background-color: #5cb85c;
+  background-color: #5cb85c; /* Botón verde */
   color: white;
 }
 
 .botones button[type="button"]:first-child {
-  background-color: #6c757d;
+  background-color: #6c757d; /* Botón gris */
   color: white;
 }
 
 .botones .btn-eliminar {
-  background-color: #d9534f;
+  background-color: #d9534f; /* Botón rojo */
   color: white;
 }
 
 .botones button:hover {
-  opacity: 0.8;
+  opacity: 0.8; /* Efecto al pasar el cursor */
 }
 
-/* Modal de pago o eliminación */
+/* Tamaños personalizados para modales */
 .modal-pago {
   max-width: 400px;
 }
@@ -323,12 +330,13 @@
   line-height: 1.5;
 }
 
-/* Estilos para formulario por pasos */
+/* Oculta elementos según clase */
 .form-step.hidden,
 .hidden {
   display: none;
 }
 
+/* Opciones de selección tipo checkbox */
 .checkbox-options {
   display: flex;
   flex-direction: column;
@@ -350,15 +358,17 @@
   cursor: pointer;
 }
 
+/* Opciones de frecuencia */
 .frecuencia-options {
   margin-top: 5px;
   display: none;
 }
 
 .frecuencia-options.visible {
-  display: block;
+  display: block; /* Se muestra cuando tiene la clase visible */
 }
 
+/* Botones de navegación entre pasos */
 .nav-btn.next-step-btn,
 .nav-btn.prev-step-btn {
   background: none;
@@ -367,34 +377,37 @@
   cursor: pointer;
   color: #2e6835;
   padding: 10px;
-  transition: transform 0.2s;
+  transition: transform 0.2s; /* Suaviza efecto al pasar mouse */
 }
 
 .nav-btn.next-step-btn:hover,
 .nav-btn.prev-step-btn:hover {
-  transform: scale(1.1);
+  transform: scale(1.1); /* Aumenta ligeramente el tamaño */
 }
 
+/* Contenedor del botón siguiente */
 .siguiente-container {
   display: flex;
   justify-content: flex-end;
   margin-top: 10px;
 }
 
+/* Contenedor del botón anterior */
 .flecha-container {
   display: flex;
   justify-content: flex-start;
   margin-top: 10px;
 }
 
-/* Gráficas de deudas */
+/* Contenedor de las gráficas */
 .graficas-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* Dos columnas para las gráficas */
   gap: 20px;
   margin-bottom: 30px;
 }
 
+/* Estilo individual de cada tarjeta con gráfica */
 .grafica-card {
   background-color: white;
   border-radius: 8px;
@@ -415,20 +428,20 @@
   height: auto;
 }
 
-/* Estilos responsive */
+/* Estilos para dispositivos pequeños (responsive) */
 @media (max-width: 768px) {
   .deudas-content {
     padding: 20px;
   }
 
   .section-header {
-    flex-direction: column;
+    flex-direction: column; /* Coloca el texto y botones uno debajo del otro */
     gap: 15px;
     text-align: center;
   }
 
   .deuda-info {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Solo una columna */
     gap: 8px;
   }
 
@@ -436,7 +449,7 @@
     display: flex;
     justify-content: space-between;
     padding: 6px 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #eee; /* Línea divisoria */
   }
 
   .deuda-detalles {
@@ -445,12 +458,12 @@
   }
 
   .deuda-acciones {
-    flex-direction: column;
+    flex-direction: column; /* Botones uno debajo del otro */
     gap: 8px;
   }
 
   .graficas-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Una sola gráfica por fila */
     gap: 15px;
   }
 }
