@@ -1,5 +1,6 @@
 h1 {
- background-color: #2e6835;
+ background-color: #2ecc71;
+ border-radius: 10px;
     color: white;
 }
 .titulo {
@@ -24,8 +25,12 @@ body {
     font-size: 2rem;
   }
 
+  .contenido-principal {
+    background-color: rgb(233, 225, 225);
+  }
 
-  /* Desde aqui empieza el css para el menú lateral */
+
+/* Desde aqui empieza el css para el menú lateral */
 /* MENÚ LATERAL */
 .menu-lateral {
   background-color: white;
