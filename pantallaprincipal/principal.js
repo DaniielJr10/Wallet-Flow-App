@@ -41,3 +41,32 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(script);
   });
 });
+
+
+// Lógica del botón agregar cuenta
+const btnNuevaCuenta = document.getElementById('btnNuevaCuenta');
+const contenedorModalCuenta = document.getElementById('contenedorModalCuenta');
+
+btnNuevaCuenta.addEventListener('click', async function (e) {
+  e.preventDefault();
+  menuOpciones.classList.add('d-none');
+
+  const response = await fetch('../formulario cuentas/forcuentas.html');
+  const html = await response.text();
+  contenedorModalCuenta.innerHTML = html;
+
+  const script = document.createElement('script');
+  script.src = '../formulario cuentas/forcuentas.js';
+  script.onload = function () {
+    if (typeof initFormularioCuenta === 'function') {
+      initFormularioCuenta();
+    }
+
+    const modal = document.getElementById('modalAgregarCuenta');
+    if (modal) {
+      modal.classList.remove('d-none');
+    }
+  };
+  document.body.appendChild(script);
+});
+
