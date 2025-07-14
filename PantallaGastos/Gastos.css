@@ -8,15 +8,6 @@ body {
 }
 
 /* --- CONTENEDOR PRINCIPAL --- */
-/* Centra el contenido, le da fondo blanco, bordes redondeados y sombra */
-.container {
-  max-width: 1200px; /* Ancho máximo del contenido */
-  margin: auto;      /* Centra horizontalmente */
-  padding: 20px;     /* Espaciado interno */
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
-}
 
 /* --- CABECERA (TÍTULO PRINCIPAL) --- */
 header h1 {
@@ -349,3 +340,29 @@ button[type="reset"] {
     align-items: flex-start;
   }
 }
+
+/* Barra lateral más angosta */
+.sidebar, .menu-lateral, .menuLateral {
+  width: 500px !important;   /* Ajusta el ancho según prefieras */
+  min-width: 140px !important;
+  max-width: 250px;
+  padding: 10px 5px !important;
+  box-sizing: border-box;
+}
+
+/* Opciones del menú más compactas */
+.sidebar button,
+.menu-lateral button,
+.menuLateral button,
+.sidebar a,
+.menu-lateral a,
+.menuLateral a {
+  font-size: 15px !important;
+  padding: 6px 8px !important;
+  margin: px 0 !important;
+  border-radius: 8px;
+  white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
