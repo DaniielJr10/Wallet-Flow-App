@@ -51,27 +51,41 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Crea el formulario HTML
     const formHtml = `
-      <form id="formEditarIngreso" style="z-index:9999; background:#fff; padding:20px; border-radius:10px; max-width:400px; margin:auto;">
-        <h5>Editar Ingreso</h5>
-        <label>Categoría:<input class="form-control" name="categoria" value="${ingreso.categoria}" required></label>
-        <label>Método:<input class="form-control" name="metodo" value="${ingreso.metodo}" required></label>
-        <label>Monto:<input class="form-control" name="monto" type="number" min="0" step="0.01" value="${ingreso.monto}" required></label>
-        <label>Fecha:<input class="form-control" name="fecha" type="date" value="${ingreso.fecha}" required></label>
-        <label>Descripción:<input class="form-control" name="descripcion" value="${ingreso.descripcion || ''}"></label>
-        <label>Recurrente:
+      <form id="formEditarIngreso" class="form-editar">
+        <h5 class="form-titulo">Editar Ingreso</h5>
+        <label class="form-label">Categoría:
+          <input class="form-control" name="categoria" value="${ingreso.categoria}" required>
+        </label>
+        <label class="form-label">Método:
+          <input class="form-control" name="metodo" value="${ingreso.metodo}" required>
+        </label>
+        <label class="form-label">Monto:
+          <input class="form-control" name="monto" type="number" min="0" step="0.01" value="${ingreso.monto}" required>
+        </label>
+        <label class="form-label">Fecha:
+          <input class="form-control" name="fecha" type="date" value="${ingreso.fecha}" required>
+        </label>
+        <label class="form-label">Descripción:
+          <input class="form-control" name="descripcion" value="${ingreso.descripcion || ''}">
+        </label>
+        <label class="form-label">Recurrente:
           <select class="form-control" name="esRecurrente">
             <option value="true" ${ingreso.esRecurrente ? 'selected' : ''}>Sí</option>
             <option value="false" ${!ingreso.esRecurrente ? 'selected' : ''}>No</option>
           </select>
         </label>
-        <label>Frecuencia:<input class="form-control" name="frecuencia" value="${ingreso.frecuencia || ''}"></label>
-        <label>Cuenta:<input class="form-control" name="cuenta" value="${ingreso.cuenta || ''}"></label>
-        <div class="mt-2">
+        <label class="form-label">Frecuencia:
+          <input class="form-control" name="frecuencia" value="${ingreso.frecuencia || ''}">
+        </label>
+        <label class="form-label">Cuenta:
+          <input class="form-control" name="cuenta" value="${ingreso.cuenta || ''}">
+        </label>
+        <div class="form-buttons">
           <button type="submit" class="btn btn-success btn-sm">Guardar</button>
           <button type="button" class="btn btn-secondary btn-sm" id="cancelarEditar">Cancelar</button>
         </div>
       </form>
-      <div id="fondoModalEditar" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);z-index:9998;"></div>
+      <div id="fondoModalEditar" class="modal-fondo"></div>
     `;
 
     // Crea el modal
