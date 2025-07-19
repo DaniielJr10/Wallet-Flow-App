@@ -1,48 +1,4 @@
-/* Estilos para el modal del formulario de ingreso */
-.modal-ingreso {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(44, 62, 80, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-  }
-  .modal-contenido {
-    background: #fff;
-    border-radius: 16px;
-    padding: 2rem 1.5rem;
-    min-width: 320px;
-    max-width: 90vw;
-    box-shadow: 0 8px 32px rgba(44,62,80,0.2);
-  }
-  .modal-contenido h3 {
-    color: #2e6835;
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-  #formIngreso .form-label {
-    color: #2e6835;
-    font-weight: 500;
-  }
-  #formIngreso .form-control {
-    border-radius: 8px;
-    border: 1px solid #2ecc71;
-  }
-  #formIngreso .btn-success {
-    background: #2ecc71;
-    border: none;
-  }
-  #formIngreso .btn-success:hover {
-    background: #27ae60;
-  }
-  #formIngreso .btn-secondary {
-    background: #b2bec3;
-    border: none;
-  }
-  #formIngreso .btn-secondary:hover {
-    background: #636e72;
-  }
+
   
   /* Fondo oscuro para el modal */
   .modal-overlay {
@@ -54,10 +10,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: black;
   }
   
   .modal-form {
     background: #e6e6e6;
+    color: black;
     padding: 20px 20px 30px 20px;
     border-radius: 20px;
     width: 90%;
@@ -65,7 +23,9 @@
     position: relative;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
   }
-  
+  .modal-form label {
+  color: black !important; /* Forzar el color negro */
+  }
   .modal-form h2 {
     text-align: center;
     margin: 0 0 20px 0;
