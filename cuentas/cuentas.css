@@ -112,12 +112,13 @@ border-radius: 10px;
   
   /* Botón eliminar */
   .btn-outline-danger {
-    border-color: #dc3545;
-    color: #dc3545;
+    border-color: red;
+    background-color: rgb(240, 29, 29);
+    color: rgb(240, 29, 29);
   }
   
   .btn-outline-danger:hover {
-    background-color: #dc3545;
+    background-color: rgb(240, 29, 29);
     color: #fff;
   }
   
