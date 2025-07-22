@@ -59,6 +59,19 @@ h2 {
 /*hasta aqui termina el css para el menú lateral */
 
 
+
+/* Estilo para que todos los bordes de la tabla sean verdes y más anchos */
+#tablaIngresos, 
+#tablaIngresos th, 
+#tablaIngresos td {
+  border: 3px solid #2ecc71; /* Borde verde más ancho */
+  border-collapse: collapse; /* Colapsar bordes para un mejor diseño */
+}
+
+/* Estilo para que todas las filas tengan el mismo color */
+#tablaIngresos tbody tr {
+  background-color: #eaf8ed; /* Fondo verde claro para todas las filas */
+}
 /*estilo de Formulario de editar ingresos*/
 .form-editar {
   background-color: #ffffff;
