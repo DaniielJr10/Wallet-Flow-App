@@ -2,12 +2,14 @@ h1 {
   background-color: #2ecc71;
   color: white;
   border-radius: 10px;
+  font-weight: bold;
 }
 .titulo {
   background-color: #2e6835;
   color: white;
   text-align: center;
   margin-top: 20px;
+  font-weight: bold;
 }
 
 /* CONTENIDO PRINCIPAL */
