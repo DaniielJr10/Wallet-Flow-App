@@ -12,9 +12,18 @@ function renderizarCuentas() {
       <div class="card h-100">
         <div class="card-body">
           <h5 class="card-title">${cuenta.nombre}</h5>
-          <p class="card-text">Tipo: ${cuenta.tipo}</p>
-          <p class="card-text">Número: ${cuenta.numero}</p>
-          <p class="card-text">Saldo Inicial: $${cuenta.saldoInicial.toFixed(2)}</p>
+          <div class="d-flex justify-content-between">
+            <span class="label">Tipo:</span>
+            <span class="value">${cuenta.tipo}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="label">Número:</span>
+            <span class="value">${cuenta.numero}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="label">Saldo Inicial:</span>
+            <span class="value">$${cuenta.saldoInicial.toFixed(2)}</span>
+          </div>
           ${cuenta.esPrincipal ? '<span class="badge bg-success">Principal</span>' : ''}
           <div class="mt-3">
             <button class="btn btn-primary btn-editar" data-index="${index}">Editar</button>
