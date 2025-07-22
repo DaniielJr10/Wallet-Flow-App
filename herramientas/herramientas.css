@@ -17,10 +17,6 @@ body, html {
   }
   
 
-
-
-
-
 /* Desde aqui empieza el css para el menú lateral */
 /* MENÚ LATERAL */
 .menu-lateral {
@@ -61,5 +57,41 @@ body, html {
   }
   /*hasta aqui termina el css para el menú lateral */
   
+  
+/* Estilo para las tarjetas de herramientas */
+.herramienta-card {
+    border: none;
+    border-radius: 20px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    width: 100%; /* Asegura que ocupen todo el ancho disponible */
+    height: 300px; /* Aumenta la altura de las tarjetas */
+    display: flex;
+    flex-direction: column; /* Organiza el contenido en columna */
+    justify-content: space-between; /* Espacia el contenido */
+    align-items: center; /* Centra horizontalmente */
+    padding: 20px; /* Espaciado interno */
+  }
+  
+  .herramienta-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Título de la herramienta */
+  .herramienta-card .card-title {
+    font-size: 30px; /* Tamaño del título */
+    font-weight: bold;
+    color: #2ecc71;
+    text-align: center; /* Centrado horizontalmente */
+    margin-bottom: 10px; /* Espaciado inferior */
+  }
+  
+  /* Iconos de herramientas */
+  .herramienta-icon {
+    font-size: 6rem; /* Aumenta el tamaño del ícono */
+    color: #2ecc71;
+    margin: auto 0; /* Centra verticalmente el ícono */
+  }
   
   
