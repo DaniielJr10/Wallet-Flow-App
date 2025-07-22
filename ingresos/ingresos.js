@@ -1,4 +1,3 @@
-//Mostar los ingresos
 document.addEventListener('DOMContentLoaded', function () {
   renderIngresos();
 
@@ -25,17 +24,19 @@ document.addEventListener('DOMContentLoaded', function () {
       tabla.appendChild(fila);
     });
 
-    // Botón eliminar
     document.querySelectorAll('.btn-eliminar').forEach(btn => {
       btn.addEventListener('click', function () {
         const idx = this.getAttribute('data-index');
-        ingresos.splice(idx, 1);
-        localStorage.setItem('ingresos', JSON.stringify(ingresos));
-        renderIngresos();
+        const confirmacion = confirm('¿Estás seguro de que deseas eliminar este ingreso?');
+        if (confirmacion) {
+          ingresos.splice(idx, 1);
+          localStorage.setItem('ingresos', JSON.stringify(ingresos));
+          renderIngresos();
+          alert('¡Ingreso eliminado exitosamente!');
+        }
       });
     });
 
-    // Botón editar
     document.querySelectorAll('.btn-editar').forEach(btn => {
       btn.addEventListener('click', function () {
         const idx = this.getAttribute('data-index');
@@ -44,12 +45,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Formulario modal simple para editar todos los campos
   function editarIngreso(idx) {
     let ingresos = JSON.parse(localStorage.getItem('ingresos')) || [];
     const ingreso = ingresos[idx];
 
-    // Crea el formulario HTML
     const formHtml = `
       <form id="formEditarIngreso" class="form-editar">
         <h5 class="form-titulo">Editar Ingreso</h5>
@@ -85,10 +84,8 @@ document.addEventListener('DOMContentLoaded', function () {
           <button type="button" class="btn btn-secondary btn-sm" id="cancelarEditar">Cancelar</button>
         </div>
       </form>
-      <div id="fondoModalEditar" class="modal-fondo"></div>
     `;
 
-    // Crea el modal
     const modal = document.createElement('div');
     modal.id = 'modalEditarIngreso';
     modal.style.position = 'fixed';
@@ -96,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
     modal.style.left = '0';
     modal.style.width = '100vw';
     modal.style.height = '100vh';
+    modal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
     modal.style.display = 'flex';
     modal.style.alignItems = 'center';
     modal.style.justifyContent = 'center';
@@ -103,15 +101,10 @@ document.addEventListener('DOMContentLoaded', function () {
     modal.innerHTML = formHtml;
     document.body.appendChild(modal);
 
-    // Evento cancelar
     document.getElementById('cancelarEditar').onclick = function () {
       document.body.removeChild(modal);
     };
-    document.getElementById('fondoModalEditar').onclick = function () {
-      document.body.removeChild(modal);
-    };
 
-    // Evento guardar
     document.getElementById('formEditarIngreso').onsubmit = function (e) {
       e.preventDefault();
       const formData = new FormData(this);

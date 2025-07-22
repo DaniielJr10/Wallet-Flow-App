@@ -2,11 +2,6 @@ body, html {
   height: 100%;
   font-family: 'Poppins', sans-serif;
 }
-img {
-  max-width: 100%;
-  height: auto;
-}
-
 
 
 /* Desde aqui empieza el css para el menú lateral */

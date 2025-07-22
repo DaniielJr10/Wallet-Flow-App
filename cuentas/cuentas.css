@@ -134,3 +134,77 @@ border-radius: 10px;
     font-size: 0.95rem;
   }
   
+
+/* Estilo del formulario de edición */
+.form-editar {
+  background-color: #ffffff;
+  border: 3px solid #2ecc71;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 15px; /* Reduce el relleno interno */
+  max-width: 370px; /* Reduce el ancho máximo */
+  width: 80%; /* Ajusta el ancho relativo al contenedor */
+  min-height: 100px; /* Reduce la altura mínima */
+  font-family: 'Arial', sans-serif;
+  color: black;
+}
+
+.form-titulo {
+  font-size: 1.2rem; /* Reduce el tamaño del título */
+  font-weight: bold;
+  color: #2ecc71;
+  text-align: center;
+  margin-bottom: 10px; /* Reduce el margen inferior */
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px; /* Reduce el margen inferior */
+  font-weight: bold;
+  color: black;
+  font-size: 0.9rem; /* Reduce el tamaño de las etiquetas */
+}
+
+.form-control {
+  width: 100%;
+  padding: 6px; /* Reduce el relleno interno de los campos */
+  margin-top: 4px; /* Reduce el margen superior */
+  border: 1px solid #2ecc71;
+  border-radius: 5px;
+  font-size: 0.9rem; /* Reduce el tamaño de la fuente */
+}
+
+.form-control:focus {
+  border-color: #2ecc71;
+  box-shadow: 0 0 4px rgba(46, 204, 113, 0.5); /* Reduce el efecto de sombra */
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px; /* Reduce el margen superior */
+}
+
+.btn-success {
+  background-color: #2ecc71;
+  border-color: #27ae60;
+  font-size: 0.9rem; /* Reduce el tamaño de la fuente del botón */
+  padding: 5px 10px; /* Reduce el relleno interno del botón */
+}
+
+.btn-success:hover {
+  background-color: #05dd4d;
+  border-color: #1e8449;
+}
+
+.btn-secondary {
+  background-color: rgb(240, 29, 29);
+  border-color: red;
+  font-size: 0.9rem; /* Reduce el tamaño de la fuente del botón */
+  padding: 5px 10px; /* Reduce el relleno interno del botón */
+}
+
+.btn-secondary:hover {
+  background-color: red;
+  border-color: red;
+}
