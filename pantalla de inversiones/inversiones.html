@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Inversiones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="inversiones.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="row">
+            <div class="col-12">
+                <div class="header-section">
+                    <h1 class="header-title">Inversiones</h1>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <!-- Mis Inversiones Section -->
+                <div class="card investment-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Mis Inversiones</h5>
+                        <button class="btn btn-success btn-sm" onclick="showNewInvestmentModal()">NUEVA INVERSIÓN</button>
+                    </div>
+                    <div class="card-body" id="investmentsList">
+                        <!-- Las inversiones se cargarán aquí dinámicamente desde JavaScript -->
+                        <div class="investment-item d-flex justify-content-between" data-investment-id="1">
+                            <div>
+                                <div class="investment-name">Renta Fija</div>
+                                <div class="investment-amount">$25,000.00</div>
+                            </div>
+                            <div class="investment-return">
+                                <span class="return-percentage">+2.5%</span>
+                                <div class="return-amount">$1,500.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Distribución de Inversiones -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Distribución de Inversiones</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <canvas id="distributionChart" width="300" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-md-12">
+                <!-- Rendimiento por Tipo -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Rendimiento por Tipo</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="performanceChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Acciones Tecnológicas -->
+                <div class="card mt-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Acciones Tecnológicas</h5>
+                        <span class="text-muted">NASDAQ</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="stock-list" id="stocksList">
+                            <!-- Las acciones se cargarán aquí dinámicamente desde JavaScript -->
+                            <div class="stock-item d-flex justify-content-between align-items-center" data-stock-id="AAPL">
+                                <div>
+                                    <div class="stock-name">AAPL</div>
+                                    <div class="stock-company">Apple Inc.</div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="stock-price">$150.25</div>
+                                    <div class="stock-change positive">+2.5%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="action-buttons mt-4 d-flex gap-3">
+                    <button class="btn btn-outline-secondary flex-fill" onclick="showUpdateValueModal()">Actualizar Valor</button>
+                    <button class="btn btn-success flex-fill" onclick="showEditModal()">Editar</button>
+                    <button class="btn btn-danger flex-fill" onclick="showDeleteModal()">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Nueva Inversión -->
+    <div class="modal fade" id="newInvestmentModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header header-section">
+                    <h5 class="modal-title header-title text-white">Nueva Inversión</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body modal-body-custom-bg">
+                    <form id="newInvestmentForm">
+                        <div class="mb-3">
+                            <label for="newInvestmentAmount" class="form-label">Monto Invertido</label>
+                            <input type="number" class="form-control" id="newInvestmentAmount" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newInvestmentDate" class="form-label">Fecha de inversión</label>
+                            <input type="date" class="form-control" id="newInvestmentDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newInvestmentDescription" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="newInvestmentDescription" placeholder="Acciones Tecnológicas" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newInvestmentType" class="form-label">Tipo de inversión</label>
+                            <input type="text" class="form-control" id="newInvestmentType" placeholder="Acciones" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newInvestmentExpectedValue" class="form-label">Valor esperado</label>
+                            <input type="number" class="form-control" id="newInvestmentExpectedValue" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newInvestmentMaturityDate" class="form-label">Fecha de vencimiento (opcional)</label>
+                            <input type="date" class="form-control" id="newInvestmentMaturityDate">
+                        </div>
+                        <div class="mb-3">
+                            <label for="newInvestmentExpectedReturn" class="form-label">Rendimiento esperado</label>
+                            <input type="text" class="form-control" id="newInvestmentExpectedReturn" placeholder="10%" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer modal-footer-custom-bg">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="addNewInvestment()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Actualizar Valor -->
+    <div class="modal fade" id="updateValueModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Actualizar Valor de Acción</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateValueForm">
+                        <div class="mb-3">
+                            <label for="stockSelect" class="form-label">Seleccionar Acción</label>
+                            <select class="form-select" id="stockSelect" required>
+                                <option value="">Seleccione una acción</option>
+                                <!-- Las opciones se cargarán dinámicamente -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPrice" class="form-label">Nuevo Precio</label>
+                            <input type="number" class="form-control" id="newPrice" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-info" onclick="simulateMarketPrice()">Simular Precio de Mercado</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="updateStockValue()">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Editar Inversión -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header header-section">
+                    <h5 class="modal-title header-title text-white">Editar Inversión</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body modal-body-custom-bg">
+                    <form id="editForm">
+                        <input type="hidden" id="editInvestmentId">
+                        <div class="mb-3">
+                            <label for="editInvestmentAmount" class="form-label">Monto Invertido</label>
+                            <input type="number" class="form-control" id="editInvestmentAmount" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editInvestmentDate" class="form-label">Fecha de inversión</label>
+                            <input type="date" class="form-control" id="editInvestmentDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editInvestmentDescription" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="editInvestmentDescription" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editInvestmentType" class="form-label">Tipo de inversión</label>
+                            <input type="text" class="form-control" id="editInvestmentType" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editInvestmentExpectedValue" class="form-label">Valor esperado</label>
+                            <input type="number" class="form-control" id="editInvestmentExpectedValue" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editInvestmentMaturityDate" class="form-label">Fecha de vencimiento (opcional)</label>
+                            <input type="date" class="form-control" id="editInvestmentMaturityDate">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editInvestmentExpectedReturn" class="form-label">Rendimiento esperado</label>
+                            <input type="text" class="form-control" id="editInvestmentExpectedReturn" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer modal-footer-custom-bg">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="saveEditedInvestment()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Eliminar -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Eliminar Elemento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Qué desea eliminar?</p>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-danger" onclick="showDeleteInvestmentOptions()">Eliminar Inversión</button>
+                        <button class="btn btn-outline-danger" onclick="showDeleteStockOptions()">Eliminar Acción</button>
+                    </div>
+                    
+                    <div id="deleteInvestmentOptions" style="display: none;" class="mt-3">
+                        <label for="investmentToDelete" class="form-label">Seleccionar Inversión a Eliminar</label>
+                        <select class="form-select" id="investmentToDelete">
+                            <option value="">Seleccione una inversión</option>
+                            <!-- Las opciones se cargarán dinámicamente -->
+                        </select>
+                        <button class="btn btn-danger mt-2" onclick="deleteInvestment()">Eliminar Inversión</button>
+                    </div>
+                    
+                    <div id="deleteStockOptions" style="display: none;" class="mt-3">
+                        <label for="stockToDelete" class="form-label">Seleccionar Acción a Eliminar</label>
+                        <select class="form-select" id="stockToDelete">
+                            <option value="">Seleccione una acción</option>
+                            <!-- Las opciones se cargarán dinámicamente -->
+                        </select>
+                        <button class="btn btn-danger mt-2" onclick="deleteStock()">Eliminar Acción</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación para Eliminar -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">⚠️ Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmDeleteMessage">¿Está seguro de que desea eliminar este elemento?</p>
+                    <div class="alert alert-warning">
+                        <strong>Advertencia:</strong> Esta acción no se puede deshacer.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nuevo Modal para Mensajes Simples (Éxito/Error) -->
+    <div class="modal fade" id="messageModal" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content message-modal-content">
+                <div class="modal-body text-center">
+                    <p id="messageModalText" class="message-modal-text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="inversiones.js"></script>
+</body>
+</html>
