@@ -153,3 +153,14 @@ function actualizarAhorro(idx) {
 document.addEventListener('DOMContentLoaded', () => {
   mostrarAhorros();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btnMenu = document.getElementById('btnMenu');
+  const menuLateral = document.getElementById('menuLateral');
+
+  btnMenu?.addEventListener('click', () => {
+    menuLateral.classList.toggle('mostrar');
+  });
+
+  mostrarAhorros(); // ya estaba en tu código
+});
