@@ -1,0 +1,55 @@
+<!-- Formulario para nueva inversión -->
+<div id="modalAgregarInversion" class="modal-overlay d-none">
+  <div class="modal-form">
+    <form id="formAgregarInversion" autocomplete="off">
+      <h2>Agregar Inversión</h2>
+      <div class="form-step" id="step1">
+        <label for="addTipoInversion">Tipo de Inversión</label>
+        <select id="addTipoInversion" required>
+          <option value="acciones">Acciones</option>
+          <option value="bonos">Bonos</option>
+          <option value="fondos_mutuos">Fondos Mutuos</option>
+          <option value="bienes_raices">Bienes Raíces</option>
+          <option value="criptomonedas">Criptomonedas</option>
+          <option value="otro">Otro</option>
+        </select>
+        
+        <label for="addMontoInversion">Monto Invertido</label>
+        <input type="number" id="addMontoInversion" required min="0" step="0.01">
+        
+        <label for="addFechaInicioInversion">Fecha de Inicio</label>
+        <input type="date" id="addFechaInicioInversion" required>
+
+        <label for="addRiesgoInversion">Nivel de Riesgo</label>
+        <select id="addRiesgoInversion" required>
+          <option value="bajo">Bajo</option>
+          <option value="medio">Medio</option>
+          <option value="alto">Alto</option>
+        </select>
+
+        <div class="siguiente-container">
+          <button type="button" class="nav-btn next-step-btn" aria-label="Siguiente">➡️</button>
+        </div>
+      </div>
+      <div class="form-step hidden" id="step2">
+        <label for="addFechaFinInversion">Fecha de Fin (Opcional)</label>
+        <input type="date" id="addFechaFinInversion">
+
+        <label for="addRendimientoEsperadoInversion">Rendimiento Esperado (%)</label>
+        <input type="number" id="addRendimientoEsperadoInversion" min="0" step="0.01">
+
+        <label for="addDescripcionInversion">Descripción</label>
+        <textarea id="addDescripcionInversion" name="descripcion"></textarea>
+        
+        <div class="botones">
+          <button type="submit" id="guardar">Guardar</button>
+          <button type="button" id="cancelarInversion">Cancelar</button>
+          <button type="reset">Limpiar</button>
+        </div>
+        <div class="flecha-container">
+          <button type="button" class="nav-btn prev-step-btn" aria-label="Anterior">⬅️</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+/* Specific styles for Deudas page and form */
+
+/* Table styles */
+.table-deudas,
+.table-deudas th,
+.table-deudas td {
+  border: 3px solid #dc3545; /* Red border for debts */
+  border-collapse: collapse;
+}
+
+.table-deudas tbody tr {
+  background-color: #f8eaf0; /* Light pink/red background */
+}
+
+/* Form styles (reusing modal-form and form-step from principal.css) */
+.modal-form h2 {
+  background-color: #dc3545; /* Red header for debt form */
+}
+
+.botones button[type="submit"] {
+  background-color: #dc3545; /* Red submit button for debt form */
+}
