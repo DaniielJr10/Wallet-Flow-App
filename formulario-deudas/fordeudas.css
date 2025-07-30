@@ -1,10 +1,10 @@
 /* Estilos específicos para el formulario de deudas */
 .modal-form h2 {
-  background-color: #dc3545; /* Rojo para el encabezado del formulario de deudas */
+  background-color: #1abc9c; /* Teal para el encabezado del formulario de deudas */
 }
 
 .botones button[type="submit"] {
-  background-color: #dc3545; /* Rojo para el botón de guardar del formulario de deudas */
+  background-color: #1abc9c; /* Teal para el botón de guardar del formulario de deudas */
 }
 
 /* Reutiliza estilos generales de principal.css para el resto del formulario */

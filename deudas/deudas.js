@@ -78,6 +78,20 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("deudaPendiente").textContent = `$${deudaPendiente.toFixed(2)}`
     document.getElementById("deudasPagadas").textContent = `$${deudasPagadas.toFixed(2)}`
 
+    // Update Debt Progress Bar
+    const debtProgressBar = document.getElementById("debtProgressBar")
+    const debtProgressText = document.getElementById("debtProgressText")
+
+    if (debtProgressBar && debtProgressText) {
+      let progressPercentage = 0
+      if (totalDeuda > 0) {
+        progressPercentage = (deudasPagadas / totalDeuda) * 100
+      }
+      debtProgressBar.style.width = `${progressPercentage.toFixed(2)}%`
+      debtProgressBar.setAttribute("aria-valuenow", progressPercentage.toFixed(2))
+      debtProgressText.textContent = `${progressPercentage.toFixed(2)}% Pagado`
+    }
+
     document.querySelectorAll(".btn-eliminar").forEach((btn) => {
       btn.addEventListener("click", function () {
         const idx = this.getAttribute("data-index")

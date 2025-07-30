@@ -56,7 +56,72 @@
           </div>
 
           <!-- Título -->
-          <h2 class="text-success mb-4">Mis Deudas</h2>
+          <h2 class="text-teal mb-4">Gestión de Deudas</h2>
+
+          <!-- Resumen de Deudas - Diseño Mejorado -->
+          <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+              <div class="card debt-total-card">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Total de Deuda</h5>
+                  <p class="display-4 text-teal" id="totalDeuda">$0.00</p>
+                  <small class="text-muted">Monto total de todas tus deudas.</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                  <div class="card debt-metric-card">
+                    <div class="card-body text-center">
+                      <h5 class="card-title">Deuda Pendiente</h5>
+                      <p class="text-teal" id="deudaPendiente">$0.00</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <div class="card debt-metric-card">
+                    <div class="card-body text-center">
+                      <h5 class="card-title">Deudas Pagadas</h5>
+                      <p class="text-success" id="deudasPagadas">$0.00</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sección de Progreso de Deuda (Nuevo) -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card debt-progress-card">
+                <div class="card-body">
+                  <h5 class="card-title text-teal">Progreso General de Deuda</h5>
+                  <div class="progress" style="height: 25px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="debtProgressBar"></div>
+                  </div>
+                  <p class="text-center mt-2" id="debtProgressText">0% Pagado</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sección de Próximos Pagos (Placeholder) -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card upcoming-payments-card">
+                <div class="card-body">
+                  <h5 class="card-title">Próximos Pagos de Deuda</h5>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Préstamo Bancario - $150.00 (15/08/2024)</li>
+                    <li class="list-group-item">Tarjeta de Crédito - $80.00 (20/08/2024)</li>
+                    <li class="list-group-item">Deuda a Amigo - $50.00 (30/08/2024)</li>
+                  </ul>
+                  <small class="text-muted">Estos son pagos de ejemplo. Agrega tus deudas para ver los reales.</small>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Filtros -->
           <div class="row mb-4">
@@ -80,25 +145,9 @@
             </div>
           </div>
 
-          <!-- Resumen -->
-          <div class="row text-center">
-            <div class="col-md-4 mb-3">
-              <h5>Total Deuda</h5>
-              <p class="display-6 text-danger" id="totalDeuda">$0.00</p>
-            </div>
-            <div class="col-md-4 mb-3">
-              <h5>Deuda Pendiente</h5>
-              <p class="text-danger" id="deudaPendiente">$0.00</p>
-            </div>
-            <div class="col-md-4 mb-3">
-              <h5>Deudas Pagadas</h5>
-              <p class="text-success" id="deudasPagadas">$0.00</p>
-            </div>
-          </div>
-
           <!-- Add Deuda Button -->
           <div class="mb-4 text-end">
-            <button class="btn btn-danger" id="btnAgregarDeudaPage">
+            <button class="btn btn-teal" id="btnAgregarDeudaPage">
               <i class="bi bi-plus-circle me-2"></i>Agregar Deuda
             </button>
           </div>
