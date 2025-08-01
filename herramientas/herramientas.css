@@ -71,11 +71,29 @@ body, html {
     justify-content: space-between; /* Espacia el contenido */
     align-items: center; /* Centra horizontalmente */
     padding: 20px; /* Espaciado interno */
+    cursor: pointer; /* Cursor pointer para indicar que es clickeable */
   }
   
   .herramienta-card:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Estilos para enlaces de herramientas */
+  a.text-decoration-none {
+    color: inherit; /* Hereda el color del elemento padre */
+  }
+
+  a.text-decoration-none:hover {
+    color: inherit; /* Mantiene el color al hacer hover */
+  }
+
+  a.text-decoration-none .herramienta-card:hover .card-title {
+    color: #27ae60; /* Color más oscuro en hover */
+  }
+
+  a.text-decoration-none .herramienta-card:hover .herramienta-icon {
+    color: #27ae60; /* Color más oscuro en hover */
   }
   
   /* Título de la herramienta */
