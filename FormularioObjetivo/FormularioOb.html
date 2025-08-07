@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Crear Objetivo Financiero</title>
+  <link rel="stylesheet" href="FormularioObj.css" />
+  
+</head>
+<body>
+  <div class="form-container">
+    <form id="formCrear">
+      <label>Objetivo</label>
+      <input type="text" id="crearTitulo" required />
+
+      <label>Descripción</label>
+      <textarea id="crearDescripcion" rows="3" required></textarea>
+
+      <label>Fecha de Creación</label>
+      <input type="date" id="crearFechaCreacion" required />
+
+      <label>Fecha Límite</label>
+      <input type="date" id="crearFechaLimite" required />
+
+      <label>Estado del Objetivo</label>
+      <select id="crearEstado" required>
+        <option value="">Seleccionar Estado</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Completado">Completado</option>
+      </select>
+
+      <div class="form-botones">
+        <button type="submit" class="btn verde">Guardar</button>
+        <button type="button" class="btn gris" onclick="limpiarFormulario()">Limpiar</button>
+        <button type="button" class="btn rojo" onclick="volverAtras()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+  <script src="FormularioObj.js"></script>
+</body>
+</html>

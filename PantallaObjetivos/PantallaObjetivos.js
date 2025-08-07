@@ -11,7 +11,13 @@ function cerrarModal() {
 // Convierte de "dd/mm/yyyy" a "yyyy-mm-dd" (para el input de fecha)
 function convertirFecha(fechaStr) {
   const partes = fechaStr.split("/");
-  return `${partes[2]}-${partes[1]}-${partes[0]}`;
+  // Validar que la fecha sea válida
+  const fecha = new Date(partes[2], partes[1] - 1, partes[0]);
+  if (isNaN(fecha.getTime())) {
+    console.error('Fecha inválida:', fechaStr);
+    return '';
+  }
+  return `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
 }
 
 // Convierte de "yyyy-mm-dd" a "dd/mm/yyyy" (para mostrar en la tarjeta)
@@ -50,6 +56,49 @@ function editarObjetivo(btn) {
 
   modal.style.display = "flex";
 }
+function limpiarFormulario() {
+  // Obtener el formulario
+  const form = document.getElementById("formEditar");
+  
+  // Limpiar cada campo
+  document.getElementById("editarTitulo").value = "";
+  document.getElementById("editarDescripcion").value = "";
+  document.getElementById("editarFechaCreacion").value = "";
+  document.getElementById("editarFechaLimite").value = "";
+  document.getElementById("editarEstado").value = "";
+  
+  // Opcionalmente, puedes mostrar un mensaje
+  alert("Formulario limpiado");
+}
+
+window.addEventListener('load', function() {
+    cargarObjetivos();
+});
+
+function cargarObjetivos() {
+    const objetivos = JSON.parse(localStorage.getItem('objetivos') || '[]');
+    const contenedor = document.querySelector('.contenedor');
+    
+    objetivos.forEach(objetivo => {
+        const objetivoHTML = `
+        <div class="objetivo">
+            <div class="info">
+                <h3>${objetivo.titulo} <span class="estado">${objetivo.estado}</span></h3>
+                <p>${objetivo.descripcion}</p>
+                <p><strong>Creación:</strong> <span>${objetivo.fechaCreacion}</span></p>
+                <p><strong>Fecha Límite:</strong> <span>${objetivo.fechaLimite}</span></p>
+                <p class="progreso">${objetivo.progreso}% Completado</p>
+                <div class="acciones">
+                    <button onclick="actualizarProgreso(this)">Actualizar Progreso</button>
+                    <button class="editar" onclick="editarObjetivo(this)">Editar</button>
+                    <button class="eliminar" onclick="eliminarObjetivo(this)">Eliminar</button>
+                </div>
+            </div>
+        </div>
+        `;
+        contenedor.insertAdjacentHTML('beforeend', objetivoHTML);
+    });
+}
 
 function eliminarObjetivo(btn) {
   if (confirm('¿Estás seguro de eliminar este objetivo?')) {
@@ -59,7 +108,7 @@ function eliminarObjetivo(btn) {
 }
 
 document.getElementById("formEditar").addEventListener("submit", function (e) {
-  e.preventDefault(); // Evita que recargue la página
+  e.preventDefault();
 
   if (!objetivoEditando) return;
 
@@ -77,9 +126,14 @@ document.getElementById("formEditar").addEventListener("submit", function (e) {
   objetivoEditando.querySelectorAll("p")[1].querySelector("span").textContent = formatearFecha(nuevaCreacion);
   objetivoEditando.querySelectorAll("p")[2].querySelector("span").textContent = formatearFecha(nuevaLimite);
 
-  window.addEventListener("click", function (e) {
-  if (e.target === modal) {
-    cerrarModal();
+  // Cambiar el color del estado si está completado
+  const estadoElement = objetivoEditando.querySelector(".estado");
+  if (nuevoEstado === "Completado") {
+    estadoElement.style.color = "#4CAF50"; // Verde
+  } else {
+    estadoElement.style.color = "#c6e200"; // Color original
   }
-});
+
+
+  cerrarModal();
 });
