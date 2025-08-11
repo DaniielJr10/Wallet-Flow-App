@@ -49,80 +49,62 @@
       <div class="col-md-10 contenido-principal">
         <div class="container my-5">
           <!-- Título Principal -->
-          <div class="row mb-4">
+          <div class="row mb-5">
             <div class="col text-center">
-              <h1 class="titulo-principal">INGRESOS</h1>
-            </div>
-          </div>
-
-          <!-- Título -->
-          <h2 class="text-success mb-4">Mis Ingresos</h2>
-
-          <!-- Filtros -->
-          <div class="row mb-4">
-            <div class="col-md-4">
-              <label for="mes" class="form-label">Mes:</label>
-              <select class="form-select" id="mes">
-                <option>Enero</option>
-                <option>Febrero</option>
-                <option>Marzo</option>
-                <option>Abril</option>
-                <option>Mayo</option>
-                <option>Junio</option>
-                <option>Julio</option>
-                <option>Agosto</option>
-                <option>Septiembre</option>
-                <option>Octubre</option>
-                <option>Noviembre</option>
-                <option>Diciembre</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label for="categoria" class="form-label">Categoría:</label>
-              <select class="form-select" id="categoria">
-                <option>Todas</option>
-                <option>Salario</option>
-                <option>Ventas</option>
-                <option>Freelance</option>
-                <option>Otro</option>
-              </select>
+              <h1 class="titulo-principal">
+                <i class="bi bi-cash-stack me-3"></i>INGRESOS
+              </h1>
+              <p class="subtitulo-pagina">Gestiona y controla todos tus ingresos</p>
             </div>
           </div>
 
           <!-- Resumen -->
-          <div class="row text-center">
+          <div class="row text-center mb-5">
             <div class="col-md-4 mb-3">
-              <h5>Total de Ingresos</h5>
-              <p class="display-6 text-success">$3200.00</p>
+              <div class="card-resumen">
+                <h5><i class="bi bi-currency-dollar me-2"></i>Total de Ingresos</h5>
+                <p class="display-6 text-success">$3,200.00</p>
+              </div>
             </div>
             <div class="col-md-4 mb-3">
-              <h5>Ingreso Principal</h5>
-              <p>Trabajo</p>
+              <div class="card-resumen">
+                <h5><i class="bi bi-briefcase-fill me-2"></i>Ingreso Principal</h5>
+                <p class="ingreso-principal">Trabajo</p>
+              </div>
             </div>
             <div class="col-md-4 mb-3">
-              <h5>Comparación con Mes Anterior</h5>
-              <p class="text-success">+ $200.00</p>
+              <div class="card-resumen">
+                <h5><i class="bi bi-graph-up me-2"></i>Comparación</h5>
+                <p class="text-success">+ $200.00 vs mes anterior</p>
+              </div>
             </div>
           </div>
-          <!-- Agrega esto donde quieras mostrar la tabla -->
-<table class="table" id="tablaIngresos">
-  <thead>
-    <tr>
-      <th>Categoría</th>
-      <th>Método</th>
-      <th>Monto</th>
-      <th>Fecha</th>
-      <th>Descripción</th>
-      <th>Recurrente</th>
-      <th>Frecuencia</th>
-      <th>Cuenta</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Aquí se insertarán los ingresos -->
-  </tbody>
-</table>
+
+          <!-- Tabla de ingresos mejorada -->
+          <div class="row">
+            <div class="col-12">
+              <div class="tabla-container">
+                <table class="table table-hover" id="tablaIngresos">
+                  <thead class="table-header">
+                    <tr>
+                      <th><i class="bi bi-tag me-2"></i>Categoría</th>
+                      <th><i class="bi bi-credit-card me-2"></i>Método</th>
+                      <th><i class="bi bi-currency-dollar me-2"></i>Monto</th>
+                      <th><i class="bi bi-calendar me-2"></i>Fecha</th>
+                      <th><i class="bi bi-file-text me-2"></i>Descripción</th>
+                      <th><i class="bi bi-repeat me-2"></i>Recurrente</th>
+                      <th><i class="bi bi-clock me-2"></i>Frecuencia</th>
+                      <th><i class="bi bi-bank me-2"></i>Cuenta</th>
+                      <th><i class="bi bi-gear me-2"></i>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Aquí se insertarán los ingresos -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
