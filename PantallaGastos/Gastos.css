@@ -8,35 +8,7 @@ body {
     min-height: 100vh;
 }
 
-  /* --- AJUSTE DE LAYOUT PARA BARRA LATERAL FIJA --- */
-  #menuLateral.menu-lateral {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 320px;
-    min-height: 100vh;
-    z-index: 1000;
-    background: linear-gradient(180deg, white 0%, #f8fffe 100%);
-    border: 3px solid #2ecc71;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
-    padding-top: 1.5rem;
-  }
 
-  .container {
-    margin-left: 340px; /* margen para no tapar la barra lateral */
-    padding: 30px 20px 20px 20px;
-  }
-
-  @media (max-width: 900px) {
-    #menuLateral.menu-lateral {
-      width: 220px;
-    }
-    .container {
-      margin-left: 230px;
-      padding: 20px 10px 10px 10px;
-    }
-  }
 /* --- CONTENEDOR PRINCIPAL --- */
 
 /* --- CABECERA (TÍTULO PRINCIPAL) --- */
@@ -355,23 +327,6 @@ button[type="reset"] {
   background-color: #b1afaa;
   color: #333;
   border: none;
-}
-
-
-/* Opciones del menú más compactas */
-.sidebar button,
-.menu-lateral button,
-.menuLateral button,
-.sidebar a,
-.menu-lateral a,
-.menuLateral a {
-  font-size: 15px !important;
-  padding: 6px 8px !important;
-  margin: px 0 !important;
-  border-radius: 8px;
-  white-space: nowrap;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .menu-lateral {
