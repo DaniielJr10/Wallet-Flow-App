@@ -62,8 +62,6 @@ body {
   background: transparent;
   min-height: 100vh;
   position: relative;
-  margin-left: 280px;
-  width: calc(100% - 280px);
 }
 
 /* ===== HEADER MODERNO ===== */
@@ -502,6 +500,58 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-export {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: var(--text-white);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-export:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.view-toggle {
+  display: flex;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 2px solid var(--border-color);
+}
+
+.view-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-secondary);
+}
+
+.view-btn:hover,
+.view-btn.active {
+  background: var(--primary-color);
+  color: var(--text-white);
 }
 
 .table-responsive {
@@ -1118,8 +1168,6 @@ input:checked + .slider:before {
 @media (max-width: 768px) {
   .contenido-principal {
     padding: 1rem;
-    margin-left: 0;
-    width: 100%;
   }
   
   .header-content {
@@ -1142,7 +1190,10 @@ input:checked + .slider:before {
   .table-header {
     flex-direction: column;
     align-items: stretch;
-    text-align: center;
+  }
+  
+  .table-actions {
+    justify-content: space-between;
   }
   
   .modern-table {
@@ -1206,21 +1257,6 @@ input:checked + .slider:before {
   
   .chart-container {
     height: 250px;
-  }
-}
-
-/* ===== LAYOUT ESPECÍFICO PARA SIDEBAR ===== */
-@media (min-width: 769px) {
-  .contenido-principal {
-    margin-left: 280px;
-    width: calc(100% - 280px);
-  }
-}
-
-@media (max-width: 768px) {
-  .contenido-principal {
-    margin-left: 0;
-    width: 100%;
   }
 }
 
