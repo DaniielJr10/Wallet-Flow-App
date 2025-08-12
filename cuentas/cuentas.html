@@ -67,46 +67,117 @@
   </div>
 
   <!-- Modal para editar cuenta -->
-<div id="modalAgregarCuenta" class="modal fade" tabindex="-1" aria-labelledby="modalEditarCuentaLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content form-editar">
-      <div class="modal-header">
-        <h5 class="modal-title form-titulo" id="modalEditarCuentaLabel">Editar Cuenta</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <form id="formAgregarCuenta">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="nombreCuenta" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombreCuenta" required>
+  <div id="modalAgregarCuenta" class="modal fade" tabindex="-1" aria-labelledby="modalEditarCuentaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modern-form">
+        <div class="modal-header modern-header">
+          <div class="header-content">
+            <div class="form-icon">
+              <i class="bi bi-bank"></i>
+            </div>
+            <div class="header-text">
+              <h4 class="modal-title" id="modalEditarCuentaLabel">Gestionar Cuenta</h4>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="tipoCuenta" class="form-label">Tipo</label>
-            <input type="text" class="form-control" id="tipoCuenta" required>
-          </div>
-          <div class="mb-3">
-            <label for="numeroCuenta" class="form-label">Número</label>
-            <input type="text" class="form-control" id="numeroCuenta" required>
-          </div>
-          <div class="mb-3">
-            <label for="saldoInicial" class="form-label">Saldo Inicial</label>
-            <input type="number" class="form-control" id="saldoInicial" step="0.01" required>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="cuentaPrincipal">
-            <label class="form-check-label" for="cuentaPrincipal">Cuenta Principal</label>
-          </div>
+          <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Cerrar">
+            <i class="bi bi-x-lg"></i>
+          </button>
         </div>
-        <div class="modal-footer form-buttons">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-success">Guardar Cambios</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+        
+        <form id="formAgregarCuenta">
+          <div class="modal-body modern-body">
+            <div class="form-grid">
+              <!-- Nombre de la cuenta -->
+              <div class="form-group">
+                <label for="nombreCuenta" class="form-label-modern">
+                  <i class="bi bi-person-badge"></i>
+                  Nombre de la cuenta
+                </label>
+                <div class="input-wrapper">
+                  <input type="text" class="form-control-modern" id="nombreCuenta" placeholder="Ej: Mi cuenta de ahorros" required>
+                  <div class="input-focus-border"></div>
+                </div>
+              </div>
 
-  <!-- Scripts -->
+              <!-- Tipo de cuenta -->
+              <div class="form-group">
+                <label for="tipoCuenta" class="form-label-modern">
+                  <i class="bi bi-tags"></i>
+                  Tipo de cuenta
+                </label>
+                <div class="input-wrapper">
+                  <select class="form-control-modern" id="tipoCuenta" required>
+                    <option value="">Selecciona el tipo</option>
+                    <option value="Ahorros">💰 Cuenta de Ahorros</option>
+                    <option value="Corriente">🏦 Cuenta Corriente</option>
+                    <option value="Credito">💳 Tarjeta de Crédito</option>
+                    <option value="Débito">💳 Tarjeta de Débito</option>
+                    <option value="Efectivo">💵 Efectivo</option>
+                    <option value="Digital">📱 Billetera Digital</option>
+                  </select>
+                  <div class="input-focus-border"></div>
+                </div>
+              </div>
+
+              <!-- Número de cuenta -->
+              <div class="form-group">
+                <label for="numeroCuenta" class="form-label-modern">
+                  <i class="bi bi-credit-card-2-front"></i>
+                  Número de cuenta
+                </label>
+                <div class="input-wrapper">
+                  <input type="text" class="form-control-modern" id="numeroCuenta" placeholder="Ej: 1234567890" required>
+                  <div class="input-focus-border"></div>
+                </div>
+              </div>
+
+              <!-- Saldo inicial -->
+              <div class="form-group">
+                <label for="saldoInicial" class="form-label-modern">
+                  <i class="bi bi-cash-stack"></i>
+                  Saldo inicial
+                </label>
+                <div class="input-wrapper currency-input">
+                  <span class="currency-symbol">$</span>
+                  <input type="number" class="form-control-modern currency-field" id="saldoInicial" placeholder="0.00" step="0.01" required>
+                  <div class="input-focus-border"></div>
+                </div>
+              </div>
+
+              <!-- Cuenta principal toggle -->
+              <div class="form-group principal-toggle">
+                <div class="toggle-wrapper">
+                  <label class="toggle-label">
+                    <input type="checkbox" id="cuentaPrincipal" class="toggle-input">
+                    <div class="toggle-slider">
+                      <div class="toggle-knob">
+                        <i class="bi bi-star-fill"></i>
+                      </div>
+                    </div>
+                    <div class="toggle-text">
+                      <span class="toggle-title">Cuenta Principal</span>
+                      <span class="toggle-subtitle">Esta será tu cuenta predeterminada</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal-footer modern-footer">
+            <button type="button" class="btn-modern btn-cancel" data-bs-dismiss="modal">
+              <i class="bi bi-x-circle"></i>
+              <span>Cancelar</span>
+            </button>
+            <button type="submit" class="btn-modern btn-save">
+              <i class="bi bi-check-circle"></i>
+              <span>Guardar Cuenta</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>  <!-- Scripts -->
   <script src="cuentas.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

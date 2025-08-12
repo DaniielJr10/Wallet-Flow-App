@@ -305,76 +305,351 @@ h1 {
 
 
 
-/* Estilo del formulario de edición */
-.form-editar {
-  background-color: #ffffff;
-  border: 3px solid #2ecc71;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 15px; /* Reduce el relleno interno */
-  max-width: 370px; /* Reduce el ancho máximo */
-  width: 80%; /* Ajusta el ancho relativo al contenedor */
-  min-height: 100px; /* Reduce la altura mínima */
-  font-family: 'Arial', sans-serif;
-  color: black;
+/* ===== FORMULARIO MODERNO Y PROFESIONAL ===== */
+.modern-form {
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fffe 100%);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-.form-titulo {
-  font-size: 1.2rem; /* Reduce el tamaño del título */
-  font-weight: bold;
-  color: #2ecc71;
-  text-align: center;
-  margin-bottom: 10px; /* Reduce el margen inferior */
+/* Header del modal */
+.modern-header {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  border: none;
+  padding: 1.5rem;
+  position: relative;
 }
 
-.form-label {
-  display: block;
-  margin-bottom: 8px; /* Reduce el margen inferior */
-  font-weight: bold;
-  color: black;
-  font-size: 0.9rem; /* Reduce el tamaño de las etiquetas */
-}
-
-.form-control {
-  width: 100%;
-  padding: 6px; /* Reduce el relleno interno de los campos */
-  margin-top: 4px; /* Reduce el margen superior */
-  border: 1px solid #2ecc71;
-  border-radius: 5px;
-  font-size: 0.9rem; /* Reduce el tamaño de la fuente */
-}
-
-.form-control:focus {
-  border-color: #2ecc71;
-  box-shadow: 0 0 4px rgba(46, 204, 113, 0.5); /* Reduce el efecto de sombra */
-}
-
-.form-buttons {
+.header-content {
   display: flex;
-  justify-content: space-between;
-  margin-top: 15px; /* Reduce el margen superior */
+  align-items: center;
+  gap: 0.75rem;
+  color: white;
 }
 
-.btn-success {
-  background-color: #2ecc71;
-  border-color: #27ae60;
-  font-size: 0.9rem; /* Reduce el tamaño de la fuente del botón */
-  padding: 5px 10px; /* Reduce el relleno interno del botón */
+.form-icon {
+  width: 45px;
+  height: 45px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  backdrop-filter: blur(10px);
 }
 
-.btn-success:hover {
-  background-color: #05dd4d;
-  border-color: #1e8449;
+.header-text .modal-title {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
 }
 
-.btn-secondary {
-  background-color: rgb(240, 29, 29);
-  border-color: red;
-  font-size: 0.9rem; /* Reduce el tamaño de la fuente del botón */
-  padding: 5px 10px; /* Reduce el relleno interno del botón */
+.btn-close-custom {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 35px;
+  height: 35px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-secondary:hover {
-  background-color: red;
-  border-color: red;
+.btn-close-custom:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Body del modal */
+.modern-body {
+  padding: 1.5rem;
+}
+
+.form-grid {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-label-modern {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #2c3e50;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.form-label-modern i {
+  color: #2ecc71;
+  font-size: 1rem;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.form-control-modern {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 2px solid rgba(46, 204, 113, 0.2);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: rgba(248, 249, 250, 0.5);
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-control-modern:focus {
+  border-color: #2ecc71;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.1);
+}
+
+.input-focus-border {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #2ecc71, #27ae60);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.form-control-modern:focus + .input-focus-border {
+  width: 100%;
+}
+
+/* Campo de moneda */
+.currency-input {
+  position: relative;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #2ecc71;
+  font-size: 1.1rem;
+  font-weight: 700;
+  z-index: 2;
+}
+
+.currency-field {
+  padding-left: 2.2rem;
+}
+
+/* Toggle moderno para cuenta principal */
+.principal-toggle {
+  margin-top: 0.3rem;
+}
+
+.toggle-wrapper {
+  background: rgba(46, 204, 113, 0.05);
+  border: 1px solid rgba(46, 204, 113, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  margin: 0;
+}
+
+.toggle-input {
+  display: none;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 50px;
+  height: 28px;
+  background: #e0e0e0;
+  border-radius: 18px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: #bbb;
+}
+
+.toggle-input:checked + .toggle-slider {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.toggle-input:checked + .toggle-slider .toggle-knob {
+  transform: translateX(22px);
+  color: #f39c12;
+}
+
+.toggle-text {
+  flex: 1;
+}
+
+.toggle-title {
+  display: block;
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.toggle-subtitle {
+  display: block;
+  color: #7f8c8d;
+  font-size: 0.8rem;
+  margin-top: 0.1rem;
+}
+
+/* Footer del modal */
+.modern-footer {
+  background: rgba(248, 249, 250, 0.8);
+  border: none;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+}
+
+.btn-modern {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.2rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 110px;
+  justify-content: center;
+}
+
+.btn-cancel {
+  background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+  color: white;
+}
+
+.btn-cancel:hover {
+  background: linear-gradient(135deg, #7f8c8d, #6c7b7d);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(127, 140, 141, 0.3);
+}
+
+.btn-save {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: white;
+}
+
+.btn-save:hover {
+  background: linear-gradient(135deg, #27ae60, #229954);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.4);
+}
+
+/* Animaciones */
+.modal.fade .modal-dialog {
+  transform: scale(0.8) translateY(-50px);
+  transition: all 0.3s ease;
+}
+
+.modal.show .modal-dialog {
+  transform: scale(1) translateY(0);
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .modern-header {
+    padding: 1.2rem;
+  }
+  
+  .modern-body {
+    padding: 1.2rem;
+  }
+  
+  .modern-footer {
+    padding: 1rem 1.2rem;
+    flex-direction: column;
+  }
+  
+  .btn-modern {
+    width: 100%;
+  }
+}
+
+/* ===== MENSAJES DE ESTADO ===== */
+.form-error-message {
+  margin-bottom: 1.5rem;
+}
+
+.success-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  animation: slideInRight 0.3s ease;
+}
+
+.alert {
+  border-radius: 12px;
+  border: none;
+  padding: 1rem 1.2rem;
+  font-weight: 500;
+}
+
+.alert-danger {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.alert-success {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: white;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }

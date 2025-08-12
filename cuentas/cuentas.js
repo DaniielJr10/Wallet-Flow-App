@@ -125,22 +125,77 @@ function editarCuenta(index) {
   document.getElementById('saldoInicial').value = cuenta.saldoInicial;
   document.getElementById('cuentaPrincipal').checked = cuenta.esPrincipal;
 
+  // Actualizar el título del modal
+  document.getElementById('modalEditarCuentaLabel').textContent = 'Editar Cuenta';
+
   // Actualizar la cuenta al guardar
   const form = document.getElementById('formAgregarCuenta');
   form.onsubmit = function (e) {
     e.preventDefault();
+    
+    // Validar que se haya seleccionado un tipo
+    const tipoSeleccionado = document.getElementById('tipoCuenta').value;
+    if (!tipoSeleccionado) {
+      showFormError('Por favor selecciona un tipo de cuenta');
+      return;
+    }
+
     cuentas[index] = {
       nombre: document.getElementById('nombreCuenta').value,
-      tipo: document.getElementById('tipoCuenta').value,
+      tipo: tipoSeleccionado,
       numero: document.getElementById('numeroCuenta').value,
       saldoInicial: parseFloat(document.getElementById('saldoInicial').value),
       esPrincipal: document.getElementById('cuentaPrincipal').checked
     };
-    localStorage.setItem('cuentas', JSON.stringify(cuentas)); // Actualizar localStorage
-    modal.hide(); // Cerrar el modal
-    form.reset(); // Limpiar el formulario
-    renderizarCuentas(); // Volver a renderizar las tarjetas
+    
+    localStorage.setItem('cuentas', JSON.stringify(cuentas));
+    modal.hide();
+    form.reset();
+    renderizarCuentas();
+    showSuccessMessage('¡Cuenta actualizada exitosamente!');
   };
+}
+
+// Función para mostrar mensajes de error
+function showFormError(message) {
+  // Crear o actualizar mensaje de error
+  let errorDiv = document.querySelector('.form-error-message');
+  if (!errorDiv) {
+    errorDiv = document.createElement('div');
+    errorDiv.className = 'form-error-message';
+    document.querySelector('.modern-body').insertBefore(errorDiv, document.querySelector('.form-grid'));
+  }
+  
+  errorDiv.innerHTML = `
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      ${message}
+    </div>
+  `;
+  
+  // Remover el mensaje después de 3 segundos
+  setTimeout(() => {
+    if (errorDiv) errorDiv.remove();
+  }, 3000);
+}
+
+// Función para mostrar mensajes de éxito
+function showSuccessMessage(message) {
+  const successDiv = document.createElement('div');
+  successDiv.className = 'success-message';
+  successDiv.innerHTML = `
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      ${message}
+    </div>
+  `;
+  
+  document.body.appendChild(successDiv);
+  
+  // Remover el mensaje después de 3 segundos
+  setTimeout(() => {
+    successDiv.remove();
+  }, 3000);
 }
 
 // Renderizar las cuentas al cargar la página
