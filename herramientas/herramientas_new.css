@@ -32,6 +32,7 @@ body, html {
   background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
   min-height: 100vh;
 }
+
 /* ===== MENÚ LATERAL MEJORADO ===== */
 .menu-lateral {
   background: linear-gradient(180deg, white 0%, #f8fffe 100%);
@@ -63,6 +64,21 @@ body, html {
   transform: translateX(5px);
   box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
   border-color: #27ae60;
+}
+
+.icono-menu {
+  font-size: 24px;
+}
+
+.titulologo {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2e6835; /* Fallback */
 }
 
 /* ===== TARJETAS DE HERRAMIENTAS MODERNAS ===== */
@@ -229,88 +245,3 @@ body, html {
     align-self: flex-start;
   }
 }
-
-.menu-lateral .nav-link.active {
-  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-  color: white;
-  border-color: #27ae60;
-  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
-}
-
-.logowf {
-  position: relative;
-  display: flex;
-  align-items: center;
-  top: -30px;
-  left: -15px;
-  padding: 3px;
-}
-
-.titulologo {
-  font-size: 24px;
-  font-weight: 700;
-  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: #2e6835; /* Fallback */
-}
-/*hasta aqui termina el css para el menú lateral */
-  /*hasta aqui termina el css para el menú lateral */
-  
-  
-/* Estilo para las tarjetas de herramientas */
-.herramienta-card {
-    border: none;
-    border-radius: 20px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-    width: 100%; /* Asegura que ocupen todo el ancho disponible */
-    height: 300px; /* Aumenta la altura de las tarjetas */
-    display: flex;
-    flex-direction: column; /* Organiza el contenido en columna */
-    justify-content: space-between; /* Espacia el contenido */
-    align-items: center; /* Centra horizontalmente */
-    padding: 20px; /* Espaciado interno */
-    cursor: pointer; /* Cursor pointer para indicar que es clickeable */
-  }
-  
-  .herramienta-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  /* Estilos para enlaces de herramientas */
-  a.text-decoration-none {
-    color: inherit; /* Hereda el color del elemento padre */
-  }
-
-  a.text-decoration-none:hover {
-    color: inherit; /* Mantiene el color al hacer hover */
-  }
-
-  a.text-decoration-none .herramienta-card:hover .card-title {
-    color: #27ae60; /* Color más oscuro en hover */
-  }
-
-  a.text-decoration-none .herramienta-card:hover .herramienta-icon {
-    color: #27ae60; /* Color más oscuro en hover */
-  }
-  
-  /* Título de la herramienta */
-  .herramienta-card .card-title {
-    font-size: 30px; /* Tamaño del título */
-    font-weight: bold;
-    color: #2ecc71;
-    text-align: center; /* Centrado horizontalmente */
-    margin-bottom: 10px; /* Espaciado inferior */
-  }
-  
-  /* Iconos de herramientas */
-  .herramienta-icon {
-    font-size: 6rem; /* Aumenta el tamaño del ícono */
-    color: #2ecc71;
-    margin: auto 0; /* Centra verticalmente el ícono */
-  }
-  
-  
