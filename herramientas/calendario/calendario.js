@@ -23,6 +23,10 @@ function updateCalendar() {
     const calendarDays = document.getElementById('calendar-days');
     
     monthDisplay.textContent = `${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+    
+    // Actualizar textos de los botones de navegación
+    updateNavigationButtons();
+    
     calendarDays.innerHTML = '';
 
     const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -61,7 +65,9 @@ function createDayElement(date) {
     div.className = 'calendar-day';
     div.textContent = date.getDate();
 
-    if (date.toDateString() === new Date().toDateString()) {
+    // Siempre obtener la fecha actual del sistema para comparar
+    const today = new Date();
+    if (date.toDateString() === today.toDateString()) {
         div.classList.add('today');
     }
 
@@ -88,6 +94,26 @@ function navigateMonth(delta) {
 function navigateYear(delta) {
     currentDate.setFullYear(currentDate.getFullYear() + delta);
     updateCalendar();
+}
+
+// Función para actualizar los textos de los botones de navegación
+function updateNavigationButtons() {
+    const prevMonthText = document.getElementById('prevMonthText');
+    const nextMonthText = document.getElementById('nextMonthText');
+    const prevYearText = document.getElementById('prevYearText');
+    const nextYearText = document.getElementById('nextYearText');
+    
+    // Calcular mes anterior
+    const prevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1);
+    prevMonthText.textContent = months[prevMonth.getMonth()];
+    
+    // Calcular mes siguiente
+    const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1);
+    nextMonthText.textContent = months[nextMonth.getMonth()];
+    
+    // Calcular años
+    prevYearText.textContent = (currentDate.getFullYear() - 1).toString();
+    nextYearText.textContent = (currentDate.getFullYear() + 1).toString();
 }
 
 document.addEventListener('DOMContentLoaded', initCalendar);

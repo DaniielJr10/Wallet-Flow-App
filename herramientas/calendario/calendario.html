@@ -58,15 +58,27 @@
           </div>
           
           <div class="row justify-content-center">
-            <div class="col-12">
+            <div class="col-lg-8 col-md-10">
               <div class="calendar-wrapper">
           <div class="calendar-header">
             <div class="calendar-nav">
-              <button id="prevYear" class="btn-nav"><i class="bi bi-chevron-double-left"></i></button>
-              <button id="prevMonth" class="btn-nav"><i class="bi bi-chevron-left"></i></button>
+              <button id="prevYear" class="btn-nav">
+                <i class="bi bi-chevron-double-left me-1"></i>
+                <span id="prevYearText">2024</span>
+              </button>
+              <button id="prevMonth" class="btn-nav">
+                <i class="bi bi-chevron-left me-1"></i>
+                <span id="prevMonthText">Julio</span>
+              </button>
               <h2 id="monthDisplay"></h2>
-              <button id="nextMonth" class="btn-nav"><i class="bi bi-chevron-right"></i></button>
-              <button id="nextYear" class="btn-nav"><i class="bi bi-chevron-double-right"></i></button>
+              <button id="nextMonth" class="btn-nav">
+                <span id="nextMonthText">Septiembre</span>
+                <i class="bi bi-chevron-right ms-1"></i>
+              </button>
+              <button id="nextYear" class="btn-nav">
+                <span id="nextYearText">2026</span>
+                <i class="bi bi-chevron-double-right ms-1"></i>
+              </button>
             </div>
           </div>
           <div class="calendar-body">
