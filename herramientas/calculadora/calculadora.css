@@ -1,19 +1,41 @@
+/* ===== ESTILOS MEJORADOS PARA CALCULADORA ===== */
+
 body, html {
     height: 100%;
     font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
-  }
-  
-  h1 {
-    background-color: #2ecc71;
-    border-radius: 10px;
-    color: white;
-    font-weight: bold;
-  }
-  
-  /* CONTENIDO PRINCIPAL */
-  .contenido-principal {
-    background-color: rgb(233, 225, 225);
-  }
+}
+
+/* ===== TÍTULO PRINCIPAL MEJORADO ===== */
+.titulo-principal {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2ecc71; /* Fallback */
+  border-radius: 15px;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  font-size: 2.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin: 0;
+}
+
+.subtitulo-pagina {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+h2 {
+  font-weight: bold;
+}
+
+/* ===== CONTENIDO PRINCIPAL MEJORADO ===== */
+.contenido-principal {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e8f4fd 100%);
+  min-height: 100vh;
+}
   
 /* ===== MENÚ LATERAL MEJORADO ===== */
 .menu-lateral {
@@ -74,44 +96,56 @@ body, html {
   color: #2e6835; /* Fallback */
 }
 /*hasta aqui termina el css para el menú lateral */
-  /*hasta aqui termina el css para el menú lateral */
+ 
 
-/* TÍTULO PRINCIPAL DE LA CALCULADORA */
+/* ===== TÍTULO PRINCIPAL DE LA CALCULADORA ===== */
 .titulo-principal {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-  border-radius: 15px;
-  box-shadow: 0 8px 25px rgba(46, 204, 113, 0.3);
-  border: 2px solid #2ecc71;
   margin-bottom: 1rem;
 }
 
 .titulo-principal h2 {
-  font-size: 1.8rem;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2ecc71; /* Fallback */
+  font-size: 2rem;
   font-weight: 700;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin: 0;
 }
 
 .titulo-principal i {
+  color: #2ecc71;
   font-size: 2rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* ESTILOS PARA LA CALCULADORA */
+/* ===== ESTILOS MEJORADOS PARA LA CALCULADORA ===== */
 .calculadora-card {
   border-radius: 20px;
-  background: linear-gradient(145deg, #ffffff, #f0f0f0);
-  box-shadow: 20px 20px 60px #d1d1d1, -20px -20px 60px #ffffff;
+  background: white;
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.15);
+  border: 1px solid rgba(52, 152, 219, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calculadora-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(52, 152, 219, 0.2);
+  border-color: rgba(52, 152, 219, 0.3);
 }
 
 .calculadora-display {
   font-size: 2rem;
   font-weight: bold;
-  background: linear-gradient(145deg, #f8f9fa, #e9ecef);
-  border: 3px solid #2ecc71;
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.08) 0%, rgba(52, 152, 219, 0.12) 100%);
+  border: 3px solid #3498db;
   border-radius: 15px;
   min-height: 80px;
   max-height: 140px;
   padding: 15px 20px;
-  box-shadow: inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.1);
   color: #2c3e50;
   font-family: 'Courier New', monospace;
   display: flex;
@@ -125,11 +159,13 @@ body, html {
   line-height: 1.3;
   text-align: right;
   white-space: pre-wrap;
+  transition: all 0.3s ease;
 }
 
 .calculadora-display:focus {
-  box-shadow: inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff, 0 0 0 0.2rem rgba(46, 204, 113, 0.25);
-  border-color: #27ae60;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2), 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+  border-color: #2980b9;
+  transform: translateY(-1px);
 }
 
 .operacion-actual {
@@ -141,97 +177,110 @@ body, html {
 .btn-calculadora {
   height: 60px;
   font-size: 1.4rem;
-  font-weight: bold;
-  border-radius: 15px;
-  transition: all 0.3s ease;
-  box-shadow: 5px 5px 10px #d1d1d1, -5px -5px 10px #ffffff;
-  border: 2px solid transparent;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.1);
+  border: 2px solid rgba(52, 152, 219, 0.2);
 }
 
 .btn-calculadora:hover {
-  transform: translateY(-2px);
-  box-shadow: 7px 7px 15px #d1d1d1, -7px -7px 15px #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.2);
 }
 
 .btn-calculadora:active {
-  transform: translateY(0);
-  box-shadow: inset 3px 3px 7px #d1d1d1, inset -3px -3px 7px #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
 }
 
-/* Botones de números */
+/* ===== BOTONES DE NÚMEROS MEJORADOS ===== */
 .btn-outline-dark.btn-calculadora {
-  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  background: white;
   color: #2c3e50;
-  border-color: #dee2e6;
+  border-color: rgba(52, 152, 219, 0.2);
 }
 
 .btn-outline-dark.btn-calculadora:hover {
-  background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.08) 0%, rgba(52, 152, 219, 0.12) 100%);
   color: #2c3e50;
-  border-color: #2ecc71;
+  border-color: #3498db;
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.2);
 }
 
-/* Botones de operaciones */
+/* ===== BOTONES DE OPERACIONES MEJORADOS ===== */
 .btn-primary.btn-calculadora {
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
   border-color: #3498db;
+  color: white;
 }
 
 .btn-primary.btn-calculadora:hover {
-  background: linear-gradient(135deg, #2980b9, #1f5e8c);
+  background: linear-gradient(135deg, #2980b9 0%, #1f5e8c 100%);
+  border-color: #2980b9;
+  color: white;
 }
 
-/* Botón de igual */
+/* ===== BOTÓN DE IGUAL MEJORADO ===== */
 .btn-success.btn-calculadora {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
   border-color: #2ecc71;
+  color: white;
 }
 
 .btn-success.btn-calculadora:hover {
-  background: linear-gradient(135deg, #27ae60, #1e8449);
+  background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+  border-color: #27ae60;
+  color: white;
 }
 
-/* Botones de funciones especiales */
+/* ===== BOTONES DE FUNCIONES ESPECIALES MEJORADOS ===== */
 .btn-outline-danger.btn-calculadora {
-  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  background: white;
   color: #e74c3c;
-  border-color: #e74c3c;
+  border-color: rgba(231, 76, 60, 0.3);
 }
 
 .btn-outline-danger.btn-calculadora:hover {
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
   color: white;
+  border-color: #e74c3c;
 }
 
 .btn-outline-warning.btn-calculadora {
-  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  background: white;
   color: #f39c12;
-  border-color: #f39c12;
+  border-color: rgba(243, 156, 18, 0.3);
 }
 
 .btn-outline-warning.btn-calculadora:hover {
-  background: linear-gradient(135deg, #f39c12, #d68910);
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  color: white;
+  border-color: #f39c12;
+}
+
+/* ===== BOTONES DE FUNCIONES ADICIONALES MEJORADOS ===== */
+.btn-info.btn-calculadora {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+  border-color: #17a2b8;
   color: white;
 }
 
-/* Botones de funciones adicionales */
-.btn-info.btn-calculadora {
-  background: linear-gradient(135deg, #17a2b8, #138496);
-  border-color: #17a2b8;
-}
-
 .btn-info.btn-calculadora:hover {
-  background: linear-gradient(135deg, #138496, #0f6674);
+  background: linear-gradient(135deg, #138496 0%, #0f6674 100%);
+  border-color: #138496;
+  color: white;
 }
 
-/* Historial */
+/* ===== HISTORIAL MEJORADO ===== */
 .historial-container {
   max-height: 200px;
   overflow-y: auto;
-  background: linear-gradient(145deg, #f8f9fa, #e9ecef);
-  border-radius: 10px;
+  background: white;
+  border-radius: 15px;
   padding: 15px;
-  border: 2px solid #dee2e6;
+  border: 2px solid rgba(52, 152, 219, 0.2);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.1);
 }
 
 .historial-list {
@@ -241,20 +290,22 @@ body, html {
 .historial-list li {
   padding: 8px 12px;
   margin: 5px 0;
-  background: white;
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.08) 0%, rgba(52, 152, 219, 0.12) 100%);
   border-radius: 8px;
-  border-left: 4px solid #2ecc71;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  border-left: 4px solid #3498db;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.15);
   font-family: 'Courier New', monospace;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #2c3e50;
 }
 
 .historial-list li:hover {
   transform: translateX(5px);
-  box-shadow: 3px 3px 8px rgba(0,0,0,0.15);
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.15) 0%, rgba(52, 152, 219, 0.2) 100%);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
 }
 
-/* Scrollbar personalizado para el historial */
+/* ===== SCROLLBAR PERSONALIZADO MEJORADO ===== */
 .historial-container::-webkit-scrollbar {
   width: 8px;
 }
@@ -265,27 +316,43 @@ body, html {
 }
 
 .historial-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(145deg, #2ecc71, #27ae60);
+  background: linear-gradient(145deg, #3498db 0%, #2980b9 100%);
   border-radius: 4px;
 }
 
 .historial-container::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(145deg, #27ae60, #1e8449);
+  background: linear-gradient(145deg, #2980b9 0%, #1f5e8c 100%);
 }
 
-/* Animaciones */
+/* ===== ANIMACIONES MEJORADAS ===== */
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
-  70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
 }
 
-/* Estilo para resaltar el resultado final */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.calculadora-card {
+  animation: slideIn 0.6s ease-out;
+}
+
+/* ===== ESTILOS PARA RESULTADO RESALTADO ===== */
 .calculadora-display.resultado-resaltado {
-  color: #155724;
+  color: #2c3e50;
   font-weight: 900;
   font-size: 2.8rem !important;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.15) 0%, rgba(52, 152, 219, 0.2) 100%);
 }
 
 /* Estilos adaptativos para diferentes longitudes de contenido */
@@ -338,12 +405,56 @@ body, html {
 .calculadora-display .resultado-grande {
   font-size: 2.2rem;
   font-weight: 900;
-  color: #28a745;
+  color: #3498db;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
   margin-top: 5px;
   word-break: break-all;
   overflow-wrap: break-word;
   max-width: 100%;
+}
+
+/* ===== RESPONSIVE MEJORADO ===== */
+@media (max-width: 768px) {
+  .titulo-principal h2 {
+    font-size: 1.5rem;
+  }
+  
+  .calculadora-card {
+    margin: 1rem;
+    padding: 1rem;
+  }
+  
+  .calculadora-display {
+    font-size: 1.5rem;
+    min-height: 60px;
+    padding: 10px 15px;
+  }
+  
+  .btn-calculadora {
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  .historial-container {
+    max-height: 150px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .titulo-principal h2 {
+    font-size: 1.2rem;
+  }
+  
+  .calculadora-display {
+    font-size: 1.2rem;
+    min-height: 50px;
+  }
+  
+  .btn-calculadora {
+    height: 45px;
+    font-size: 1rem;
+  }
 }
 
 .calculadora-display .operacion-parte {
