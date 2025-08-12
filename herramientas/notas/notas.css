@@ -9,7 +9,7 @@
 
 body {
   font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -71,26 +71,42 @@ body {
 
 /* CONTENIDO PRINCIPAL */
 .contenido-principal {
-  background-color: rgb(233, 225, 225);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+  padding: 0;
 }
 
-/* TÍTULO PRINCIPAL */
-.titulo-principal {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-  border-radius: 15px;
-  box-shadow: 0 8px 25px rgba(46, 204, 113, 0.3);
-  border: 2px solid #2ecc71;
-  margin-bottom: 1rem;
+/* TÍTULO PRINCIPAL CONSISTENTE */
+.titulo-section {
+  margin-bottom: 2rem;
 }
 
-.titulo-principal h2 {
-  font-size: 1.8rem;
+.titulo-gradiente {
+  font-size: 2.5rem;
   font-weight: 700;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2ecc71; /* Fallback */
+  text-shadow: none;
 }
 
-.titulo-principal i {
-  font-size: 2rem;
+.titulo-gradiente i {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2ecc71; /* Fallback */
+}
+
+.subtitulo {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
+  margin-top: 0.5rem;
 }
 
 /* BARRA DE BÚSQUEDA Y BOTÓN NUEVA NOTA ELEGANTES */
