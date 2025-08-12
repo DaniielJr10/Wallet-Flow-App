@@ -9,26 +9,48 @@ function renderizarCuentas() {
     const tarjeta = document.createElement('div');
     tarjeta.className = 'col-md-4 mb-4'; // Clase de Bootstrap para columnas y margen inferior
     tarjeta.innerHTML = `
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title">${cuenta.nombre}</h5>
-          <div class="d-flex justify-content-between">
-            <span class="label">Tipo:</span>
-            <span class="value">${cuenta.tipo}</span>
+      <div class="account-card">
+        <div class="card-header-custom">
+          <div class="account-icon">
+            <i class="bi ${getAccountIcon(cuenta.tipo)}"></i>
           </div>
-          <div class="d-flex justify-content-between">
-            <span class="label">Número:</span>
-            <span class="value">${cuenta.numero}</span>
+          <div class="account-status">
+            ${cuenta.esPrincipal ? '<span class="badge-principal"><i class="bi bi-star-fill"></i> Principal</span>' : ''}
           </div>
-          <div class="d-flex justify-content-between">
-            <span class="label">Saldo Inicial:</span>
-            <span class="value">$${cuenta.saldoInicial.toFixed(2)}</span>
+        </div>
+        
+        <div class="card-content">
+          <h3 class="account-name">${cuenta.nombre}</h3>
+          <div class="account-type">${cuenta.tipo}</div>
+          
+          <div class="account-details">
+            <div class="detail-item">
+              <span class="detail-label">
+                <i class="bi bi-credit-card-2-front"></i>
+                Número de cuenta
+              </span>
+              <span class="detail-value">${cuenta.numero}</span>
+            </div>
+            
+            <div class="detail-item balance-item">
+              <span class="detail-label">
+                <i class="bi bi-cash-stack"></i>
+                Saldo disponible
+              </span>
+              <span class="detail-value balance-value">$${formatCurrency(cuenta.saldoInicial)}</span>
+            </div>
           </div>
-          ${cuenta.esPrincipal ? '<span class="badge bg-success">Principal</span>' : ''}
-          <div class="mt-3">
-            <button class="btn btn-primary btn-editar" data-index="${index}">Editar</button>
-            <button class="btn btn-danger btn-eliminar" data-index="${index}">Eliminar</button>
-          </div>
+        </div>
+        
+        <div class="card-actions">
+          <button class="btn-action btn-edit" data-index="${index}">
+            <i class="bi bi-pencil-square"></i>
+            <span>Editar</span>
+          </button>
+          <button class="btn-action btn-delete" data-index="${index}">
+            <i class="bi bi-trash"></i>
+            <span>Eliminar</span>
+          </button>
         </div>
       </div>
     `;
@@ -36,7 +58,7 @@ function renderizarCuentas() {
   });
 
   // Agregar eventos a los botones de eliminar
-  const botonesEliminar = document.querySelectorAll('.btn-eliminar');
+  const botonesEliminar = document.querySelectorAll('.btn-delete');
   botonesEliminar.forEach((boton) => {
     boton.addEventListener('click', function () {
       const index = this.getAttribute('data-index');
@@ -45,13 +67,34 @@ function renderizarCuentas() {
   });
 
   // Agregar eventos a los botones de editar
-  const botonesEditar = document.querySelectorAll('.btn-editar');
+  const botonesEditar = document.querySelectorAll('.btn-edit');
   botonesEditar.forEach((boton) => {
     boton.addEventListener('click', function () {
       const index = this.getAttribute('data-index');
       editarCuenta(index);
     });
   });
+}
+
+// Función auxiliar para obtener el icono según el tipo de cuenta
+function getAccountIcon(tipo) {
+  const iconMap = {
+    'Ahorros': 'bi-piggy-bank-fill',
+    'Corriente': 'bi-bank2',
+    'Credito': 'bi-credit-card-fill',
+    'Débito': 'bi-credit-card-2-front-fill',
+    'Efectivo': 'bi-cash-stack',
+    'Digital': 'bi-phone-fill'
+  };
+  return iconMap[tipo] || 'bi-bank';
+}
+
+// Función auxiliar para formatear moneda
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('es-CO', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(amount);
 }
 
 // Función para eliminar una cuenta con confirmación
