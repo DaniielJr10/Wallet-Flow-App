@@ -45,8 +45,21 @@
       </div>
       
       <!-- Contenido Principal -->
-      <div class="col-md-10 contenido-principal p-4">
-        <div class="calendar-wrapper">
+      <div class="col-md-10 contenido-principal">
+        <div class="container my-5">
+          <!-- Título Principal -->
+          <div class="row mb-5">
+            <div class="col text-center">
+              <h1 class="titulo-principal">
+                <i class="bi bi-calendar-fill me-3"></i>CALENDARIO
+              </h1>
+              <p class="subtitulo-pagina">Organiza y planifica tus fechas importantes</p>
+            </div>
+          </div>
+          
+          <div class="row justify-content-center">
+            <div class="col-12">
+              <div class="calendar-wrapper">
           <div class="calendar-header">
             <div class="calendar-nav">
               <button id="prevYear" class="btn-nav"><i class="bi bi-chevron-double-left"></i></button>
@@ -62,6 +75,9 @@
               <div>Jue</div><div>Vie</div><div>Sáb</div>
             </div>
             <div id="calendar-days" class="calendar-days"></div>
+          </div>
+        </div>
+            </div>
           </div>
         </div>
       </div>
