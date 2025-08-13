@@ -1,6 +1,7 @@
 body, html {
-    height: 100%;
-    font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
+  height: 100%;
+  font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
 /* ===== MENÚ LATERAL MEJORADO ===== */
@@ -64,48 +65,50 @@ body, html {
 /*hasta aqui termina el css para el menú lateral */
 /* CONTENIDO PRINCIPAL */
 .contenido-principal {
-    background-color: rgb(233, 225, 225);
-    min-height: 100vh;
-    padding: 20px;
-
-
-/* CONTENIDO PRINCIPAL */
-.contenido-principal {
-  background: linear-gradient(135deg, #eaf8ed 0%, #d5f4e6 100%);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   min-height: 100vh;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 40px;
+}
+/* TÍTULO PRINCIPAL CONSISTENTE */
+.titulo-gradiente {
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2ecc71; /* Fallback */
+  text-shadow: none;
+}
+.titulo-gradiente i {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2ecc71; /* Fallback */
+}
+.subtitulo {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
+  margin-top: 0.5rem;
 }
 
 /* ESTILOS PARA EL CONVERSOR */
 .conversor-wrapper {
-  background: rgba(255,255,255,0.85);
-  border-radius: 28px;
-  box-shadow: 0 8px 32px rgba(46,204,113,0.18), 0 1.5px 8px rgba(39,174,96,0.08);
-  padding: 38px 28px 28px 28px;
-  max-width: 420px;
-  margin: 0 auto;
-  border: 2.5px solid #2ecc71;
-  position: relative;
-  z-index: 2;
+  background: rgba(255,255,255,0.95);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(46,204,113,0.15);
+  padding: 3rem 2.5rem;
+  border: 2px solid rgba(46, 204, 113, 0.1);
   transition: box-shadow 0.3s, background 0.3s;
   backdrop-filter: blur(6px);
-  overflow: hidden;
-}
-.conversor-wrapper::before {
-  content: '';
-  position: absolute;
-  top: -60px;
-  left: -60px;
-  width: 180px;
-  height: 180px;
-  background: radial-gradient(circle, #2ecc71 0%, #eaf8ed 80%, transparent 100%);
-  opacity: 0.18;
-  z-index: 0;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .conversor-wrapper:hover {
   box-shadow: 0 16px 48px rgba(46,204,113,0.22);
@@ -195,5 +198,4 @@ body, html {
 @keyframes bounce {
   0% { transform: translateY(0); }
   100% { transform: translateY(-10px) scale(1.08); }
-}
 }

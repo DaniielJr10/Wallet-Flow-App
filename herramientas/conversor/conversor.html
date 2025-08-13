@@ -41,42 +41,56 @@
         </ul>
       </div>
       <!-- Contenido principal -->
-      <div class="col-md-10 contenido-principal d-flex flex-column align-items-center justify-content-center">
-        <div class="conversor-wrapper">
-          <div class="text-center mb-3">
-            <i class="bi bi-currency-exchange conversor-anim" style="font-size: 4rem; color: #27ae60;"></i>
-          </div>
-          <div class="conversor-title mb-2">Conversor de Monedas</div>
-          <div class="mb-3">
-            <label for="cantidad" class="form-label">Cantidad</label>
-            <input type="number" class="form-control shadow-sm" id="cantidad" placeholder="Ingresa la cantidad" min="0" />
-          </div>
-          <div class="row g-2 mb-3">
-            <div class="col-6">
-              <label for="monedaOrigen" class="form-label">De</label>
-              <select class="form-select shadow-sm" id="monedaOrigen">
-                <option value="USD">Dólar (USD)</option>
-                <option value="EUR">Euro (EUR)</option>
-                <option value="MXN">Peso Mexicano (MXN)</option>
-                <option value="COP">Peso Colombiano (COP)</option>
-                <option value="PEN">Sol Peruano (PEN)</option>
-                <option value="ARS">Peso Argentino (ARS)</option>
-              </select>
-            </div>
-            <div class="col-6">
-              <label for="monedaDestino" class="form-label">A</label>
-              <select class="form-select shadow-sm" id="monedaDestino">
-                <option value="USD">Dólar (USD)</option>
-                <option value="EUR">Euro (EUR)</option>
-                <option value="MXN">Peso Mexicano (MXN)</option>
-                <option value="COP">Peso Colombiano (COP)</option>
-                <option value="PEN">Sol Peruano (PEN)</option>
-                <option value="ARS">Peso Argentino (ARS)</option>
-              </select>
+      <div class="col-md-10 contenido-principal">
+        <div class="container mt-4">
+          <!-- Título principal -->
+          <div class="row justify-content-center mb-4">
+            <div class="col-lg-8 col-md-10">
+              <div class="text-center py-2">
+                <i class="bi bi-currency-exchange" style="font-size: 3.2rem; background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: #2ecc71;"></i>
+                <h2 class="titulo-gradiente mb-2" style="font-size:2.5rem; font-family:'Inter','Segoe UI','Poppins',sans-serif; font-weight:700; background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: #2ecc71;">Conversor de Monedas</h2>
+                <p class="subtitulo mb-0" style="color:#7f8c8d; font-size:1.1rem; font-weight:500; font-family:'Inter','Segoe UI','Poppins',sans-serif; margin-top:0.5rem;">Convierte entre diferentes monedas de forma rápida y sencilla</p>
+              </div>
             </div>
           </div>
-          <button class="w-100 mb-3" id="convertirBtn" style="font-size:1.2rem; letter-spacing:1px;"><i class="bi bi-arrow-left-right me-2"></i>Convertir</button>
-          <div id="resultado" class="alert alert-info text-center d-none"></div>
+          
+          <!-- Conversor -->
+          <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-7 col-sm-9">
+              <div class="conversor-wrapper">
+                <div class="mb-3">
+                  <label for="cantidad" class="form-label">Cantidad</label>
+                  <input type="number" class="form-control shadow-sm" id="cantidad" placeholder="Ingresa la cantidad" min="0" />
+                </div>
+                <div class="row g-2 mb-3">
+                  <div class="col-6">
+                    <label for="monedaOrigen" class="form-label">De</label>
+                    <select class="form-select shadow-sm" id="monedaOrigen">
+                      <option value="USD">Dólar (USD)</option>
+                      <option value="EUR">Euro (EUR)</option>
+                      <option value="MXN">Peso Mexicano (MXN)</option>
+                      <option value="COP">Peso Colombiano (COP)</option>
+                      <option value="PEN">Sol Peruano (PEN)</option>
+                      <option value="ARS">Peso Argentino (ARS)</option>
+                    </select>
+                  </div>
+                  <div class="col-6">
+                    <label for="monedaDestino" class="form-label">A</label>
+                    <select class="form-select shadow-sm" id="monedaDestino">
+                      <option value="USD">Dólar (USD)</option>
+                      <option value="EUR">Euro (EUR)</option>
+                      <option value="MXN">Peso Mexicano (MXN)</option>
+                      <option value="COP">Peso Colombiano (COP)</option>
+                      <option value="PEN">Sol Peruano (PEN)</option>
+                      <option value="ARS">Peso Argentino (ARS)</option>
+                    </select>
+                  </div>
+                </div>
+                <button class="w-100 mb-3" id="convertirBtn" style="font-size:1.2rem; letter-spacing:1px;"><i class="bi bi-arrow-left-right me-2"></i>Convertir</button>
+                <div id="resultado" class="alert alert-info text-center d-none"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
