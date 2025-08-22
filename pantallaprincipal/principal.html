@@ -49,27 +49,146 @@
         <h2>Contenido principal</h2>
         <p>Wallet Flow: tu mejor herramienta financiera.</p>
 
-        <!-- Perfil -->
-        <div class="perfilusuario position-absolute">
-          <span class="me-2">Perfil</span>
-          <a href="#" class="perfil-icono"><i class="bi bi-person-circle"></i></a>
+        <!-- Perfil Mejorado -->
+        <div class="perfil-mejorado position-absolute">
+          <div class="dropdown">
+            <button class="btn-perfil dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <div class="perfil-info">
+                <span class="perfil-nombre">Mi Perfil</span>
+                <small class="perfil-estado">● En línea</small>
+              </div>
+              <div class="perfil-avatar">
+                <i class="bi bi-person-circle"></i>
+              </div>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end perfil-dropdown shadow">
+              <li class="dropdown-header">
+                <strong>Daniel Jr</strong>
+                <br><small class="text-muted">daniel@walletflow.com</small>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Ver Perfil</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Configuración</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-bell me-2"></i>Notificaciones</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-shield-check me-2"></i>Privacidad</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="#" id="cerrarSesionPerfil"><i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</a></li>
+            </ul>
+          </div>
         </div>
 
-        <!-- Botón flotante -->
-        <div class="agregar position-absolute bottom-0 m-3">
-          <a href="#" class="btn btn-primary" id="botonAgregar"><i class="bi bi-plus-circle"></i></a>
+        <!-- Botón flotante mejorado -->
+        <div class="boton-flotante-mejorado position-fixed">
+          <button class="btn-flotante" id="botonAgregar" data-bs-toggle="tooltip" data-bs-placement="left" title="Agregar nueva transacción">
+            <i class="bi bi-plus-lg"></i>
+            <div class="ripple"></div>
+          </button>
         </div>
 
-        <!-- Menú emergente -->
-        <div id="menuOpciones" class="menu-opciones d-none">
-          <div class="titulo-menu">Agregar Nuevo</div>
-          <a href="#" class="btn btn-light d-block mb-2" id="btnNuevoIngreso">Ingreso</a>
-          <a href="#" class="btn btn-light d-block mb-2">Gasto</a>
-          <a href="#" class="btn btn-light d-block mb-2">Ahorro</a>
-          <a href="#" class="btn btn-light d-block mb-2">Deuda</a>
-          <a href="#" class="btn btn-light d-block mb-2">Inversión</a>
-          <a href="#" class="btn btn-light d-block mb-2" id="btnNuevaCuenta">Cuenta</a>
-          <a href="#" class="btn btn-light d-block mb-2">Objetivo</a>
+        <!-- Menú emergente mejorado -->
+        <div id="menuOpciones" class="menu-emergente d-none">
+          <div class="menu-header">
+            <i class="bi bi-plus-circle-fill me-2"></i>
+            <span>Agregar Nuevo</span>
+            <button class="btn-cerrar" id="btnCerrarMenu">
+              <i class="bi bi-x"></i>
+            </button>
+          </div>
+          
+          <div class="menu-body">
+            <div class="menu-grid">
+              <a href="#" class="menu-item ingreso-item" id="btnNuevoIngreso">
+                <div class="item-icon">
+                  <i class="bi bi-arrow-up-circle-fill"></i>
+                </div>
+                <div class="item-content">
+                  <span class="item-title">Ingreso</span>
+                  <small class="item-desc">Registrar dinero recibido</small>
+                </div>
+                <div class="item-arrow">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+              </a>
+
+              <a href="#" class="menu-item gasto-item">
+                <div class="item-icon">
+                  <i class="bi bi-arrow-down-circle-fill"></i>
+                </div>
+                <div class="item-content">
+                  <span class="item-title">Gasto</span>
+                  <small class="item-desc">Registrar dinero gastado</small>
+                </div>
+                <div class="item-arrow">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+              </a>
+
+              <a href="#" class="menu-item ahorro-item">
+                <div class="item-icon">
+                  <i class="bi bi-piggy-bank-fill"></i>
+                </div>
+                <div class="item-content">
+                  <span class="item-title">Ahorro</span>
+                  <small class="item-desc">Guardar para el futuro</small>
+                </div>
+                <div class="item-arrow">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+              </a>
+
+              <a href="#" class="menu-item cuenta-item" id="btnNuevaCuenta">
+                <div class="item-icon">
+                  <i class="bi bi-bank2"></i>
+                </div>
+                <div class="item-content">
+                  <span class="item-title">Cuenta</span>
+                  <small class="item-desc">Nueva cuenta bancaria</small>
+                </div>
+                <div class="item-arrow">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+              </a>
+
+              <a href="#" class="menu-item deuda-item">
+                <div class="item-icon">
+                  <i class="bi bi-credit-card-fill"></i>
+                </div>
+                <div class="item-content">
+                  <span class="item-title">Deuda</span>
+                  <small class="item-desc">Registrar dinero prestado</small>
+                </div>
+                <div class="item-arrow">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+              </a>
+
+              <a href="#" class="menu-item inversion-item">
+                <div class="item-icon">
+                  <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <div class="item-content">
+                  <span class="item-title">Inversión</span>
+                  <small class="item-desc">Hacer crecer tu dinero</small>
+                </div>
+                <div class="item-arrow">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+              </a>
+
+              <a href="#" class="menu-item objetivo-item">
+                <div class="item-icon">
+                  <i class="bi bi-bullseye"></i>
+                </div>
+                <div class="item-content">
+                  <span class="item-title">Objetivo</span>
+                  <small class="item-desc">Meta de ahorro</small>
+                </div>
+                <div class="item-arrow">
+                  <i class="bi bi-chevron-right"></i>
+                </div>
+              </a>
+            </div>
+          </div>
         </div>
 
         <!-- Modal de ingreso (se cargará dinámicamente) -->
