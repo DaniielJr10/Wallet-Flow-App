@@ -1,0 +1,316 @@
+/* ===== ESTILOS MODERNOS PARA HERRAMIENTAS ===== */
+
+body, html {
+  height: 100%;
+  font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
+}
+
+/* ===== TÍTULO PRINCIPAL MEJORADO ===== */
+.titulo-principal {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2ecc71; /* Fallback */
+  border-radius: 15px;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  font-size: 2.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin: 0;
+}
+
+.subtitulo-pagina {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+/* ===== CONTENIDO PRINCIPAL MEJORADO ===== */
+.contenido-principal {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+  min-height: 100vh;
+}
+/* ===== MENÚ LATERAL MEJORADO ===== */
+.menu-lateral {
+  background: linear-gradient(180deg, white 0%, #f8fffe 100%);
+  border: 3px solid #2ecc71;
+  border-radius: 15px;
+  min-height: 100vh;
+  padding-top: 1.5rem;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
+}
+
+.menu-lateral .nav-link {
+  font-size: 18px;
+  background: linear-gradient(135deg, #eaf8ed 0%, #d5f4e6 100%);
+  color: #2c3e50;
+  margin: 6px 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid rgba(46, 204, 113, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  top: -40px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.menu-lateral .nav-link:hover {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  border-color: #27ae60;
+}
+
+/* ===== TARJETAS DE HERRAMIENTAS MODERNAS ===== */
+.tool-card {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fffe 100%);
+  border-radius: 20px;
+  padding: 0;
+  border: 1px solid rgba(46, 204, 113, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.tool-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(46, 204, 113, 0.15);
+  border-color: rgba(46, 204, 113, 0.3);
+  color: inherit;
+  text-decoration: none;
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #2ecc71, #27ae60, #16a085);
+}
+
+/* Header de la tarjeta */
+.tool-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+}
+
+.tool-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.calculadora-icon {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.calendario-icon {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.notas-icon {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.conversor-icon {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
+.tool-badge {
+  background: rgba(46, 204, 113, 0.1);
+  color: #27ae60;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Contenido de la tarjeta */
+.tool-content {
+  padding: 0 1.5rem 1rem 1.5rem;
+}
+
+.tool-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 0.5rem 0;
+}
+
+.tool-description {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.tool-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.feature-tag {
+  background: rgba(46, 204, 113, 0.05);
+  color: #27ae60;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid rgba(46, 204, 113, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.feature-tag i {
+  font-size: 0.7rem;
+}
+
+/* Footer de la tarjeta */
+.tool-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: rgba(248, 249, 250, 0.5);
+  border-top: 1px solid rgba(46, 204, 113, 0.08);
+  margin-top: auto;
+}
+
+.launch-text {
+  color: #2ecc71;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.tool-footer i {
+  color: #2ecc71;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.tool-card:hover .tool-footer i {
+  transform: translateX(5px);
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .tool-card {
+    margin-bottom: 1.5rem;
+  }
+  
+  .tool-features {
+    flex-direction: column;
+  }
+  
+  .feature-tag {
+    align-self: flex-start;
+  }
+}
+
+.menu-lateral .nav-link.active {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+  border-color: #27ae60;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+.logowf {
+  position: relative;
+  display: flex;
+  align-items: center;
+  top: -30px;
+  left: -15px;
+  padding: 3px;
+}
+
+.titulologo {
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2e6835; /* Fallback */
+}
+/*hasta aqui termina el css para el menú lateral */
+  /*hasta aqui termina el css para el menú lateral */
+  
+  
+/* Estilo para las tarjetas de herramientas */
+.herramienta-card {
+    border: none;
+    border-radius: 20px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    width: 100%; /* Asegura que ocupen todo el ancho disponible */
+    height: 300px; /* Aumenta la altura de las tarjetas */
+    display: flex;
+    flex-direction: column; /* Organiza el contenido en columna */
+    justify-content: space-between; /* Espacia el contenido */
+    align-items: center; /* Centra horizontalmente */
+    padding: 20px; /* Espaciado interno */
+    cursor: pointer; /* Cursor pointer para indicar que es clickeable */
+  }
+  
+  .herramienta-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Estilos para enlaces de herramientas */
+  a.text-decoration-none {
+    color: inherit; /* Hereda el color del elemento padre */
+  }
+
+  a.text-decoration-none:hover {
+    color: inherit; /* Mantiene el color al hacer hover */
+  }
+
+  a.text-decoration-none .herramienta-card:hover .card-title {
+    color: #27ae60; /* Color más oscuro en hover */
+  }
+
+  a.text-decoration-none .herramienta-card:hover .herramienta-icon {
+    color: #27ae60; /* Color más oscuro en hover */
+  }
+  
+  /* Título de la herramienta */
+  .herramienta-card .card-title {
+    font-size: 30px; /* Tamaño del título */
+    font-weight: bold;
+    color: #2ecc71;
+    text-align: center; /* Centrado horizontalmente */
+    margin-bottom: 10px; /* Espaciado inferior */
+  }
+  
+  /* Iconos de herramientas */
+  .herramienta-icon {
+    font-size: 6rem; /* Aumenta el tamaño del ícono */
+    color: #2ecc71;
+    margin: auto 0; /* Centra verticalmente el ícono */
+  }
+  
+  

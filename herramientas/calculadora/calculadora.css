@@ -1,0 +1,519 @@
+/* ===== ESTILOS MEJORADOS PARA CALCULADORA ===== */
+
+body, html {
+    height: 100%;
+    font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
+}
+
+/* ===== TÍTULO PRINCIPAL MEJORADO ===== */
+.titulo-principal {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2ecc71; /* Fallback */
+  border-radius: 15px;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  font-size: 2.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin: 0;
+}
+
+.subtitulo-pagina {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+h2 {
+  font-weight: bold;
+}
+
+/* ===== CONTENIDO PRINCIPAL MEJORADO ===== */
+.contenido-principal {
+  background: linear-gradient(135deg, #f8f9fa 0%, #eaf8ed 100%);
+  min-height: 100vh;
+}
+  
+/* ===== MENÚ LATERAL MEJORADO ===== */
+.menu-lateral {
+  background: linear-gradient(180deg, white 0%, #f8fffe 100%);
+  border: 3px solid #2ecc71;
+  border-radius: 15px;
+  min-height: 100vh;
+  padding-top: 1.5rem;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
+}
+
+.menu-lateral .nav-link {
+  font-size: 18px;
+  background: linear-gradient(135deg, #eaf8ed 0%, #d5f4e6 100%);
+  color: #2c3e50;
+  margin: 6px 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid rgba(46, 204, 113, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  top: -40px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.menu-lateral .nav-link:hover {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  border-color: #27ae60;
+}
+
+.menu-lateral .nav-link.active {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+  border-color: #27ae60;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+.logowf {
+  position: relative;
+  display: flex;
+  align-items: center;
+  top: -30px;
+  left: -15px;
+  padding: 3px;
+}
+
+.titulologo {
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2e6835; /* Fallback */
+}
+/*hasta aqui termina el css para el menú lateral */
+ 
+
+/* ===== TÍTULO PRINCIPAL DE LA CALCULADORA ===== */
+.titulo-principal {
+  margin-bottom: 1rem;
+}
+
+.titulo-principal h2 {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2ecc71; /* Fallback */
+  font-size: 2rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin: 0;
+}
+
+.titulo-principal i {
+  color: #2ecc71;
+  font-size: 2rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* ===== ESTILOS MEJORADOS PARA LA CALCULADORA ===== */
+.calculadora-card {
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.15);
+  border: 1px solid rgba(46, 204, 113, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calculadora-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(46, 204, 113, 0.2);
+  border-color: rgba(46, 204, 113, 0.3);
+}
+
+.calculadora-display {
+  font-size: 2rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.08) 0%, rgba(46, 204, 113, 0.12) 100%);
+  border: 3px solid #2ecc71;
+  border-radius: 15px;
+  min-height: 80px;
+  max-height: 140px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
+  color: #2c3e50;
+  font-family: 'Courier New', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow-y: auto;
+  overflow-x: hidden;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  line-height: 1.3;
+  text-align: right;
+  white-space: pre-wrap;
+  transition: all 0.3s ease;
+}
+
+.calculadora-display:focus {
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2), 0 0 0 0.2rem rgba(46, 204, 113, 0.25);
+  border-color: #27ae60;
+  transform: translateY(-1px);
+}
+
+.operacion-actual {
+  font-size: 1rem;
+  min-height: 1.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+.btn-calculadora {
+  height: 60px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
+  border: 2px solid rgba(46, 204, 113, 0.2);
+}
+
+.btn-calculadora:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.2);
+}
+
+.btn-calculadora:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(46, 204, 113, 0.3);
+}
+
+/* ===== BOTONES DE NÚMEROS MEJORADOS ===== */
+.btn-outline-dark.btn-calculadora {
+  background: white;
+  color: #2c3e50;
+  border-color: rgba(46, 204, 113, 0.2);
+}
+
+.btn-outline-dark.btn-calculadora:hover {
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.08) 0%, rgba(46, 204, 113, 0.12) 100%);
+  color: #2c3e50;
+  border-color: #2ecc71;
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.2);
+}
+
+/* ===== BOTONES DE OPERACIONES MEJORADOS (AHORA VERDE) ===== */
+.btn-primary.btn-calculadora {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  border-color: #2ecc71;
+  color: white;
+}
+
+.btn-primary.btn-calculadora:hover {
+  background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+  border-color: #27ae60;
+  color: white;
+}
+
+/* ===== BOTÓN DE IGUAL MEJORADO ===== */
+.btn-success.btn-calculadora {
+  background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+  border-color: #28a745;
+  color: white;
+}
+
+.btn-success.btn-calculadora:hover {
+  background: linear-gradient(135deg, #1e7e34 0%, #155724 100%);
+  border-color: #1e7e34;
+  color: white;
+}
+
+/* ===== BOTONES DE FUNCIONES ESPECIALES MEJORADOS ===== */
+.btn-outline-danger.btn-calculadora {
+  background: white;
+  color: #e74c3c;
+  border-color: rgba(231, 76, 60, 0.3);
+}
+
+.btn-outline-danger.btn-calculadora:hover {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border-color: #e74c3c;
+}
+
+.btn-outline-warning.btn-calculadora {
+  background: white;
+  color: #f39c12;
+  border-color: rgba(243, 156, 18, 0.3);
+}
+
+.btn-outline-warning.btn-calculadora:hover {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  color: white;
+  border-color: #f39c12;
+}
+
+/* ===== BOTONES DE FUNCIONES ADICIONALES MEJORADOS ===== */
+.btn-info.btn-calculadora {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+  border-color: #17a2b8;
+  color: white;
+}
+
+.btn-info.btn-calculadora:hover {
+  background: linear-gradient(135deg, #138496 0%, #0f6674 100%);
+  border-color: #138496;
+  color: white;
+}
+
+/* ===== HISTORIAL MEJORADO ===== */
+.historial-container {
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  border: 2px solid rgba(46, 204, 113, 0.2);
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
+}
+
+.historial-list {
+  margin-bottom: 0;
+}
+
+.historial-list li {
+  padding: 8px 12px;
+  margin: 5px 0;
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.08) 0%, rgba(46, 204, 113, 0.12) 100%);
+  border-radius: 8px;
+  border-left: 4px solid #2ecc71;
+  box-shadow: 0 2px 8px rgba(46, 204, 113, 0.15);
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #2c3e50;
+}
+
+.historial-list li:hover {
+  transform: translateX(5px);
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(46, 204, 113, 0.2) 100%);
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2);
+}
+
+/* ===== SCROLLBAR PERSONALIZADO MEJORADO ===== */
+.historial-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.historial-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.historial-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(145deg, #2ecc71 0%, #27ae60 100%);
+  border-radius: 4px;
+}
+
+.historial-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(145deg, #27ae60 0%, #1e8449 100%);
+}
+
+/* ===== ANIMACIONES MEJORADAS ===== */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.calculadora-card {
+  animation: slideIn 0.6s ease-out;
+}
+
+/* ===== ESTILOS PARA RESULTADO RESALTADO ===== */
+.calculadora-display.resultado-resaltado {
+  color: #2c3e50;
+  font-weight: 900;
+  font-size: 2.8rem !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(46, 204, 113, 0.2) 100%);
+}
+
+/* Estilos adaptativos para diferentes longitudes de contenido */
+.calculadora-display.contenido-largo {
+  font-size: 1.5rem;
+}
+
+.calculadora-display.contenido-muy-largo {
+  font-size: 1.2rem;
+}
+
+.calculadora-display.contenido-extremo {
+  font-size: 1rem;
+}
+
+.calculadora-display .resultado-grande.resultado-largo {
+  font-size: 1.8rem;
+}
+
+.calculadora-display .resultado-grande.resultado-muy-largo {
+  font-size: 1.5rem;
+}
+
+.calculadora-display .resultado-grande.resultado-extremo {
+  font-size: 1.2rem;
+}
+
+.calculadora-display .operacion-parte.operacion-larga {
+  font-size: 1.2rem;
+}
+
+.calculadora-display .operacion-parte.operacion-muy-larga {
+  font-size: 1rem;
+}
+
+.calculadora-display .operacion-parte.operacion-extrema {
+  font-size: 0.9rem;
+}
+
+/* Estilo para operación con resultado resaltado */
+.calculadora-display.operacion-con-resultado {
+  font-family: 'Courier New', monospace;
+  font-size: 1.4rem;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 10px 15px;
+}
+
+.calculadora-display .resultado-grande {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #2ecc71;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  margin-top: 5px;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+/* ===== RESPONSIVE MEJORADO ===== */
+@media (max-width: 768px) {
+  .titulo-principal h2 {
+    font-size: 1.5rem;
+  }
+  
+  .calculadora-card {
+    margin: 1rem;
+    padding: 1rem;
+  }
+  
+  .calculadora-display {
+    font-size: 1.5rem;
+    min-height: 60px;
+    padding: 10px 15px;
+  }
+  
+  .btn-calculadora {
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  .historial-container {
+    max-height: 150px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .titulo-principal h2 {
+    font-size: 1.2rem;
+  }
+  
+  .calculadora-display {
+    font-size: 1.2rem;
+    min-height: 50px;
+  }
+  
+  .btn-calculadora {
+    height: 45px;
+    font-size: 1rem;
+  }
+}
+
+.calculadora-display .operacion-parte {
+  font-size: 1.4rem;
+  color: #6c757d;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+@keyframes resaltarResultado {
+  0% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+  }
+  50% { 
+    transform: scale(1.02);
+    box-shadow: 0 0 0 15px rgba(40, 167, 69, 0.3);
+  }
+  100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .calculadora-display {
+    font-size: 2rem;
+    height: 60px;
+  }
+  
+  .btn-calculadora {
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  .titulo-principal h2 {
+    font-size: 1.4rem;
+  }
+  
+  .titulo-principal i {
+    font-size: 1.6rem;
+  }
+  
+  .titulo-principal {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Estilos para el botón de limpiar historial */
+.btn-outline-danger.btn-sm {
+  border-radius: 8px;
+  padding: 4px 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-danger.btn-sm:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
+}
+  

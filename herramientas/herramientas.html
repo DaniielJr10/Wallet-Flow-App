@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Herramientas</title>
+
+  <!-- Bootstrap y Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  
+  <!-- Estilos -->
+  <link rel="stylesheet" href="herramientas.css" />
+</head>
+<body>
+
+  <!-- Botón para mostrar menú lateral en móviles -->
+  <button class="btn btn-success d-md-none m-2" type="button" data-bs-toggle="collapse" data-bs-target="#menuLateral">
+    <i class="bi bi-list"></i> Menú
+  </button>
+
+  <div class="container-fluid contenido-principal">
+    <div class="row">
+      <!-- Menú lateral -->
+      <div id="menuLateral" class="col-md-2 collapse d-md-block menu-lateral">
+        <div class="logowf d-flex align-items-center p-3">
+          <img src="../registro/Logo_Wallet_Flow-removebg-preview.png" alt="Logo" width="80" height="80">
+          <h4 class="titulologo">Wallet Flow</h4>
+        </div>
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link" href="../pantallaprincipal/principal.html"><i class="bi bi-house-door-fill me-2 icono-menu"></i>Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="../ingresos/ingresos.html"><i class="bi bi-cash-stack me-2 icono-menu"></i>Ingresos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cart-fill me-2 icono-menu"></i>Gastos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-piggy-bank-fill me-2 icono-menu"></i>Ahorros</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-credit-card-2-back-fill me-2 icono-menu"></i>Deudas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-graph-up-arrow me-2 icono-menu"></i>Inversiones</a></li>
+          <li class="nav-item"><a class="nav-link" href="../cuentas/cuentas.html"><i class="bi bi-bank me-2 icono-menu"></i>Cuentas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bullseye me-2 icono-menu"></i>Objetivos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-lightbulb-fill me-2 icono-menu"></i>Consejos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-wrench me-2 icono-menu"></i>Herramientas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-question-circle-fill me-2 icono-menu"></i>Ayuda</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear-fill me-2 icono-menu"></i>Configuración</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" id="cerrarSesionBtn"><i class="bi bi-box-arrow-right me-2 icono-menu"></i>Cerrar sesión</a></li>
+        </ul>
+      </div>
+
+      <!-- Contenido principal -->
+      <div class="col-md-10 contenido-principal">
+        <div class="container my-5">
+          <!-- Título Principal -->
+          <div class="row mb-5">
+            <div class="col text-center">
+              <h1 class="titulo-principal">
+                <i class="bi bi-wrench me-3"></i>HERRAMIENTAS
+              </h1>
+              <p class="subtitulo-pagina">Accede a herramientas útiles para gestionar mejor tus finanzas</p>
+            </div>
+          </div>
+
+          <!-- Tarjetas de herramientas -->
+          <div class="row">
+            <!-- Calculadora -->
+            <div class="col-lg-6 col-md-6 mb-4">
+              <a href="calculadora/calculadora.html" class="text-decoration-none">
+                <div class="tool-card">
+                  <div class="tool-header">
+                    <div class="tool-icon calculadora-icon">
+                      <i class="bi bi-calculator-fill"></i>
+                    </div>
+                    <div class="tool-badge">Básica</div>
+                  </div>
+                  <div class="tool-content">
+                    <h4 class="tool-title">Calculadora</h4>
+                    <p class="tool-description">Realiza cálculos básicos y operaciones matemáticas rápidas</p>
+                    <div class="tool-features">
+                      <span class="feature-tag"><i class="bi bi-plus-circle"></i> Operaciones básicas</span>
+                      <span class="feature-tag"><i class="bi bi-percent"></i> Porcentajes</span>
+                    </div>
+                  </div>
+                  <div class="tool-footer">
+                    <span class="launch-text">Abrir herramienta</span>
+                    <i class="bi bi-arrow-right-circle"></i>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <!-- Calendario -->
+            <div class="col-lg-6 col-md-6 mb-4">
+              <a href="calendario/calendario.html" class="text-decoration-none">
+                <div class="tool-card">
+                  <div class="tool-header">
+                    <div class="tool-icon calendario-icon">
+                      <i class="bi bi-calendar-event-fill"></i>
+                    </div>
+                    <div class="tool-badge">Organización</div>
+                  </div>
+                  <div class="tool-content">
+                    <h4 class="tool-title">Calendario</h4>
+                    <p class="tool-description">Organiza tus fechas importantes y eventos financieros</p>
+                    <div class="tool-features">
+                      <span class="feature-tag"><i class="bi bi-calendar-check"></i> Eventos</span>
+                      <span class="feature-tag"><i class="bi bi-alarm"></i> Recordatorios</span>
+                    </div>
+                  </div>
+                  <div class="tool-footer">
+                    <span class="launch-text">Abrir herramienta</span>
+                    <i class="bi bi-arrow-right-circle"></i>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <!-- Notas -->
+            <div class="col-lg-6 col-md-6 mb-4">
+              <a href="notas/notas.html" class="text-decoration-none">
+                <div class="tool-card">
+                  <div class="tool-header">
+                    <div class="tool-icon notas-icon">
+                      <i class="bi bi-journal-text"></i>
+                    </div>
+                    <div class="tool-badge">Productividad</div>
+                  </div>
+                  <div class="tool-content">
+                    <h4 class="tool-title">Notas</h4>
+                    <p class="tool-description">Guarda ideas, recordatorios y apuntes importantes</p>
+                    <div class="tool-features">
+                      <span class="feature-tag"><i class="bi bi-pencil"></i> Edición rápida</span>
+                      <span class="feature-tag"><i class="bi bi-cloud"></i> Auto-guardado</span>
+                    </div>
+                  </div>
+                  <div class="tool-footer">
+                    <span class="launch-text">Abrir herramienta</span>
+                    <i class="bi bi-arrow-right-circle"></i>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <!-- Conversor de Monedas -->
+            <div class="col-lg-6 col-md-6 mb-4">
+              <a href="conversor/conversor.html" class="text-decoration-none">
+                <div class="tool-card">
+                  <div class="tool-header">
+                    <div class="tool-icon conversor-icon">
+                      <i class="bi bi-currency-exchange"></i>
+                    </div>
+                    <div class="tool-badge">Financiera</div>
+                  </div>
+                  <div class="tool-content">
+                    <h4 class="tool-title">Conversor de Monedas</h4>
+                    <p class="tool-description">Convierte entre diferentes divisas con tipos de cambio actualizados</p>
+                    <div class="tool-features">
+                      <span class="feature-tag"><i class="bi bi-globe"></i> Múltiples divisas</span>
+                      <span class="feature-tag"><i class="bi bi-arrow-repeat"></i> Tiempo real</span>
+                    </div>
+                  </div>
+                  <div class="tool-footer">
+                    <span class="launch-text">Abrir herramienta</span>
+                    <i class="bi bi-arrow-right-circle"></i>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="herramientas.js"></script>
+</body>
+</html>

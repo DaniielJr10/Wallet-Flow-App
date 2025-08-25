@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - Wallet Flow</title>
+    <link rel="stylesheet" href="configuracion.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <button class="back-btn" onclick="goBack()">
+                <span class="icon">←</span>
+            </button>
+            <h1>Configuración</h1>
+        </header>
+
+        <main class="main-content">
+            <!-- Sección de Notificaciones -->
+            <section class="config-section">
+                <h2 class="section-title">
+                    <span class="icon">🔔</span>
+                    Notificaciones
+                </h2>
+                
+                <div class="option-group">
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Notificaciones Push</h3>
+                            <p>Recibe alertas en tu dispositivo</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="pushNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Notificaciones en la App</h3>
+                            <p>Alertas dentro de la aplicación</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="inAppNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Recordatorios de Pagos</h3>
+                            <p>Alertas sobre deudas y gastos</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="paymentReminders" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Consejos Financieros</h3>
+                            <p>Recomendaciones personalizadas</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="financialTips" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Frecuencia de Notificaciones</h3>
+                            <p>Con qué frecuencia recibir alertas</p>
+                        </div>
+                        <select id="notificationFrequency" class="select-input">
+                            <option value="daily">Diarias</option>
+                            <option value="weekly">Semanales</option>
+                            <option value="important">Solo eventos importantes</option>
+                        </select>
+                    </div>
+
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Correo Electrónico</h3>
+                            <p>Recibir notificaciones por email</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="emailNotifications">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="action-btn" onclick="showNotificationHistory()">
+                    Ver Historial de Notificaciones
+                </button>
+            </section>
+
+            <!-- Sección de Personalización -->
+            <section class="config-section">
+                <h2 class="section-title">
+                    <span class="icon">🎨</span>
+                    Personalización
+                </h2>
+
+                <div class="option-group">
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Tema</h3>
+                            <p>Apariencia de la aplicación</p>
+                        </div>
+                        <select id="themeSelect" class="select-input">
+                            <option value="light">Claro</option>
+                            <option value="dark">Oscuro</option>
+                            <option value="auto">Automático</option>
+                        </select>
+                    </div>
+
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Fuente</h3>
+                            <p>Estilo de letra</p>
+                        </div>
+                        <select id="fontSelect" class="select-input">
+                            <option value="default">Predeterminada</option>
+                            <option value="serif">Serif</option>
+                            <option value="sans-serif">Sans-Serif</option>
+                            <option value="monospace">Monoespaciada</option>
+                        </select>
+                    </div>
+
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Tamaño de Letra</h3>
+                            <p>Tamaño del texto</p>
+                        </div>
+                        <div class="font-size-controls">
+                            <select id="fontSizeSelect" class="select-input">
+                                <option value="small">Pequeño</option>
+                                <option value="medium">Mediano</option>
+                                <option value="large">Grande</option>
+                                <option value="custom">Personalizado</option>
+                            </select>
+                            <input type="range" id="fontSizeSlider" min="12" max="20" value="16" class="slider-input" style="display: none;">
+                        </div>
+                    </div>
+
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Color de Acento</h3>
+                            <p>Color principal de la interfaz</p>
+                        </div>
+                        <div class="color-picker">
+                            <input type="color" id="accentColor" value="#28a745" class="color-input">
+                            <div class="color-presets">
+                                <button class="color-preset" data-color="#28a745" style="background: #28a745;"></button>
+                                <button class="color-preset" data-color="#20c997" style="background: #20c997;"></button>
+                                <button class="color-preset" data-color="#007bff" style="background: #007bff;"></button>
+                                <button class="color-preset" data-color="#dc3545" style="background: #dc3545;"></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Alto Contraste</h3>
+                            <p>Mejora la visibilidad</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="highContrast">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Texto en Negrita</h3>
+                            <p>Mejora la legibilidad</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="boldText">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="action-btn secondary" onclick="resetPersonalization()">
+                    Restablecer Configuración
+                </button>
+            </section>
+
+            <!-- Sección de Eliminar Cuenta -->
+            <section class="config-section danger-section">
+                <h2 class="section-title danger-title">
+                    <span class="icon">⚠️</span>
+                    Zona Peligrosa
+                </h2>
+
+                <div class="delete-account-warning">
+                    <h4>⚠️ Eliminar Cuenta Permanentemente</h4>
+                    <p>Esta acción es <strong>irreversible</strong> y eliminará:</p>
+                    <ul>
+                        <li>Todos tus datos financieros</li>
+                        <li>Historial de transacciones</li>
+                        <li>Metas de ahorro e inversiones</li>
+                        <li>Configuraciones personalizadas</li>
+                        <li>Historial de notificaciones</li>
+                    </ul>
+                    <p><strong>No podrás recuperar esta información una vez eliminada.</strong></p>
+                </div>
+
+                <div class="option-group">
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Confirmar Eliminación</h3>
+                            <p>Escribe "ELIMINAR CUENTA" para confirmar</p>
+                            <input 
+                                type="text" 
+                                id="deleteConfirmation" 
+                                class="delete-account-input" 
+                                placeholder="Escribe: ELIMINAR CUENTA"
+                                autocomplete="off"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="option-item">
+                        <div class="option-info">
+                            <h3>Motivo de Eliminación (Opcional)</h3>
+                            <p>Ayúdanos a mejorar contándonos por qué eliminas tu cuenta</p>
+                            <select id="deleteReason" class="select-input">
+                                <option value="">Selecciona un motivo</option>
+                                <option value="not-useful">La app no me es útil</option>
+                                <option value="privacy">Preocupaciones de privacidad</option>
+                                <option value="complexity">Muy complicada de usar</option>
+                                <option value="alternative">Encontré una alternativa mejor</option>
+                                <option value="temporary">Solo necesito una pausa temporal</option>
+                                <option value="other">Otro motivo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="action-btn danger" id="deleteAccountBtn" onclick="deleteAccount()" disabled>
+                    🗑️ Eliminar Cuenta Permanentemente
+                </button>
+            </section>
+        </main>
+
+        <!-- Vista previa -->
+        <div class="preview-text">
+            <p>Vista previa del texto con la configuración actual</p>
+        </div>
+    </div>
+
+    <!-- Modal para historial de notificaciones -->
+    <div id="notificationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Historial de Notificaciones</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="notificationHistory"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirmar Acción</h2>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+                <div class="modal-actions">
+                    <button class="btn-confirm" onclick="confirmAction()">Confirmar</button>
+                    <button class="btn-cancel" onclick="closeConfirmModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de eliminación de cuenta -->
+    <div id="deleteAccountModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header danger-header">
+                <h2>⚠️ Confirmar Eliminación de Cuenta</h2>
+            </div>
+            <div class="modal-body">
+                <div class="delete-account-warning">
+                    <h4>Última Oportunidad</h4>
+                    <p>Estás a punto de eliminar permanentemente tu cuenta. Esta acción:</p>
+                    <ul>
+                        <li><strong>NO SE PUEDE DESHACER</strong></li>
+                        <li>Eliminará todos tus datos inmediatamente</li>
+                        <li>Cerrará tu sesión en todos los dispositivos</li>
+                        <li>No podrás crear una nueva cuenta con el mismo email</li>
+                    </ul>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-confirm danger" onclick="confirmDeleteAccount()">
+                        SÍ, ELIMINAR MI CUENTA
+                    </button>
+                    <button class="btn-cancel" onclick="closeDeleteModal()">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="configuracion.js"></script>
+</body>
+</html>

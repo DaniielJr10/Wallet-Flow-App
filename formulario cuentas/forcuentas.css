@@ -1,0 +1,147 @@
+
+  
+  /* Fondo oscuro para el modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+  }
+  
+  .modal-form {
+    background: #e6e6e6;
+    color: black;
+    padding: 20px 20px 30px 20px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 350px;
+    position: relative;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  }
+  .modal-form label {
+  color: black !important; /* Forzar el color negro */
+  }
+  .modal-form h2 {
+    text-align: center;
+    margin: 0 0 20px 0;
+    padding: 15px 0;
+    font-size: 22px;
+    background-color: #2ecc71;
+    color: white;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .form-step.hidden,
+  .hidden {
+    display: none;
+  }
+  
+  .modal-form input,
+  .modal-form select,
+  .modal-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    background-color: white;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+  
+  .nav-btn.next-step-btn,
+  .nav-btn.prev-step-btn {
+    background: none;
+    border: none;
+    font-size: 40px;
+    cursor: pointer;
+    color: #2e6835;
+    padding: 10px;
+    transition: transform 0.2s;
+  }
+  
+  .nav-btn.next-step-btn:hover,
+  .nav-btn.prev-step-btn:hover {
+    transform: scale(1.1);
+  }
+  
+  .checkbox-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+  }
+  
+  .checkbox-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+  }
+  
+  .checkbox-options input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  
+  .frecuencia-options {
+    margin-top: 5px;
+    display: none;
+  }
+  
+  .frecuencia-options.visible {
+    display: block;
+  }
+  
+  .botones {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 10px 0;
+    padding: 10px;
+  }
+  
+  .botones button {
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 80px;
+    border: none;
+    transition: background 0.2s;
+  }
+  
+  button[type="submit"] {
+    background-color: #2e6835;
+    color: white;
+  }
+  
+  button[type="button"] {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  button[type="reset"] {
+    background-color: #b1afaa;
+    color: #333;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .modal-form {
+      max-width: 98vw;
+      padding: 10px 5px 60px 5px;
+    }
+  }
+  
+  .siguiente-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Cuentas</title>
+
+  <!-- Bootstrap y Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <!-- CSS personalizado -->
+  <link rel="stylesheet" href="cuentas.css">
+</head>
+<body>
+
+  <!-- Botón para mostrar menú lateral en móviles -->
+  <button class="btn btn-success d-md-none m-2" type="button" data-bs-toggle="collapse" data-bs-target="#menuLateral">
+    <i class="bi bi-list"></i> Menú
+  </button>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Menú lateral -->
+      <div id="menuLateral" class="col-md-2 collapse d-md-block menu-lateral">
+        <div class="logowf d-flex align-items-center p-3">
+          <img src="../registro/Logo_Wallet_Flow-removebg-preview.png" alt="Logo" width="80" height="80">
+          <h4 class="titulologo">Wallet Flow</h4>
+        </div>
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link" href="../pantallaprincipal/principal.html"><i class="bi bi-house-door-fill me-2 icono-menu"></i>Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="../ingresos/ingresos.html"><i class="bi bi-cash-stack me-2 icono-menu"></i>Ingresos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cart-fill me-2 icono-menu"></i>Gastos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-piggy-bank-fill me-2 icono-menu"></i>Ahorros</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-credit-card-2-back-fill me-2 icono-menu"></i>Deudas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-graph-up-arrow me-2 icono-menu"></i>Inversiones</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bank me-2 icono-menu"></i>Cuentas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bullseye me-2 icono-menu"></i>Objetivos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-lightbulb-fill me-2 icono-menu"></i>Consejos</a></li>
+          <li class="nav-item"><a class="nav-link" href="../herramientas/herramientas.html"><i class="bi bi-wrench me-2 icono-menu"></i>Herramientas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-question-circle-fill me-2 icono-menu"></i>Ayuda</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear-fill me-2 icono-menu"></i>Configuración</a></li>
+         <li class="nav-item"><a class="nav-link" href="#" id="cerrarSesionBtn"><i class="bi bi-box-arrow-right me-2 icono-menu"></i>Cerrar sesión</a></li>
+        </ul>
+      </div>
+
+      <!-- Contenido principal -->
+      <div class="col-md-10 contenido-principal">
+        <div class="container my-5">
+          <!-- Título Principal -->
+          <div class="row mb-5">
+            <div class="col text-center">
+              <h1 class="titulo-principal">
+                <i class="bi bi-bank me-3"></i>CUENTAS
+              </h1>
+              <p class="subtitulo-pagina">Administra y visualiza todas tus cuentas bancarias y billeteras en un solo lugar</p>
+            </div>
+          </div>
+
+          <!-- Contenedor de tarjetas -->
+          <div id="contenedorCuentas" class="row">
+            <!-- Las tarjetas se generarán dinámicamente aquí -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para editar cuenta -->
+  <div id="modalAgregarCuenta" class="modal fade" tabindex="-1" aria-labelledby="modalEditarCuentaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modern-form">
+        <div class="modal-header modern-header">
+          <div class="header-content">
+            <div class="form-icon">
+              <i class="bi bi-bank"></i>
+            </div>
+            <div class="header-text">
+              <h4 class="modal-title" id="modalEditarCuentaLabel">Gestionar Cuenta</h4>
+            </div>
+          </div>
+          <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Cerrar">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        
+        <form id="formAgregarCuenta">
+          <div class="modal-body modern-body">
+            <div class="form-grid">
+              <!-- Nombre de la cuenta -->
+              <div class="form-group">
+                <label for="nombreCuenta" class="form-label-modern">
+                  <i class="bi bi-person-badge"></i>
+                  Nombre de la cuenta
+                </label>
+                <div class="input-wrapper">
+                  <input type="text" class="form-control-modern" id="nombreCuenta" placeholder="Ej: Mi cuenta de ahorros" required>
+                  <div class="input-focus-border"></div>
+                </div>
+              </div>
+
+              <!-- Tipo de cuenta -->
+              <div class="form-group">
+                <label for="tipoCuenta" class="form-label-modern">
+                  <i class="bi bi-tags"></i>
+                  Tipo de cuenta
+                </label>
+                <div class="input-wrapper">
+                  <select class="form-control-modern" id="tipoCuenta" required>
+                    <option value="">Selecciona el tipo</option>
+                    <option value="Ahorros">💰 Cuenta de Ahorros</option>
+                    <option value="Corriente">🏦 Cuenta Corriente</option>
+                    <option value="Credito">💳 Tarjeta de Crédito</option>
+                    <option value="Débito">💳 Tarjeta de Débito</option>
+                    <option value="Efectivo">💵 Efectivo</option>
+                    <option value="Digital">📱 Billetera Digital</option>
+                  </select>
+                  <div class="input-focus-border"></div>
+                </div>
+              </div>
+
+              <!-- Número de cuenta -->
+              <div class="form-group">
+                <label for="numeroCuenta" class="form-label-modern">
+                  <i class="bi bi-credit-card-2-front"></i>
+                  Número de cuenta
+                </label>
+                <div class="input-wrapper">
+                  <input type="text" class="form-control-modern" id="numeroCuenta" placeholder="Ej: 1234567890" required>
+                  <div class="input-focus-border"></div>
+                </div>
+              </div>
+
+              <!-- Saldo inicial -->
+              <div class="form-group">
+                <label for="saldoInicial" class="form-label-modern">
+                  <i class="bi bi-cash-stack"></i>
+                  Saldo inicial
+                </label>
+                <div class="input-wrapper currency-input">
+                  <span class="currency-symbol">$</span>
+                  <input type="number" class="form-control-modern currency-field" id="saldoInicial" placeholder="0.00" step="0.01" required>
+                  <div class="input-focus-border"></div>
+                </div>
+              </div>
+
+              <!-- Cuenta principal toggle -->
+              <div class="form-group principal-toggle">
+                <div class="toggle-wrapper">
+                  <label class="toggle-label">
+                    <input type="checkbox" id="cuentaPrincipal" class="toggle-input">
+                    <div class="toggle-slider">
+                      <div class="toggle-knob">
+                        <i class="bi bi-star-fill"></i>
+                      </div>
+                    </div>
+                    <div class="toggle-text">
+                      <span class="toggle-title">Cuenta Principal</span>
+                      <span class="toggle-subtitle">Esta será tu cuenta predeterminada</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal-footer modern-footer">
+            <button type="button" class="btn-modern btn-cancel" data-bs-dismiss="modal">
+              <i class="bi bi-x-circle"></i>
+              <span>Cancelar</span>
+            </button>
+            <button type="submit" class="btn-modern btn-save">
+              <i class="bi bi-check-circle"></i>
+              <span>Guardar Cuenta</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>  <!-- Scripts -->
+  <script src="cuentas.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
