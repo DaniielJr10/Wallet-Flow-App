@@ -1,10 +1,12 @@
-// Funcionalidad del sistema de inicio de sesión para WalletFlow
+// ===== SISTEMA DE INICIO DE SESIÓN - WALLET FLOW =====
+// Archivo: inicio.js
+// Descripción: Maneja toda la lógica de autenticación y validación del login
 
-// Variables globales
+// ===== VARIABLES GLOBALES =====
 let users = JSON.parse(localStorage.getItem('walletflow_users') || '[]');
 let currentUser = JSON.parse(localStorage.getItem('walletflow_current_user') || 'null');
 
-// Elementos del DOM
+// ===== ELEMENTOS DEL DOM =====
 const loginForm = document.getElementById('loginForm');
 const loginIdentifier = document.getElementById('login-identifier');
 const loginPassword = document.getElementById('login-password');
@@ -16,14 +18,14 @@ const loginBtn = document.getElementById('loginBtn');
 const loginSpinner = document.getElementById('loginSpinner');
 const forgotPasswordLink = document.getElementById('forgotPassword');
 
-// Inicialización cuando el DOM está listo
+// ===== INICIALIZACIÓN DE LA APLICACIÓN =====
 document.addEventListener('DOMContentLoaded', function() {
     initializeLogin();
     setupEventListeners();
     checkRememberedUser();
 });
 
-// Configurar todos los event listeners
+// ===== CONFIGURACIÓN DE EVENT LISTENERS =====
 function setupEventListeners() {
     // Evento del formulario de login
     loginForm.addEventListener('submit', handleLogin);
@@ -31,7 +33,7 @@ function setupEventListeners() {
     // Toggle para mostrar/ocultar contraseña
     togglePasswordBtn.addEventListener('click', togglePasswordVisibility);
     
-    // Enlace para "olvidaste contraseña" (solo prevenir acción por defecto)
+    // Enlace para "olvidaste contraseña"
     forgotPasswordLink.addEventListener('click', function(e) {
         e.preventDefault();
     });
@@ -41,13 +43,13 @@ function setupEventListeners() {
     loginPassword.addEventListener('input', clearValidation);
 }
 
-// Inicializar la página de login
+// ===== INICIALIZACIÓN DE LA PÁGINA DE LOGIN =====
 function initializeLogin() {
     // Crear usuarios de prueba si no existen
     createTestUsers();
 }
 
-// Crear usuarios de prueba para desarrollo
+// ===== GESTIÓN DE USUARIOS DE PRUEBA =====
 function createTestUsers() {
     if (users.length === 0) {
         const testUsers = [
@@ -80,7 +82,7 @@ function createTestUsers() {
     }
 }
 
-// Verificar si hay un usuario recordado
+// ===== FUNCIONALIDAD "RECORDAR USUARIO" =====
 function checkRememberedUser() {
     const rememberedUser = localStorage.getItem('walletflow_remembered_user');
     if (rememberedUser) {
@@ -90,7 +92,7 @@ function checkRememberedUser() {
     }
 }
 
-// Manejar el envío del formulario de login
+// ===== MANEJO DEL FORMULARIO DE LOGIN =====
 async function handleLogin(e) {
     e.preventDefault();
     
@@ -118,7 +120,7 @@ async function handleLogin(e) {
     }, 1500);
 }
 
-// Validar el formulario de login
+// ===== VALIDACIÓN DEL FORMULARIO =====
 function validateLoginForm() {
     let isValid = true;
     
@@ -141,9 +143,9 @@ function validateLoginForm() {
     return isValid;
 }
 
-// Autenticar usuario (acepta cualquier usuario y contraseña por el momento)
+// ===== AUTENTICACIÓN DE USUARIO =====
 function authenticateUser(identifier, password) {
-    // Por el momento, cualquier combinación es válida
+    // Por el momento, cualquier combinación es válida para fines de desarrollo
     // Crear un usuario temporal para la sesión
     return {
         id: Math.floor(Math.random() * 1000),
@@ -155,9 +157,9 @@ function authenticateUser(identifier, password) {
     };
 }
 
-// Manejar login exitoso
+// ===== MANEJO DE LOGIN EXITOSO =====
 function handleSuccessfulLogin(user) {
-    // Guardar usuario actual
+    // Guardar usuario actual en localStorage
     currentUser = {
         id: user.id,
         username: user.username,
@@ -169,7 +171,7 @@ function handleSuccessfulLogin(user) {
     
     localStorage.setItem('walletflow_current_user', JSON.stringify(currentUser));
     
-    // Manejar "recordar usuario"
+    // Manejar funcionalidad "recordar usuario"
     if (rememberMe.checked) {
         localStorage.setItem('walletflow_remembered_user', loginIdentifier.value.trim());
     } else {
@@ -179,13 +181,13 @@ function handleSuccessfulLogin(user) {
     // Mostrar mensaje de éxito
     showMessage(`¡Bienvenido/a, ${user.name}!`, 'success');
     
-    // Redireccionar después de un breve delay
+    // Redireccionar a la pantalla principal después de un breve delay
     setTimeout(() => {
         window.location.href = '../pantallaprincipal/principal.html';
     }, 1500);
 }
 
-// Manejar login fallido
+// ===== MANEJO DE LOGIN FALLIDO =====
 function handleFailedLogin() {
     showMessage('Usuario o contraseña incorrectos. Por favor verifica tus datos.', 'danger');
     loginPassword.value = '';
@@ -196,16 +198,16 @@ function handleFailedLogin() {
     loginPassword.classList.add('is-invalid');
 }
 
-// Mostrar/ocultar contraseña
+// ===== TOGGLE PARA MOSTRAR/OCULTAR CONTRASEÑA =====
 function togglePasswordVisibility() {
     const isPassword = loginPassword.type === 'password';
     loginPassword.type = isPassword ? 'text' : 'password';
     toggleIcon.className = isPassword ? 'bi bi-eye-slash' : 'bi bi-eye';
 }
 
-// Funciones de UI y utilidades
+// ===== FUNCIONES DE INTERFAZ DE USUARIO =====
 
-// Mostrar mensajes en el login
+// Mostrar mensajes de estado en el login
 function showMessage(message, type) {
     loginMessage.className = `alert alert-${type}`;
     loginMessage.textContent = message;
@@ -237,14 +239,14 @@ function showFieldSuccess(field) {
     field.classList.remove('is-invalid');
 }
 
-// Limpiar validación
+// Limpiar validación de campos
 function clearValidation() {
     loginMessage.classList.add('d-none');
     loginIdentifier.classList.remove('is-invalid', 'is-valid');
     loginPassword.classList.remove('is-invalid', 'is-valid');
 }
 
-// Mostrar/ocultar loading en login
+// Mostrar/ocultar spinner de carga durante el login
 function showLoginLoading(show) {
     loginSpinner.classList.toggle('d-none', !show);
     loginBtn.disabled = show;
@@ -254,6 +256,8 @@ function showLoginLoading(show) {
         loginBtn.prepend(loginSpinner);
     }
 }
+
+// ===== FUNCIONES GLOBALES PARA GESTIÓN DE SESIÓN =====
 
 // Función para cerrar sesión (disponible globalmente)
 window.logout = function() {
@@ -272,7 +276,8 @@ window.checkAuth = function() {
     return currentUser;
 };
 
-// Debugging: Mostrar usuarios disponibles en consola (solo en desarrollo)
+// ===== HERRAMIENTAS DE DESARROLLO =====
+// Mostrar usuarios disponibles en consola (solo en desarrollo)
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     console.log('=== WALLETFLOW - USUARIOS DE PRUEBA ===');
     console.log('Admin: usuario="admin", password="WalletFlow123!"');
