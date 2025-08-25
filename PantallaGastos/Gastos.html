@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallet Flow - Gestión de Gastos</title>
+  <link rel="stylesheet" href="Gastos.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="../BarraLateral/BarraLateral.css">
+</head>
+<body class="modern-theme">
+  <!-- Botón de menú móvil -->
+  <button class="mobile-menu-btn d-md-none" onclick="toggleSidebar()">
+    <i class="bi bi-list"></i>
+  </button>
+
+  <div id="menuLateral" class="menu-lateral">
+    <div class="logowf d-flex align-items-center p-3">
+      <img src="../Logo_Wallet_Flow-removebg-preview.png" alt="Logo" width="60" height="60">
+      <h4 class="titulologo">Wallet Flow</h4>
+    </div>
+    <ul class="nav flex-column">
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-house-door-fill me-2"></i>Inicio</a></li>
+      <li class="nav-item"><a class="nav-link" href="../ingresos/ingresos.html"><i class="bi bi-cash-stack me-2"></i>Ingresos</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cart-fill me-2"></i>Gastos</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-piggy-bank-fill me-2"></i>Ahorros</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-credit-card-2-back-fill me-2"></i>Deudas</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-graph-up-arrow me-2"></i>Inversiones</a></li>
+      <li class="nav-item"><a class="nav-link" href="../cuentas/cuentas.html"><i class="bi bi-bank me-2"></i>Cuentas</a></li>
+      <li class="nav-item"><a class="nav-link" href="../PantallaObjetivos/PantallaObjetivo.html"><i class="bi bi-bullseye me-2"></i>Objetivos</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-lightbulb-fill me-2"></i>Consejos</a></li>
+      <li class="nav-item"><a class="nav-link" href="../herramientas/herramientas.html"><i class="bi bi-wrench me-2"></i>Herramientas</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-question-circle-fill me-2"></i>Ayuda</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear-fill me-2"></i>Configuración</a></li>
+      <li class="nav-item"><a class="nav-link" href="#" id="cerrarSesionBtn"><i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión</a></li>
+    </ul>
+  </div>
+  
+  <div class="contenido-principal">
+    <!-- Header moderno -->
+    <div class="header-modern">
+      <div class="header-content">
+        <div class="header-icon">
+          <i class="bi bi-cart-fill"></i>
+        </div>
+        <div class="header-text">
+          <h1>Gestión de Gastos</h1>
+          <p>Controla y analiza tus gastos de manera inteligente</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn-add-expense" onclick="mostrarModalAgregar()">
+            <i class="bi bi-plus-lg"></i>
+            Nuevo Gasto
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard de estadísticas -->
+    <div class="stats-dashboard">
+      <div class="stat-card">
+        <div class="stat-icon bg-danger">
+          <i class="bi bi-currency-dollar"></i>
+        </div>
+        <div class="stat-content">
+          <h3 id="totalGastos">$240,000</h3>
+          <p>Total de Gastos</p>
+          <div class="stat-change negative">
+            <i class="bi bi-arrow-up"></i>
+            <span>+12% vs mes anterior</span>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon bg-warning">
+          <i class="bi bi-calendar-day"></i>
+        </div>
+        <div class="stat-content">
+          <h3 id="promedioDiario">$12,670</h3>
+          <p>Promedio Diario</p>
+          <div class="stat-change neutral">
+            <i class="bi bi-dash"></i>
+            <span>Sin cambios</span>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon bg-info">
+          <i class="bi bi-graph-up-arrow"></i>
+        </div>
+        <div class="stat-content">
+          <h3 id="mayorCategoria">Transporte</h3>
+          <p>Mayor Categoría</p>
+          <div class="stat-change positive">
+            <i class="bi bi-arrow-down"></i>
+            <span>-5% optimizado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de filtros y análisis -->
+    <div class="filters-analysis-section">
+      <div class="filters-container">
+        <div class="filter-group">
+          <label for="mes"><i class="bi bi-calendar3"></i> Período</label>
+          <select id="mes" class="modern-select">
+            <option value="todos">Todo el tiempo</option>
+            <option value="enero">Enero 2025</option>
+            <option value="febrero">Febrero 2025</option>
+            <option value="marzo">Marzo 2025</option>
+            <option value="abril">Abril 2025</option>
+            <option value="mayo">Mayo 2025</option>
+            <option value="junio">Junio 2025</option>
+            <option value="julio">Julio 2025</option>
+            <option value="agosto" selected>Agosto 2025</option>
+            <option value="septiembre">Septiembre 2025</option>
+            <option value="octubre">Octubre 2025</option>
+            <option value="noviembre">Noviembre 2025</option>
+            <option value="diciembre">Diciembre 2025</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="categoria"><i class="bi bi-tags"></i> Categoría</label>
+          <select id="categoria" class="modern-select" onchange="actualizarGraficoPorCategoria()">
+            <option value="todos">Todas las categorías</option>
+            <option value="alimentacion">🍽️ Alimentación</option>
+            <option value="transporte">🚗 Transporte</option>
+            <option value="servicios">🏠 Servicios</option>
+            <option value="entretenimiento">🎮 Entretenimiento</option>
+            <option value="salud">💊 Salud</option>
+            <option value="educacion">📚 Educación</option>
+            <option value="otros">📦 Otros</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="rangoMonto"><i class="bi bi-cash-stack"></i> Rango de Monto</label>
+          <select id="rangoMonto" class="modern-select">
+            <option value="todos">Todos los montos</option>
+            <option value="0-50000">$0 - $50,000</option>
+            <option value="50000-100000">$50,000 - $100,000</option>
+            <option value="100000-200000">$100,000 - $200,000</option>
+            <option value="200000+">Más de $200,000</option>
+          </select>
+        </div>
+
+        <div class="search-container">
+          <i class="bi bi-search"></i>
+          <input type="text" placeholder="Buscar gastos..." id="searchInput">
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de gráfico y análisis -->
+    <div class="chart-analysis-container">
+      <div class="chart-section">
+        <div class="chart-header">
+          <h3><i class="bi bi-pie-chart"></i> Distribución por Categoría</h3>
+          <div class="chart-controls">
+            <button class="chart-btn active" data-type="doughnut">
+              <i class="bi bi-circle"></i>
+            </button>
+            <button class="chart-btn" data-type="bar">
+              <i class="bi bi-bar-chart"></i>
+            </button>
+            <button class="chart-btn" data-type="line">
+              <i class="bi bi-graph-up"></i>
+            </button>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="graficoGastos"></canvas>
+        </div>
+      </div>
+
+      <div class="insights-section">
+        <h3><i class="bi bi-lightbulb"></i> Insights Inteligentes</h3>
+        <div class="insight-card">
+          <div class="insight-icon bg-warning">
+            <i class="bi bi-exclamation-triangle"></i>
+          </div>
+          <div class="insight-content">
+            <h4>Alerta de Gastos</h4>
+            <p>Has gastado 15% más en transporte este mes</p>
+          </div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon bg-success">
+            <i class="bi bi-trophy"></i>
+          </div>
+          <div class="insight-content">
+            <h4>¡Buen trabajo!</h4>
+            <p>Has reducido gastos en entretenimiento en 8%</p>
+          </div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon bg-info">
+            <i class="bi bi-graph-up-arrow"></i>
+          </div>
+          <div class="insight-content">
+            <h4>Tendencia</h4>
+            <p>Tus gastos han sido consistentes últimos 3 meses</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Tabla moderna de gastos -->
+    <div class="modern-table-container">
+      <div class="table-header">
+        <h3><i class="bi bi-table"></i> Historial de Gastos</h3>
+      </div>
+
+      <div class="table-responsive">
+        <table id="tablaGastos" class="modern-table">
+          <thead>
+            <tr>
+              <th><i class="bi bi-calendar3"></i> Fecha</th>
+              <th><i class="bi bi-card-text"></i> Descripción</th>
+              <th><i class="bi bi-tags"></i> Categoría</th>
+              <th><i class="bi bi-cash-stack"></i> Monto</th>
+              <th><i class="bi bi-credit-card"></i> Método</th>
+              <th><i class="bi bi-arrow-repeat"></i> Recurrente</th>
+              <th><i class="bi bi-gear"></i> Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Los datos se cargarán dinámicamente desde localStorage -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-pagination">
+        <div class="pagination-info">
+          <span>Mostrando todos los gastos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('graficoGastos').getContext('2d');
+    let grafico = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Alimentación', 'Transporte', 'Servicios', 'Entretenimiento', 'Salud', 'Educación'],
+        datasets: [{
+          label: 'Gastos por Categoría',
+          data: [25, 40, 20, 15, 8, 12],
+          backgroundColor: [
+            '#10b981',
+            '#34d399',
+            '#059669',
+            '#065f46',
+            '#6ee7b7',
+            '#a7f3d0'
+          ],
+          borderColor: '#ffffff',
+          borderWidth: 3,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: {
+              usePointStyle: true,
+              pointStyle: 'circle',
+              font: {
+                size: 13,
+                family: 'Inter'
+              },
+              padding: 15,
+              color: '#374151'
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(16, 185, 129, 0.9)',
+            titleColor: '#ffffff',
+            bodyColor: '#ffffff',
+            borderColor: '#10b981',
+            borderWidth: 1,
+            cornerRadius: 8,
+            displayColors: true
+          }
+        }
+      }
+    });
+    
+    function actualizarGraficoPorCategoria() {
+      const categoria = document.getElementById('categoria').value;
+      
+      const datosOriginales = {
+        alimentacion: [100],
+        transporte: [180],
+        servicios: [60],
+        entretenimiento: [90],
+        salud: [45],
+        educacion: [75],
+        otros: [30],
+        todos: [100, 180, 60, 90, 45, 75]
+      };
+      
+      const etiquetas = {
+        alimentacion: ['Alimentación'],
+        transporte: ['Transporte'],
+        servicios: ['Servicios'],
+        entretenimiento: ['Entretenimiento'],
+        salud: ['Salud'],
+        educacion: ['Educación'],
+        otros: ['Otros'],
+        todos: ['Alimentación', 'Transporte', 'Servicios', 'Entretenimiento', 'Salud', 'Educación']
+      };
+      
+      const colores = {
+        alimentacion: ['#10b981'],
+        transporte: ['#34d399'],
+        servicios: ['#059669'],
+        entretenimiento: ['#065f46'],
+        salud: ['#6ee7b7'],
+        educacion: ['#a7f3d0'],
+        otros: ['#84cc16'],
+        todos: ['#10b981', '#34d399', '#059669', '#065f46', '#6ee7b7', '#a7f3d0']
+      };
+      
+      grafico.data.labels = etiquetas[categoria];
+      grafico.data.datasets[0].data = datosOriginales[categoria];
+      grafico.data.datasets[0].backgroundColor = colores[categoria];
+      grafico.update();
+    }
+
+    // Funciones para controles de gráfico
+    document.addEventListener('DOMContentLoaded', function() {
+      const chartBtns = document.querySelectorAll('.chart-btn');
+      chartBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          chartBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          
+          const chartType = this.getAttribute('data-type');
+          grafico.config.type = chartType;
+          grafico.update();
+        });
+      });
+    });
+
+    // Función para toggle de sidebar móvil
+    function toggleSidebar() {
+      const sidebar = document.getElementById('menuLateral');
+      sidebar.classList.toggle('show');
+    }
+
+    // Cerrar sidebar al hacer click en enlaces en móvil
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebarLinks = document.querySelectorAll('.menu-lateral .nav-link');
+      sidebarLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 768) {
+            document.getElementById('menuLateral').classList.remove('show');
+          }
+        });
+      });
+    });
+    </script>
+<!-- Modal moderno para agregar/editar gastos -->
+<div class="modal-overlay" id="modalEdicion" style="display: none;">
+  <div class="modal-modern">
+    <div class="modal-header">
+      <div class="modal-title">
+        <i class="bi bi-pencil-square"></i>
+        <h2>Editar Gasto</h2>
+      </div>
+      <button class="modal-close" onclick="cerrarModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="modal-progress">
+      <div class="progress-step active" id="progress-step1">
+        <div class="step-circle">1</div>
+        <span>Información Básica</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step" id="progress-step2">
+        <div class="step-circle">2</div>
+        <span>Detalles Adicionales</span>
+      </div>
+    </div>
+
+    <form id="formEditar" class="modal-content">
+      <!-- Paso 1: Información Básica -->
+      <div class="form-step active" id="step1">
+        <div class="form-grid">
+          <div class="form-group">
+            <label><i class="bi bi-tags"></i> Categoría</label>
+            <select id="editCategoria" class="modern-input" required>
+              <option value="">Seleccionar categoría</option>
+              <option value="alimentacion">🍽️ Alimentación</option>
+              <option value="transporte">🚗 Transporte</option>
+              <option value="servicios">🏠 Servicios</option>
+              <option value="entretenimiento">🎮 Entretenimiento</option>
+              <option value="salud">💊 Salud</option>
+              <option value="educacion">📚 Educación</option>
+              <option value="otros">📦 Otros</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label><i class="bi bi-credit-card"></i> Método de Pago</label>
+            <select id="editMetodo" class="modern-input" required>
+              <option value="">Seleccionar método</option>
+              <option value="efectivo">💵 Efectivo</option>
+              <option value="tarjeta_credito">💳 Tarjeta de Crédito</option>
+              <option value="tarjeta_debito">💳 Tarjeta de Débito</option>
+              <option value="transferencia">🏦 Transferencia</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label><i class="bi bi-cash-stack"></i> Monto</label>
+            <input type="number" id="editMonto" class="modern-input" placeholder="Ingrese el monto" required>
+          </div>
+
+          <div class="form-group">
+            <label><i class="bi bi-calendar3"></i> Fecha</label>
+            <input type="date" id="editFecha" class="modern-input" required>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-next" onclick="siguientePaso()">
+            Siguiente
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Paso 2: Detalles Adicionales -->
+      <div class="form-step" id="step2">
+        <div class="form-group full-width">
+          <label><i class="bi bi-card-text"></i> Descripción</label>
+          <textarea id="editDescripcion" class="modern-input" rows="3" placeholder="Describe el gasto (opcional)"></textarea>
+        </div>
+
+        <div class="form-options">
+          <div class="option-card">
+            <div class="option-header">
+              <label class="switch">
+                <input type="checkbox" id="checkRecurrente" onchange="toggleFrecuencia()">
+                <span class="slider"></span>
+              </label>
+              <div class="option-info">
+                <h4><i class="bi bi-arrow-repeat"></i> Gasto Recurrente</h4>
+                <p>Este gasto se repite periódicamente</p>
+              </div>
+            </div>
+            <div class="option-content" id="frecuenciaOptions" style="display: none;">
+              <select id="frecuencia" class="modern-input">
+                <option value="">Seleccionar frecuencia</option>
+                <option value="diario">📅 Diario</option>
+                <option value="semanal">📅 Semanal</option>
+                <option value="mensual">📅 Mensual</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="option-card">
+            <div class="option-header">
+              <label class="switch">
+                <input type="checkbox" id="checkCuenta" onchange="toggleCuenta()">
+                <span class="slider"></span>
+              </label>
+              <div class="option-info">
+                <h4><i class="bi bi-bank"></i> Cuenta Asociada</h4>
+                <p>Vincular a una cuenta específica</p>
+              </div>
+            </div>
+            <div class="option-content" id="cuentaAsociadaOptions" style="display: none;">
+              <select id="cuentaAsociada" class="modern-input">
+                <option value="">Seleccionar cuenta</option>
+                <option value="bancolombia">🏦 Bancolombia</option>
+                <option value="davivienda">🏦 Davivienda</option>
+                <option value="nequi">📱 Nequi</option>
+                <option value="efectivo">💵 Efectivo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-prev" onclick="pasoAnterior()">
+            <i class="bi bi-arrow-left"></i>
+            Anterior
+          </button>
+          <div class="action-buttons">
+            <button type="button" class="btn-secondary" onclick="cerrarModal()">
+              Cancelar
+            </button>
+            <button type="reset" class="btn-outline">
+              <i class="bi bi-arrow-counterclockwise"></i>
+              Limpiar
+            </button>
+            <button type="submit" class="btn-primary">
+              <i class="bi bi-check-lg"></i>
+              Guardar Gasto
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+</div>
+
+</body>
+<script src="Gastos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>
