@@ -1,153 +1,68 @@
-/* ===================================================================
-   WALLET FLOW - PANTALLA DE GASTOS
-   Archivo: Gastos.css
-   Propósito: Estilos para la gestión y visualización de gastos
-   Autor: Wallet Flow Team
-   Fecha: 2025
-   
-   ÍNDICE DE CONTENIDO:
-   1. CONFIGURACIÓN BASE
-   2. TÍTULOS Y ENCABEZADOS
-   3. CONTENIDO PRINCIPAL
-   4. CARDS DE RESUMEN
-   5. MENÚ LATERAL
-   6. TABLA DE GASTOS
-   7. BOTONES Y CONTROLES
-   8. ELEMENTOS DECORATIVOS
-   9. ANIMACIONES
-   10. RESPONSIVE DESIGN
-   =================================================================== */
+/*
+===================================================================
+WALLET FLOW - ESTILOS DE PANTALLA DE GASTOS
+===================================================================
+Archivo: Gastos.css
+Propósito: Estilos para la pantalla de gestión y control de gastos
+Coherencia: Mantiene la misma identidad visual que principal.css
+Autor: Wallet Flow Team
+Fecha: 2025
 
-/* ===== 1. CONFIGURACIÓN BASE ===== */
-/* Configuración general del documento y fuentes principales */
+ÍNDICE DE SECCIONES:
+1. CONFIGURACIÓN GENERAL - Variables, reset y configuración base
+2. MENÚ LATERAL - Estilos idénticos a principal.html (100% igual)
+3. CONTENIDO PRINCIPAL - Área de trabajo para gastos
+4. COMPONENTES ESPECÍFICOS - Elementos únicos de gastos
+5. RESPONSIVE DESIGN - Adaptaciones para diferentes dispositivos
+6. ANIMACIONES Y EFECTOS - Transiciones y microinteracciones
+===================================================================
+*/
+
+/* ===== 1. CONFIGURACIÓN GENERAL ===== */
+/* Configuración base del documento y fuentes */
 body, html {
   height: 100%;
   font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
 }
 
-/* ===== 2. TÍTULOS Y ENCABEZADOS ===== */
-/* Estilos para títulos principales de la página */
-.titulo-principal {
-  /* Gradiente verde coherente con el diseño de ingresos */
-  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: #2ecc71; /* Color de respaldo para navegadores no compatibles */
-  border-radius: 15px;
-  padding: 1rem 2rem;
-  font-weight: 700;
-  font-size: 2.5rem;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  margin: 0;
-}
+/* ===== 2. MENÚ LATERAL (100% IDÉNTICO A PRINCIPAL.HTML) ===== */
+/* Estilos del menú lateral - Exactamente iguales a principal.css */
 
-/* Subtítulo descriptivo bajo el título principal */
-.subtitulo-pagina {
-  color: #7f8c8d; /* Gris suave para contraste */
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin-top: 0.5rem;
-}
-
-/* Títulos secundarios en toda la aplicación */
-h2 {
-  font-weight: bold;
-}
-
-/* ===== 3. CONTENIDO PRINCIPAL ===== */
-/* Área principal donde se muestra todo el contenido de gastos */
-.contenido-principal {
-  /* Gradiente de fondo suave y profesional */
-  background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
-  min-height: 100vh; /* Ocupa toda la altura de la ventana */
-}
-
-/* ===== 4. CARDS DE RESUMEN ===== */
-/* Tarjetas que muestran estadísticas resumidas de gastos */
-.card-resumen {
-  background: white;
-  padding: 2rem 1.5rem;
-  border-radius: 15px;
-  /* Sombra y borde con el color principal */
-  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
-  border: 1px solid rgba(46, 204, 113, 0.2);
-  /* Transición suave para efectos hover */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  height: 100%; /* Asegura altura uniforme en la fila */
-}
-
-/* Efecto cuando el usuario pasa el mouse sobre las cards */
-.card-resumen:hover {
-  transform: translateY(-5px); /* Levanta ligeramente la card */
-  box-shadow: 0 8px 25px rgba(46, 204, 113, 0.2);
-  border-color: rgba(46, 204, 113, 0.3);
-}
-
-/* Títulos dentro de las cards de resumen */
-.card-resumen h5 {
-  color: #2c3e50; /* Gris oscuro para legibilidad */
-  font-weight: 600;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-}
-
-/* Números grandes destacados en las cards */
-.card-resumen .display-6 {
-  font-weight: 700;
-  color: #27ae60; /* Verde principal coherente */
-  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-/* Texto principal para categorías o datos importantes */
-.ingreso-principal {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2c3e50;
-  margin: 0;
-}
-
-/* ===== 5. MENÚ LATERAL ===== */
-/* Barra de navegación lateral izquierda */
+/* == Contenedor principal del menú lateral == */
 .menu-lateral {
-  /* Gradiente de fondo blanco a verde muy suave */
   background: linear-gradient(180deg, white 0%, #f8fffe 100%);
-  border: 3px solid #2ecc71; /* Borde verde principal */
+  border: 3px solid #2ecc71;
   border-radius: 15px;
-  min-height: 100vh; /* Ocupa toda la altura */
+  min-height: 100vh;
   padding-top: 1.5rem;
   box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
 }
 
-/* Enlaces de navegación en el menú lateral */
+/* == Enlaces de navegación del menú == */
 .menu-lateral .nav-link {
   font-size: 18px;
-  /* Fondo verde suave por defecto */
   background: linear-gradient(135deg, #eaf8ed 0%, #d5f4e6 100%);
-  color: #2c3e50; /* Texto oscuro para contraste */
+  color: #2c3e50;
   margin: 6px 8px;
   padding: 12px 16px;
   border-radius: 12px;
   border: 2px solid rgba(46, 204, 113, 0.3);
-  /* Transición suave para todos los efectos */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  top: -40px; /* Ajuste de posición vertical */
+  top: -40px;
   font-weight: 500;
   text-decoration: none;
 }
 
-/* Efecto hover en los enlaces del menú */
+/* == Estados hover y activo de los enlaces == */
 .menu-lateral .nav-link:hover {
-  /* Fondo verde intenso al pasar el mouse */
   background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-  color: white; /* Texto blanco para contraste */
-  transform: translateX(5px); /* Desplaza ligeramente a la derecha */
+  color: white;
+  transform: translateX(5px);
   box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
   border-color: #27ae60;
 }
 
-/* Estilo para el enlace activo (página actual) */
 .menu-lateral .nav-link.active {
   background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
   color: white;
@@ -155,898 +70,150 @@ h2 {
   box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
 }
 
-/* Contenedor del logo en el menú lateral */
+/* == Sección del logo == */
 .logowf {
   position: relative;
   display: flex;
   align-items: center;
-  top: -30px; /* Ajuste de posición */
+  top: -30px;
   left: -15px;
   padding: 3px;
 }
 
-/* Título del logo "Wallet Flow" */
+/* == Título del logo == */
 .titulologo {
   font-size: 24px;
   font-weight: 700;
-  /* Gradiente que coincide con el tema principal */
   background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: #2e6835; /* Color de respaldo */
+  color: #2e6835; /* Fallback para navegadores que no soportan background-clip */
 }
 
-/* ===== 6. TABLA DE GASTOS ===== */
-/* Contenedor principal de la tabla de gastos */
-.tabla-container {
-  background: white;
-  border-radius: 15px;
-  overflow: hidden; /* Evita que el contenido se salga de los bordes redondeados */
-  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.15);
-  border: 1px solid rgba(46, 204, 113, 0.2);
-}
+/* ===== 3. CONTENIDO PRINCIPAL ===== */
+/* Área principal donde se desarrolla la funcionalidad de gastos */
 
-/* Tabla principal de gastos */
-#tablaGastos {
-  margin: 0;
-  border: none;
-}
-
-/* Encabezados de la tabla */
-.table-header th {
-  /* Fondo verde intenso para los encabezados */
-  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
-  padding: 1.2rem 1rem;
-  border: none;
-  text-transform: uppercase; /* Texto en mayúsculas */
-  letter-spacing: 0.5px; /* Espaciado entre letras */
-}
-
-/* Filas de datos en la tabla */
-#tablaGastos tbody tr {
-  background: white;
-  transition: all 0.3s ease; /* Transición suave para efectos */
-  border-bottom: 1px solid rgba(46, 204, 113, 0.1);
-}
-
-/* Efecto hover en las filas de la tabla */
-#tablaGastos tbody tr:hover {
-  /* Fondo verde muy suave al pasar el mouse */
-  background: linear-gradient(135deg, rgba(46, 204, 113, 0.08) 0%, rgba(46, 204, 113, 0.12) 100%);
-  transform: scale(1.01); /* Agranda ligeramente la fila */
-  box-shadow: 0 2px 8px rgba(46, 204, 113, 0.15);
-}
-
-/* Celdas de datos en la tabla */
-#tablaGastos td {
-  padding: 1rem;
-  vertical-align: middle; /* Centra verticalmente el contenido */
-  border: none;
-  font-weight: 500;
-}
-
-/* ===== 7. BOTONES Y CONTROLES ===== */
-/* Botón de advertencia (generalmente para editar) */
-.btn-warning {
-  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-  border: none;
-  color: white;
-  padding: 0.5rem 0.8rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-/* Efecto hover para botón de advertencia */
-.btn-warning:hover {
-  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
-  transform: translateY(-2px); /* Levanta el botón */
-  box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
-  color: white;
-}
-
-/* Botón de peligro (generalmente para eliminar) */
-.btn-danger {
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-  border: none;
-  color: white;
-  padding: 0.5rem 0.8rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-/* Efecto hover para botón de peligro */
-.btn-danger:hover {
-  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
-  color: white;
-}
-
-/* ===== 8. ELEMENTOS DECORATIVOS ===== */
-/* Badges para indicar estado "Sí" (activo/verdadero) */
-.badge-si {
-  background: #27ae60; /* Verde para positivo */
-  color: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.8rem;
-}
-
-/* Badges para indicar estado "No" (inactivo/falso) */
-.badge-no {
-  background: #95a5a6; /* Gris para neutro */
-  color: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.8rem;
-}
-
-/* Badge para mostrar categorías de gastos */
-.categoria-badge {
-  background: #f8f9fa; /* Fondo claro */
-  color: #2ecc71; /* Texto verde principal */
-  padding: 0.25rem 0.75rem;
-  border-radius: 15px;
-  font-weight: 500;
-  border: 1px solid rgba(46, 204, 113, 0.2);
-}
-
-/* Estilo para mostrar métodos de pago */
-.metodo-pago {
+/* == Contenedor principal del contenido == */
+.contenido-principal {
+  position: relative;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
   color: #2c3e50;
-  font-weight: 500;
 }
 
-/* Estilo para destacar montos importantes */
-.monto-destacado {
-  font-weight: 700;
-  font-size: 1.1rem;
+/* ===== 4. RESPONSIVE DESIGN ===== */
+/* Adaptaciones para diferentes tamaños de pantalla */
+
+/* == Adaptaciones para tablets == */
+@media (max-width: 992px) {
+  .menu-lateral {
+    border-radius: 10px;
+    padding-top: 1rem;
+  }
+  
+  .menu-lateral .nav-link {
+    font-size: 16px;
+    padding: 10px 14px;
+    margin: 4px 6px;
+  }
+  
+  .titulologo {
+    font-size: 20px;
+  }
 }
 
-/* Estilo para mostrar fechas con fuente monoespaciada */
-.fecha-formato {
-  color: #7f8c8d;
-  font-family: monospace; /* Fuente de ancho fijo para fechas */
+/* == Adaptaciones para móviles == */
+@media (max-width: 768px) {
+  .contenido-principal {
+    padding: 1rem;
+  }
+  
+  .menu-lateral {
+    border-radius: 8px;
+    border-width: 2px;
+    padding-top: 0.5rem;
+  }
+  
+  .menu-lateral .nav-link {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 3px 4px;
+    top: -20px;
+  }
+  
+  .logowf {
+    top: -15px;
+    left: -10px;
+  }
+  
+  .titulologo {
+    font-size: 18px;
+  }
 }
 
-/* Estilo para texto descriptivo */
-.descripcion-texto {
-  color: #2c3e50;
-  font-style: italic; /* Texto en cursiva */
+/* == Adaptaciones para pantallas muy pequeñas == */
+@media (max-width: 576px) {
+  .contenido-principal {
+    padding: 0.5rem;
+  }
+  
+  .menu-lateral .nav-link {
+    font-size: 13px;
+    padding: 6px 10px;
+    margin: 2px;
+    border-radius: 8px;
+  }
+  
+  .titulologo {
+    font-size: 16px;
+  }
+  
+  .logowf img {
+    width: 60px;
+    height: 60px;
+  }
 }
 
-/* Estilo para texto de frecuencia y cuenta */
-.frecuencia-texto, .cuenta-texto {
-  color: #7f8c8d; /* Gris suave */
+/* ===== 5. ANIMACIONES Y EFECTOS ===== */
+/* Efectos visuales para mejorar la experiencia del usuario */
+
+/* == Animación suave para carga de página == */
+.menu-lateral {
+  animation: slideInLeft 0.5s ease-out;
 }
 
-/* Contenedor para botones de acción */
-.botones-accion {
-  display: flex;
-  gap: 0.25rem; /* Espaciado entre botones */
-  justify-content: center; /* Centra los botones */
-}
-
-/* ===== 9. ANIMACIONES ===== */
-/* Animación de entrada suave para elementos */
-@keyframes slideIn {
+@keyframes slideInLeft {
   from {
+    transform: translateX(-100%);
     opacity: 0;
-    transform: translateY(20px); /* Inicia 20px más abajo */
   }
   to {
+    transform: translateX(0);
     opacity: 1;
-    transform: translateY(0); /* Termina en su posición final */
   }
 }
 
-/* Aplica la animación a cards y tabla */
-.card-resumen, .tabla-container {
-  animation: slideIn 0.6s ease-out;
+/* == Efectos de transición para enlaces == */
+.menu-lateral .nav-link {
+  will-change: transform, background, color, box-shadow;
 }
 
-/* ===== 10. RESPONSIVE DESIGN ===== */
-/* Adaptaciones para pantallas medianas y pequeñas */
-@media (max-width: 768px) {
-  /* Reduce el tamaño del título en móviles */
-  .titulo-principal {
-    font-size: 2rem;
-  }
-  
-  /* Agrega margen inferior a las cards en móviles */
-  .card-resumen {
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Reduce el tamaño de fuente de la tabla en móviles */
-  #tablaGastos {
-    font-size: 0.9rem;
-  }
-  
-  /* Ajusta el padding de los encabezados en móviles */
-  .table-header th {
-    padding: 1rem 0.5rem;
-    font-size: 0.8rem;
-  }
-  
-  /* Ajusta el padding de las celdas en móviles */
-  #tablaGastos td {
-    padding: 0.75rem 0.5rem;
-  }
+/* == Suavizado de transiciones generales == */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.header-modern {
-  background: linear-gradient(90deg, var(--primary-green), var(--secondary-green));
-  color: #fff;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  margin-bottom: 2rem;
-  padding: 2rem 2.5rem 1.5rem 2.5rem;
-}
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-}
-.header-icon {
-  font-size: 2.5rem;
-  background: var(--light-green);
-  color: var(--dark-green);
-  border-radius: 50%;
-  padding: 1rem;
-  margin-right: 1rem;
-}
-.header-text h1 {
-  font-size: 2.2rem;
-  font-weight: 700;
-  margin-bottom: 0.3rem;
-}
-.header-text p {
-  color: var(--light-green);
-  font-size: 1.1rem;
-}
-.btn-add-expense {
-  background: var(--success-color);
-  color: #fff;
-  border: none;
-  border-radius: 2rem;
-  padding: 0.7rem 1.5rem;
-  font-weight: 600;
-  font-size: 1rem;
-  box-shadow: var(--shadow-lg);
-  transition: background 0.2s;
-}
-.btn-add-expense:hover {
-  background: var(--dark-green);
-}
-
-/* --- Dashboard de estadísticas --- */
-.stats-dashboard {
-  display: flex;
-  gap: 2rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-.stat-card {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 1.5rem 2rem;
-  flex: 1 1 220px;
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-}
-.stat-icon {
-  font-size: 2.2rem;
-  border-radius: 50%;
-  padding: 1rem;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.stat-icon.bg-danger { background: var(--danger-color); }
-.stat-icon.bg-warning { background: var(--warning-color); }
-.stat-icon.bg-info { background: var(--info-color); }
-.stat-content h3 {
-  font-size: 1.7rem;
-  font-weight: 700;
-  margin-bottom: 0.2rem;
-}
-.stat-content p {
-  color: var(--text-muted);
-  margin-bottom: 0.3rem;
-}
-.stat-change {
-  font-size: 0.95rem;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-.stat-change.negative { color: var(--danger-color); }
-.stat-change.positive { color: var(--success-color); }
-.stat-change.neutral { color: var(--text-muted); }
-
-/* --- Filtros --- */
-.filters-analysis-section {
-  margin-bottom: 2rem;
-}
-.filters-container {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 1.2rem 2rem;
-}
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-.modern-select {
-  border-radius: 1rem;
-  border: 1px solid var(--primary-green);
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  background: #fff;
-  color: var(--dark-green);
-  transition: border 0.2s;
-}
-.modern-select:focus {
-  border-color: var(--secondary-green);
-  outline: none;
-}
-.search-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: #fff;
-  border-radius: 1rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--primary-green);
-}
-.search-container input {
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  background: transparent;
-  color: var(--dark-green);
-}
-
-/* --- Gráfica y análisis --- */
-.chart-analysis-container {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
-}
-.chart-section {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 1.5rem 2rem;
-  flex: 2 1 350px;
-  min-width: 320px;
-}
-.chart-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-.chart-controls {
-  display: flex;
-  gap: 0.5rem;
-}
-.chart-btn {
-  background: var(--primary-green);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 2.2rem;
-  height: 2.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  transition: background 0.2s;
-}
-.chart-btn.active, .chart-btn:hover {
-  background: var(--dark-green);
-}
-.chart-container {
-  min-height: 260px;
-  height: 320px;
-}
-
-.insights-section {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 1.5rem 2rem;
-  flex: 1 1 220px;
-  min-width: 220px;
-}
-.insight-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 2px 8px rgba(16,185,129,0.08);
-  padding: 1rem 1.2rem;
-  margin-bottom: 1rem;
-}
-.insight-icon {
-  font-size: 1.7rem;
-  border-radius: 50%;
-  padding: 0.7rem;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.insight-icon.bg-warning { background: var(--warning-color); }
-.insight-icon.bg-success { background: var(--success-color); }
-.insight-icon.bg-info { background: var(--info-color); }
-.insight-content h4 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.2rem;
-}
-.insight-content p {
-  color: var(--text-muted);
-  font-size: 0.98rem;
-}
-
-/* --- Tabla moderna de gastos --- */
-.modern-table-container {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 2rem;
-  margin-bottom: 2rem;
-}
-.table-header {
-  margin-bottom: 1rem;
-}
-.modern-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: #fff;
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(16,185,129,0.08);
-}
-.modern-table th, .modern-table td {
-  padding: 1rem 0.7rem;
-  text-align: left;
-  font-size: 1rem;
-}
-.modern-table th {
-  background: var(--primary-green);
-  color: #fff;
-  font-weight: 600;
-  border-bottom: 2px solid var(--secondary-green);
-}
-.modern-table tbody tr {
-  border-bottom: 1px solid var(--bg-card);
-  transition: background 0.2s;
-}
-.modern-table tbody tr:hover {
-  background: var(--light-green);
-}
-.date-badge {
-  background: var(--secondary-green);
-  color: #fff;
-  border-radius: 1rem;
-  padding: 0.3rem 0.8rem;
-  font-size: 0.98rem;
-  font-weight: 500;
-}
-.category-badge {
-  background: var(--primary-green);
-  color: #fff;
-  border-radius: 1rem;
-  padding: 0.3rem 0.8rem;
-  font-size: 0.98rem;
-  font-weight: 500;
-}
-.amount-cell {
-  color: var(--dark-green);
-  font-weight: 700;
-}
-.method-badge {
-  background: var(--light-green);
-  color: var(--dark-green);
-  border-radius: 1rem;
-  padding: 0.3rem 0.8rem;
-  font-size: 0.98rem;
-  font-weight: 500;
-}
-.recurring-badge.yes {
-  background: var(--success-color);
-  color: #fff;
-  border-radius: 1rem;
-  padding: 0.3rem 0.8rem;
-  font-size: 0.98rem;
-  font-weight: 500;
-}
-.recurring-badge.no {
-  background: var(--danger-color);
-  color: #fff;
-  border-radius: 1rem;
-  padding: 0.3rem 0.8rem;
-  font-size: 0.98rem;
-  font-weight: 500;
-}
-.action-buttons {
-  display: flex;
-  gap: 0.5rem;
-}
-.btn-action {
-  background: var(--primary-green);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  transition: background 0.2s;
-}
-.btn-action.edit:hover {
-  background: var(--info-color);
-}
-.btn-action.delete:hover {
-  background: var(--danger-color);
-}
-.table-pagination {
-  margin-top: 1rem;
-  text-align: right;
-  color: var(--text-muted);
-}
-
-/* --- Modal moderno --- */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(16,185,129,0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-.modal-modern {
-  background: var(--bg-modal);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 2rem 2.5rem;
-  min-width: 500px;
-  max-width: 600px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-}
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.2rem;
-}
-.modal-title {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-}
-.modal-title h2 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--primary-green);
-}
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.3rem;
-  color: var(--danger-color);
-  cursor: pointer;
-}
-.modal-progress {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin-bottom: 1.2rem;
-}
-.progress-step {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  color: var(--text-muted);
-}
-.progress-step.active {
-  color: var(--primary-green);
-  font-weight: 600;
-}
-.step-circle {
-  background: var(--primary-green);
-  color: #fff;
-  border-radius: 50%;
-  width: 1.5rem;
-  height: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-}
-.progress-line {
-  flex: 1;
-  height: 2px;
-  background: var(--light-green);
-}
-.form-step {
-  display: none;
-}
-.form-step.active {
-  display: block;
-}
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.form-group label {
-  font-weight: 600;
-  color: var(--dark-green);
-  font-size: 0.95rem;
-}
-.modern-input {
-  border-radius: 1rem;
-  border: 1px solid var(--primary-green);
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  background: #fff;
-  color: var(--dark-green);
-  transition: border 0.2s;
-}
-.modern-input:focus {
-  border-color: var(--secondary-green);
-  outline: none;
-}
-.full-width {
-  grid-column: 1 / -1;
-}
-.form-options {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-.option-card {
-  background: var(--bg-card);
-  border-radius: 1rem;
-  box-shadow: 0 2px 8px rgba(16,185,129,0.08);
-  padding: 1.2rem;
-  width: 100%;
-}
-.option-header {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin-bottom: 0.5rem;
-}
-.option-info h4 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--primary-green);
-}
-.option-info p {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-}
-.option-content {
-  margin-top: 0.5rem;
-}
-/* Switch moderno */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 40px;
-  height: 22px;
-}
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--light-green);
-  border-radius: 22px;
-  transition: .4s;
-}
-.switch input:checked + .slider {
-  background: var(--primary-green);
-}
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 3px;
-  bottom: 3px;
-  background: #fff;
-  border-radius: 50%;
-  transition: .4s;
-}
-.switch input:checked + .slider:before {
-  transform: translateX(18px);
-}
-
-/* --- Acciones del modal --- */
-.modal-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1.2rem;
-}
-.btn-next, .btn-prev, .btn-primary, .btn-secondary, .btn-outline {
-  border: none;
-  border-radius: 1rem;
-  padding: 0.6rem 1.2rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-.btn-next {
-  background: var(--primary-green);
-  color: #fff;
-}
-.btn-next:hover {
-  background: var(--dark-green);
-}
-.btn-prev {
-  background: var(--light-green);
-  color: var(--dark-green);
-}
-.btn-prev:hover {
-  background: var(--secondary-green);
-  color: #fff;
-}
-.btn-primary {
-  background: var(--success-color);
-  color: #fff;
-}
-.btn-primary:hover {
-  background: var(--dark-green);
-}
-.btn-secondary {
-  background: var(--danger-color);
-  color: #fff;
-}
-.btn-secondary:hover {
-  background: #fff;
-  color: var(--danger-color);
-  border: 1px solid var(--danger-color);
-}
-.btn-outline {
-  background: #fff;
-  color: var(--primary-green);
-  border: 1px solid var(--primary-green);
-}
-.btn-outline:hover {
-  background: var(--primary-green);
-  color: #fff;
-}
-.action-buttons {
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* --- Notificaciones --- */
-.notification {
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 1rem;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 1rem 2rem;
-  color: #fff;
-  position: fixed;
-  top: 2rem;
-  right: 2rem;
-  z-index: 10000;
-  animation: slideInRight 0.3s ease-out;
-  max-width: 400px;
-}
-.notification.success { background: var(--success-color); }
-.notification.error { background: var(--danger-color); }
-.notification.info { background: var(--info-color); }
-.notification-content {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 500;
-}
-
-@keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-@keyframes slideOutRight {
-  from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(100%); opacity: 0; }
-}
-
-/* --- Responsive --- */
-@media (max-width: 900px) {
-  .header-content, .stats-dashboard, .chart-analysis-container {
-    flex-direction: column;
-    gap: 1.2rem;
-  }
-  .filters-container {
-    gap: 1rem;
-    padding: 1rem;
-  }
-  .modern-table-container {
-    padding: 1rem;
-  }
-}
-@media (max-width: 600px) {
-  .modal-modern {
-    padding: 1.5rem 1rem;
-    min-width: 95vw;
-    max-width: 95vw;
-    width: 95vw;
-    margin: 1rem;
-  }
-  .form-grid {
-    grid-template-columns: 1fr;
-    gap: 0.8rem;
-  }
-  .form-options {
-    gap: 0.8rem;
-  }
-  .header-modern {
-    padding: 1rem 1rem 0.7rem 1rem;
-  }
-  .stats-dashboard, .chart-analysis-container {
-    gap: 0.7rem;
-  }
-  .modern-table th, .modern-table td {
-    padding: 0.5rem 0.3rem;
-    font-size: 0.95rem;
-  }
-}
-
-/* --- Scrollbar --- */
-::-webkit-scrollbar {
-  width: 8px;
-  background: var(--bg-card);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--primary-green);
-  border-radius: 8px;
-}
+/*
+===================================================================
+FIN DE LA SECCIÓN DEL MENÚ LATERAL
+===================================================================
+El menú lateral está 100% completo e idéntico a principal.html
+Próximos pasos: Desarrollar el contenido principal de gastos
+===================================================================
+*/
