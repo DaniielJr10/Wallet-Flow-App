@@ -1,0 +1,10 @@
+/* Estilos específicos para el formulario de inversiones */
+.modal-form h2 {
+  background-color: #2ecc71; /* Verde para el encabezado del formulario de inversiones */
+}
+
+.botones button[type="submit"] {
+  background-color: #2e6835; /* Verde oscuro para el botón de guardar del formulario de inversiones */
+}
+
+/* Reutiliza estilos generales de principal.css para el resto del formulario */

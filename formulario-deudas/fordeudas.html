@@ -1,0 +1,48 @@
+<!-- Formulario para nueva deuda -->
+<div id="modalAgregarDeuda" class="modal-overlay d-none">
+  <div class="modal-form">
+    <form id="formAgregarDeuda" autocomplete="off">
+      <h2>Agregar Deuda</h2>
+      <div class="form-step" id="step1">
+        <label for="addAcreedorDeuda">Acreedor</label>
+        <input type="text" id="addAcreedorDeuda" required>
+        
+        <label for="addMontoDeuda">Monto</label>
+        <input type="number" id="addMontoDeuda" required min="0" step="0.01">
+        
+        <label for="addFechaInicioDeuda">Fecha de Inicio</label>
+        <input type="date" id="addFechaInicioDeuda" required>
+
+        <label for="addEstadoDeuda">Estado</label>
+        <select id="addEstadoDeuda" required>
+          <option value="pendiente">Pendiente</option>
+          <option value="pagada">Pagada</option>
+          <option value="renegociada">Renegociada</option>
+        </select>
+
+        <div class="siguiente-container">
+          <button type="button" class="nav-btn next-step-btn" aria-label="Siguiente">➡️</button>
+        </div>
+      </div>
+      <div class="form-step hidden" id="step2">
+        <label for="addFechaVencimientoDeuda">Fecha de Vencimiento (Opcional)</label>
+        <input type="date" id="addFechaVencimientoDeuda">
+
+        <label for="addTasaInteresDeuda">Tasa de Interés (%)</label>
+        <input type="number" id="addTasaInteresDeuda" min="0" step="0.01">
+
+        <label for="addDescripcionDeuda">Descripción</label>
+        <textarea id="addDescripcionDeuda" name="descripcion"></textarea>
+        
+        <div class="botones">
+          <button type="submit" id="guardar">Guardar</button>
+          <button type="button" id="cancelarDeuda">Cancelar</button>
+          <button type="reset">Limpiar</button>
+        </div>
+        <div class="flecha-container">
+          <button type="button" class="nav-btn prev-step-btn" aria-label="Anterior">⬅️</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+/* Specific styles for Inversiones page and form */
+
+/* Table styles */
+.table-inversiones,
+.table-inversiones th,
+.table-inversiones td {
+  border: 3px solid #2ecc71; /* Green border */
+  border-collapse: collapse;
+}
+
+.table-inversiones tbody tr {
+  background-color: #eaf8ed; /* Light green background */
+}
+
+/* Estilos específicos para el resumen de inversiones */
+.summary-cards-inversiones .card {
+  border: 2px solid #2ecc71;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.investment-card-main {
+  background-color: #eaf8ed; /* Light green background */
+}
+
+.investment-card-small {
+  background-color: #f0fdf4; /* Even lighter green */
+}
+
+.investment-card-main .display-5 {
+  font-size: 3.5rem;
+  font-weight: bold;
+}
+
+.investment-card-small .card-title {
+  font-size: 1.1rem;
+  color: #2e6835;
+}
+
+.investment-card-small p {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* Estilos para la sección de distribución de portafolio */
+.portfolio-distribution-card {
+  border: 2px solid #2ecc71;
+  border-radius: 15px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.portfolio-distribution-card .card-title {
+  color: #2e6835;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.portfolio-distribution-card .list-group-item {
+  background-color: transparent;
+  border-color: #eaf8ed;
+  color: #2c3e50;
+  padding: 10px 0;
+}

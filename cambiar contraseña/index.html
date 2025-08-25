@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña - WalletFlow</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-container">
+        <div class="overlay"></div>
+        <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100 p-3">
+            <div class="row w-100 justify-content-center">
+                <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+                    <div class="form-card">
+                        <!-- Header -->
+                        <div class="header text-center">
+                            <div class="logo d-flex flex-column align-items-center mb-3">
+                                <img src="img/edd13b3b-4aaf-46c9-8e72-93d418a11da4.png" alt="logo" width="73" height="73">
+                                <h1 class="brand-name mb-0">WalletFlow</h1>
+                            </div>
+                            <h2 id="step-title" class="step-title">Recuperar Contraseña</h2>
+                        </div>
+
+                        <div class="form-content p-4">
+                            <!-- Mensajes de estado -->
+                            <div id="message-container" class="message-container d-none mb-3">
+                                <div id="success-message" class="alert alert-success d-none" role="alert">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    <span id="success-text"></span>
+                                </div>
+                                <div id="error-message" class="alert alert-danger d-none" role="alert">
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                    <span id="error-text"></span>
+                                </div>
+                            </div>
+
+                            <!-- Paso 1: Email -->
+                            <div class="step-container active" id="step-email">
+                                <p class="step-description text-center text-muted mb-4">
+                                    Ingresa tu correo electrónico para recibir un código de recuperación.
+                                </p>
+                                <form id="email-form">
+                                    <div class="mb-3">
+                                        <label for="recovery-email" class="form-label fw-medium">Correo Electrónico</label>
+                                        <input type="email" class="form-control form-control-lg" id="recovery-email" 
+                                               placeholder="correo@ejemplo.com" required>
+                                        <div class="invalid-feedback">
+                                            Por favor ingresa un correo electrónico válido.
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 position-relative" id="send-code-btn">
+                                        <span class="btn-text">Enviar Código</span>
+                                        <div class="loading-spinner d-none position-absolute top-50 end-0 translate-middle-y me-3">
+                                            <i class="fas fa-spinner fa-spin"></i>
+                                        </div>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Paso 2: Código -->
+                            <div class="step-container d-none" id="step-code">
+                                <p class="step-description text-center text-muted mb-4">
+                                    Ingresa el código de 6 dígitos que enviamos a <strong id="email-display"></strong>
+                                </p>
+                                <form id="code-form">
+                                    <div class="mb-3">
+                                        <label for="recovery-code" class="form-label fw-medium">Código de Recuperación</label>
+                                        <input type="text" class="form-control form-control-lg text-center fw-bold" 
+                                               id="recovery-code" placeholder="123456" maxlength="6" required
+                                               style="letter-spacing: 8px; font-size: 1.5rem;">
+                                        <div class="form-text text-center mt-2">
+                                            <small class="text-muted">
+                                                El código expira en <span id="countdown" class="text-danger fw-bold">10:00</span> minutos
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 position-relative mb-3" 
+                                            id="verify-code-btn" disabled>
+                                        <span class="btn-text">Verificar Código</span>
+                                        <div class="loading-spinner d-none position-absolute top-50 end-0 translate-middle-y me-3">
+                                            <i class="fas fa-spinner fa-spin"></i>
+                                        </div>
+                                    </button>
+                                    <div class="text-center">
+                                        <button type="button" id="resend-code-btn" class="btn btn-link text-decoration-none">
+                                            ¿No recibiste el código? Reenviar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Paso 3: Nueva Contraseña -->
+                            <div class="step-container d-none" id="step-password">
+                                <p class="step-description text-center text-muted mb-4">
+                                    Crea una nueva contraseña segura.
+                                </p>
+                                <form id="password-form">
+                                    <div class="mb-3">
+                                        <label for="new-password" class="form-label fw-medium">Nueva Contraseña</label>
+                                        <input type="password" class="form-control form-control-lg" id="new-password" 
+                                               placeholder="Mínimo 12 caracteres" required>
+                                        
+                                        <!-- Requisitos de contraseña -->
+                                        <div class="password-requirements mt-3 p-3 bg-light rounded border">
+                                            <p class="mb-2 fw-medium text-dark small">La contraseña debe tener:</p>
+                                            <ul class="list-unstyled mb-0">
+                                                <li id="req-length" class="d-flex align-items-center mb-1 small text-danger">
+                                                    <i class="fas fa-times me-2" style="width: 16px;"></i>
+                                                    Al menos 12 caracteres
+                                                </li>
+                                                <li id="req-uppercase" class="d-flex align-items-center mb-1 small text-danger">
+                                                    <i class="fas fa-times me-2" style="width: 16px;"></i>
+                                                    Al menos una letra mayúscula
+                                                </li>
+                                                <li id="req-number" class="d-flex align-items-center mb-1 small text-danger">
+                                                    <i class="fas fa-times me-2" style="width: 16px;"></i>
+                                                    Al menos un número
+                                                </li>
+                                                <li id="req-symbol" class="d-flex align-items-center mb-1 small text-danger">
+                                                    <i class="fas fa-times me-2" style="width: 16px;"></i>
+                                                    Al menos un símbolo (!, @, #, etc.)
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="confirm-password" class="form-label fw-medium">Confirmar Nueva Contraseña</label>
+                                        <input type="password" class="form-control form-control-lg" id="confirm-password" 
+                                               placeholder="Repite tu contraseña" required>
+                                        
+                                        <div class="password-match d-none mt-2 small text-success">
+                                            <i class="fas fa-check me-2"></i>
+                                            Las contraseñas coinciden
+                                        </div>
+                                        <div class="password-no-match d-none mt-2 small text-danger">
+                                            <i class="fas fa-times me-2"></i>
+                                            Las contraseñas no coinciden
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 position-relative" 
+                                            id="reset-password-btn" disabled>
+                                        <span class="btn-text">Restablecer Contraseña</span>
+                                        <div class="loading-spinner d-none position-absolute top-50 end-0 translate-middle-y me-3">
+                                            <i class="fas fa-spinner fa-spin"></i>
+                                        </div>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Back link -->
+                            <div class="back-link text-center mt-4 pt-3 border-top">
+                                <a href="#" id="back-to-login" class="text-decoration-none d-inline-flex align-items-center">
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    Volver al inicio de sesión
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html>

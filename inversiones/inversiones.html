@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Inversiones</title>
+
+  <!-- Bootstrap y Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <!-- CSS personalizado -->
+  <link rel="stylesheet" href="../principal.css">
+  <link rel="stylesheet" href="inversiones.css">
+</head>
+<body>
+
+  <!-- Botón para mostrar menú lateral en móviles -->
+  <button class="btn btn-success d-md-none m-2" type="button" data-bs-toggle="collapse" data-bs-target="#menuLateral">
+    <i class="bi bi-list"></i> Menú
+  </button>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Menú lateral -->
+      <div id="menuLateral" class="col-md-2 collapse d-md-block menu-lateral">
+        <div class="logowf d-flex align-items-center p-3">
+          <img src="../imag/image.png" alt="Logo" width="80" height="80">
+          <h4 class="titulologo">Wallet Flow</h4>
+        </div>
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link" href="../index.html"><i class="bi bi-house-door-fill me-2 icono-menu"></i>Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="../ingresos/ingresos.html"><i class="bi bi-cash-stack me-2 icono-menu"></i>Ingresos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cart-fill me-2 icono-menu"></i>Gastos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-piggy-bank-fill me-2 icono-menu"></i>Ahorros</a></li>
+          <li class="nav-item"><a class="nav-link" href="../deudas/deudas.html"><i class="bi bi-credit-card-2-back-fill me-2 icono-menu"></i>Deudas</a></li>
+          <li class="nav-item"><a class="nav-link active" href="inversiones.html"><i class="bi bi-graph-up-arrow me-2 icono-menu"></i>Inversiones</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bank me-2 icono-menu"></i>Cuentas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bullseye me-2 icono-menu"></i>Objetivos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-lightbulb-fill me-2 icono-menu"></i>Consejos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-wrench me-2 icono-menu"></i>Herramientas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-question-circle-fill me-2 icono-menu"></i>Ayuda</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear-fill me-2 icono-menu"></i>Configuración</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-box-arrow-right me-2 icono-menu"></i>Cerrar sesión</a></li>
+        </ul>
+      </div>
+
+      <!-- Contenido principal -->
+      <div class="col-md-10 contenido-principal">
+        <div class="container my-5">
+          <!-- Título Principal -->
+          <div class="row mb-4">
+            <div class="col text-center">
+              <h1 class="titulo-principal">INVERSIONES</h1>
+            </div>
+          </div>
+
+          <!-- Título -->
+          <h2 class="text-success mb-4">Análisis de Inversiones</h2>
+
+          <!-- Resumen de Inversiones - Diseño Único -->
+          <div class="row mb-4 summary-cards-inversiones">
+            <div class="col-md-8 mb-3">
+              <div class="card investment-card-main">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Total Invertido</h5>
+                  <p class="display-5 text-success" id="totalInvertido">$0.00</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="card investment-card-small">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Rendimiento Promedio</h5>
+                  <p class="text-success" id="rendimientoPromedio">0.00%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sección de Distribución de Portafolio (Placeholder) -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card portfolio-distribution-card">
+                <div class="card-body">
+                  <h5 class="card-title">Distribución del Portafolio</h5>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Acciones: 40%</li>
+                    <li class="list-group-item">Bonos: 30%</li>
+                    <li class="list-group-item">Fondos Mutuos: 20%</li>
+                    <li class="list-group-item">Criptomonedas: 10%</li>
+                  </ul>
+                  <small class="text-muted">Esta es una distribución de ejemplo. Agrega tus inversiones para ver la real.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtros -->
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <label for="tipoFiltro" class="form-label">Tipo:</label>
+              <select class="form-select" id="tipoFiltro">
+                <option>Todas</option>
+                <option>Acciones</option>
+                <option>Bonos</option>
+                <option>Fondos Mutuos</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="riesgoFiltro" class="form-label">Riesgo:</label>
+              <select class="form-select" id="riesgoFiltro">
+                <option>Todos</option>
+                <option>Bajo</option>
+                <option>Medio</option>
+                <option>Alto</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Add Inversión Button -->
+          <div class="mb-4 text-end">
+            <button class="btn btn-success" id="btnAgregarInversionPage">
+              <i class="bi bi-plus-circle me-2"></i>Agregar Inversión
+            </button>
+          </div>
+
+          <!-- Tabla de Inversiones -->
+          <table class="table table-wallet table-inversiones" id="tablaInversiones">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Monto</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Riesgo</th>
+                <th>Rendimiento Esperado</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Aquí se insertarán las inversiones -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor para el modal de inversión -->
+  <div id="contenedorModalInversion"></div>
+  <!-- Contenedor para el modal de edición de inversión -->
+  <div id="contenedorModalEditarInversion"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../principal.js"></script> <!-- For sidebar toggle -->
+  <script src="inversiones.js"></script>
+</body>
+</html>

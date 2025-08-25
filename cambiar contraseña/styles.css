@@ -1,0 +1,290 @@
+/* Variables CSS para colores personalizados */
+:root {
+  --primary-color: #059669;
+  --primary-hover: #047857;
+  --primary-light: rgba(5, 150, 105, 0.1);
+  --primary-border: rgba(5, 150, 105, 0.2);
+  --success-color: #059669;
+  --danger-color: #ef4444;
+}
+
+/* Override Bootstrap primary colors */
+.btn-primary {
+  --bs-btn-bg: var(--primary-color);
+  --bs-btn-border-color: var(--primary-color);
+  --bs-btn-hover-bg: var(--primary-hover);
+  --bs-btn-hover-border-color: var(--primary-hover);
+  --bs-btn-active-bg: var(--primary-hover);
+  --bs-btn-active-border-color: var(--primary-hover);
+  --bs-btn-disabled-bg: #9ca3af;
+  --bs-btn-disabled-border-color: #9ca3af;
+}
+
+.btn-link {
+  --bs-btn-color: var(--primary-color);
+  --bs-btn-hover-color: var(--primary-hover);
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(5, 150, 105, 0.25);
+}
+
+.alert-success {
+  --bs-alert-bg: var(--primary-light);
+  --bs-alert-border-color: var(--primary-border);
+  --bs-alert-color: var(--primary-hover);
+}
+
+/* Background and layout */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.background-container {
+  min-height: 100vh;
+  background-image: url("img/fondo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.container-fluid {
+  position: relative;
+  z-index: 2;
+}
+
+/* Form card styling */
+.form-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.header {
+  padding: 2rem 1.5rem 1.5rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+}
+
+.wf-coin {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
+}
+
+.brand-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.step-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+/* Step animations */
+.step-container {
+  display: none;
+}
+
+.step-container.active {
+  display: block;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom form styling */
+.form-control-lg {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+}
+
+.form-control:invalid {
+  border-color: var(--danger-color);
+}
+
+/* Loading spinner positioning */
+.btn .loading-spinner {
+  right: 1rem !important;
+}
+
+/* Password requirements styling */
+.password-requirements li.met {
+  color: var(--success-color) !important;
+}
+
+.password-requirements li.met i:before {
+  content: "\f00c";
+}
+
+/* Code input special styling */
+#recovery-code {
+  font-family: 'Courier New', monospace;
+}
+
+/* Countdown styling */
+#countdown {
+  font-weight: bold;
+  color: var(--danger-color) !important;
+}
+
+/* Back link styling */
+.back-link a {
+  color: var(--primary-color);
+  transition: color 0.2s ease;
+}
+
+.back-link a:hover {
+  color: var(--primary-hover);
+}
+
+/* Success animations */
+@keyframes checkmark {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.password-requirements li.met i {
+  animation: checkmark 0.3s ease-in-out;
+}
+
+/* Brand name hover animation */
+@keyframes textGlow {
+  0%, 100% { 
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  }
+  50% { 
+    text-shadow: 0 2px 8px rgba(5, 150, 105, 0.3); 
+  }
+}
+
+.brand-name:hover {
+  animation: textGlow 2s ease-in-out infinite;
+}
+
+/* Button hover effects */
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+.btn-primary:disabled {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .header {
+    padding: 1.5rem 1rem 1rem;
+  }
+  
+  .form-content {
+    padding: 1.5rem !important;
+  }
+  
+  .wf-coin {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .brand-name {
+    font-size: 1.5rem;
+  }
+  
+  .step-title {
+    font-size: 1.125rem;
+  }
+}
+
+/* Utility classes */
+.d-none {
+  display: none !important;
+}
+
+.active {
+  display: block !important;
+}
+
+/* Custom alert styling to match theme */
+.alert {
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+.alert-success {
+  background-color: var(--primary-light);
+  border-color: var(--primary-border);
+  color: var(--primary-hover);
+}
+
+.alert-danger {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #dc2626;
+}
+
+/* Form validation styling */
+.was-validated .form-control:valid {
+  border-color: var(--success-color);
+}
+
+.was-validated .form-control:invalid {
+  border-color: var(--danger-color);
+}
+
+/* Loading state styling */
+.btn-text.hide {
+  opacity: 0;
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease;
+}
+
+.btn, .form-control, .alert {
+  transition: all 0.2s ease;
+}

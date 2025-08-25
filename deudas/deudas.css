@@ -1,0 +1,161 @@
+/* Specific styles for Deudas page and form */
+
+/* Custom Teal Color */
+.text-teal {
+  color: #1abc9c !important; /* Teal color */
+}
+
+.btn-teal {
+  background-color: #1abc9c;
+  border-color: #1abc9c;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn-teal:hover {
+  background-color: #16a085;
+  border-color: #16a085;
+}
+
+/* Table styles */
+.table-deudas {
+  border: 3px solid #1abc9c; /* Teal border for debts */
+  border-collapse: collapse;
+  width: 100%; /* Ensure table takes full width */
+}
+
+.table-deudas th,
+.table-deudas td {
+  border: 1px solid #a7e4d9; /* Lighter teal border for cells */
+  padding: 12px 15px; /* More padding */
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table-deudas thead th {
+  background-color: #1abc9c; /* Teal header */
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.table-deudas tbody tr {
+  background-color: #f0fdfc; /* Very light teal background */
+  transition: background-color 0.3s ease;
+}
+
+.table-deudas tbody tr:nth-child(even) {
+  background-color: #eafaf8; /* Slightly darker alternate row */
+}
+
+.table-deudas tbody tr:hover {
+  background-color: #d0f0eb; /* Hover effect */
+}
+
+/* Estilos específicos para el resumen de deudas - MEJORADO */
+.debt-total-card,
+.debt-metric-card,
+.debt-progress-card,
+.upcoming-payments-card {
+  border: 2px solid #1abc9c; /* Teal border */
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* More pronounced shadow */
+  padding: 20px;
+  margin-bottom: 20px; /* Consistent margin */
+  background-color: #fff; /* White background for cards */
+}
+
+.debt-total-card {
+  background-color: #f0fdfc; /* Lightest teal for total card */
+}
+
+.debt-total-card .display-4 {
+  font-size: 4rem; /* Larger font for total */
+  font-weight: bold;
+  color: #1abc9c; /* Teal color */
+}
+
+.debt-metric-card {
+  background-color: #eafaf8; /* Slightly darker teal for metric cards */
+}
+
+.debt-metric-card .card-title {
+  font-size: 1.2rem;
+  color: #16a085; /* Darker teal for titles */
+  font-weight: 600;
+}
+
+.debt-metric-card p {
+  font-size: 2rem; /* Larger font for metrics */
+  font-weight: bold;
+}
+
+/* Estilos para la sección de progreso de deuda */
+.debt-progress-card .card-title {
+  color: #1abc9c; /* Teal color */
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.progress {
+  background-color: #a7e4d9; /* Lighter teal for progress bar background */
+  border-radius: 10px;
+  overflow: hidden; /* Ensure progress bar stays within bounds */
+}
+
+.progress-bar {
+  background-color: #2ecc71; /* Green for progress (positive) */
+  transition: width 0.6s ease;
+}
+
+/* Estilos para la sección de próximos pagos */
+.upcoming-payments-card {
+  background-color: #fff;
+}
+
+.upcoming-payments-card .card-title {
+  color: #1abc9c; /* Teal color */
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.upcoming-payments-card .list-group-item {
+  background-color: transparent;
+  border-color: #eafaf8; /* Light teal border */
+  color: #2c3e50;
+  padding: 10px 0;
+}
+
+.upcoming-payments-card .list-group-item:last-child {
+  border-bottom: none;
+}
+
+/* Styles for the edit modal specific to Deudas */
+#modalEditarDeuda .form-editar {
+  border: 3px solid #1abc9c; /* Teal border for edit form */
+}
+
+#modalEditarDeuda .form-titulo {
+  color: #1abc9c; /* Teal title for edit form */
+}
+
+#modalEditarDeuda .btn-success {
+  /* For the "Guardar" button in edit modal */
+  background-color: #1abc9c;
+  border-color: #1abc9c;
+}
+#modalEditarDeuda .btn-success:hover {
+  background-color: #16a085;
+  border-color: #16a085;
+}
+
+#modalEditarDeuda .btn-secondary {
+  /* For the "Cancelar" button in edit modal */
+  background-color: #6c757d; /* Neutral grey for cancel */
+  border-color: #6c757d;
+}
+#modalEditarDeuda .btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #5a6268;
+}
