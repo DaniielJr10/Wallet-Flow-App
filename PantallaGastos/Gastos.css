@@ -1,51 +1,384 @@
-/* --- Layout principal con barra lateral --- */
+/* ===================================================================
+   WALLET FLOW - PANTALLA DE GASTOS
+   Archivo: Gastos.css
+   Propósito: Estilos para la gestión y visualización de gastos
+   Autor: Wallet Flow Team
+   Fecha: 2025
+   
+   ÍNDICE DE CONTENIDO:
+   1. CONFIGURACIÓN BASE
+   2. TÍTULOS Y ENCABEZADOS
+   3. CONTENIDO PRINCIPAL
+   4. CARDS DE RESUMEN
+   5. MENÚ LATERAL
+   6. TABLA DE GASTOS
+   7. BOTONES Y CONTROLES
+   8. ELEMENTOS DECORATIVOS
+   9. ANIMACIONES
+   10. RESPONSIVE DESIGN
+   =================================================================== */
+
+/* ===== 1. CONFIGURACIÓN BASE ===== */
+/* Configuración general del documento y fuentes principales */
+body, html {
+  height: 100%;
+  font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
+}
+
+/* ===== 2. TÍTULOS Y ENCABEZADOS ===== */
+/* Estilos para títulos principales de la página */
+.titulo-principal {
+  /* Gradiente verde coherente con el diseño de ingresos */
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2ecc71; /* Color de respaldo para navegadores no compatibles */
+  border-radius: 15px;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  font-size: 2.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin: 0;
+}
+
+/* Subtítulo descriptivo bajo el título principal */
+.subtitulo-pagina {
+  color: #7f8c8d; /* Gris suave para contraste */
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+/* Títulos secundarios en toda la aplicación */
+h2 {
+  font-weight: bold;
+}
+
+/* ===== 3. CONTENIDO PRINCIPAL ===== */
+/* Área principal donde se muestra todo el contenido de gastos */
 .contenido-principal {
-  margin-left: 280px;
-  padding: 2rem 2rem 2rem 2rem;
-  min-height: 100vh;
-  transition: margin-left 0.3s;
-  width: calc(100% - 280px);
-  box-sizing: border-box;
+  /* Gradiente de fondo suave y profesional */
+  background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+  min-height: 100vh; /* Ocupa toda la altura de la ventana */
 }
 
-/* Responsive para coincidir con BarraLateral.css */
+/* ===== 4. CARDS DE RESUMEN ===== */
+/* Tarjetas que muestran estadísticas resumidas de gastos */
+.card-resumen {
+  background: white;
+  padding: 2rem 1.5rem;
+  border-radius: 15px;
+  /* Sombra y borde con el color principal */
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
+  border: 1px solid rgba(46, 204, 113, 0.2);
+  /* Transición suave para efectos hover */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%; /* Asegura altura uniforme en la fila */
+}
+
+/* Efecto cuando el usuario pasa el mouse sobre las cards */
+.card-resumen:hover {
+  transform: translateY(-5px); /* Levanta ligeramente la card */
+  box-shadow: 0 8px 25px rgba(46, 204, 113, 0.2);
+  border-color: rgba(46, 204, 113, 0.3);
+}
+
+/* Títulos dentro de las cards de resumen */
+.card-resumen h5 {
+  color: #2c3e50; /* Gris oscuro para legibilidad */
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+/* Números grandes destacados en las cards */
+.card-resumen .display-6 {
+  font-weight: 700;
+  color: #27ae60; /* Verde principal coherente */
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Texto principal para categorías o datos importantes */
+.ingreso-principal {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+}
+
+/* ===== 5. MENÚ LATERAL ===== */
+/* Barra de navegación lateral izquierda */
+.menu-lateral {
+  /* Gradiente de fondo blanco a verde muy suave */
+  background: linear-gradient(180deg, white 0%, #f8fffe 100%);
+  border: 3px solid #2ecc71; /* Borde verde principal */
+  border-radius: 15px;
+  min-height: 100vh; /* Ocupa toda la altura */
+  padding-top: 1.5rem;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
+}
+
+/* Enlaces de navegación en el menú lateral */
+.menu-lateral .nav-link {
+  font-size: 18px;
+  /* Fondo verde suave por defecto */
+  background: linear-gradient(135deg, #eaf8ed 0%, #d5f4e6 100%);
+  color: #2c3e50; /* Texto oscuro para contraste */
+  margin: 6px 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid rgba(46, 204, 113, 0.3);
+  /* Transición suave para todos los efectos */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  top: -40px; /* Ajuste de posición vertical */
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* Efecto hover en los enlaces del menú */
+.menu-lateral .nav-link:hover {
+  /* Fondo verde intenso al pasar el mouse */
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white; /* Texto blanco para contraste */
+  transform: translateX(5px); /* Desplaza ligeramente a la derecha */
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  border-color: #27ae60;
+}
+
+/* Estilo para el enlace activo (página actual) */
+.menu-lateral .nav-link.active {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+  border-color: #27ae60;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+/* Contenedor del logo en el menú lateral */
+.logowf {
+  position: relative;
+  display: flex;
+  align-items: center;
+  top: -30px; /* Ajuste de posición */
+  left: -15px;
+  padding: 3px;
+}
+
+/* Título del logo "Wallet Flow" */
+.titulologo {
+  font-size: 24px;
+  font-weight: 700;
+  /* Gradiente que coincide con el tema principal */
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2e6835; /* Color de respaldo */
+}
+
+/* ===== 6. TABLA DE GASTOS ===== */
+/* Contenedor principal de la tabla de gastos */
+.tabla-container {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden; /* Evita que el contenido se salga de los bordes redondeados */
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.15);
+  border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+/* Tabla principal de gastos */
+#tablaGastos {
+  margin: 0;
+  border: none;
+}
+
+/* Encabezados de la tabla */
+.table-header th {
+  /* Fondo verde intenso para los encabezados */
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 1.2rem 1rem;
+  border: none;
+  text-transform: uppercase; /* Texto en mayúsculas */
+  letter-spacing: 0.5px; /* Espaciado entre letras */
+}
+
+/* Filas de datos en la tabla */
+#tablaGastos tbody tr {
+  background: white;
+  transition: all 0.3s ease; /* Transición suave para efectos */
+  border-bottom: 1px solid rgba(46, 204, 113, 0.1);
+}
+
+/* Efecto hover en las filas de la tabla */
+#tablaGastos tbody tr:hover {
+  /* Fondo verde muy suave al pasar el mouse */
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.08) 0%, rgba(46, 204, 113, 0.12) 100%);
+  transform: scale(1.01); /* Agranda ligeramente la fila */
+  box-shadow: 0 2px 8px rgba(46, 204, 113, 0.15);
+}
+
+/* Celdas de datos en la tabla */
+#tablaGastos td {
+  padding: 1rem;
+  vertical-align: middle; /* Centra verticalmente el contenido */
+  border: none;
+  font-weight: 500;
+}
+
+/* ===== 7. BOTONES Y CONTROLES ===== */
+/* Botón de advertencia (generalmente para editar) */
+.btn-warning {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  border: none;
+  color: white;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+/* Efecto hover para botón de advertencia */
+.btn-warning:hover {
+  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+  transform: translateY(-2px); /* Levanta el botón */
+  box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+  color: white;
+}
+
+/* Botón de peligro (generalmente para eliminar) */
+.btn-danger {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  border: none;
+  color: white;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+/* Efecto hover para botón de peligro */
+.btn-danger:hover {
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+  color: white;
+}
+
+/* ===== 8. ELEMENTOS DECORATIVOS ===== */
+/* Badges para indicar estado "Sí" (activo/verdadero) */
+.badge-si {
+  background: #27ae60; /* Verde para positivo */
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+/* Badges para indicar estado "No" (inactivo/falso) */
+.badge-no {
+  background: #95a5a6; /* Gris para neutro */
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+/* Badge para mostrar categorías de gastos */
+.categoria-badge {
+  background: #f8f9fa; /* Fondo claro */
+  color: #2ecc71; /* Texto verde principal */
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-weight: 500;
+  border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+/* Estilo para mostrar métodos de pago */
+.metodo-pago {
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+/* Estilo para destacar montos importantes */
+.monto-destacado {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Estilo para mostrar fechas con fuente monoespaciada */
+.fecha-formato {
+  color: #7f8c8d;
+  font-family: monospace; /* Fuente de ancho fijo para fechas */
+}
+
+/* Estilo para texto descriptivo */
+.descripcion-texto {
+  color: #2c3e50;
+  font-style: italic; /* Texto en cursiva */
+}
+
+/* Estilo para texto de frecuencia y cuenta */
+.frecuencia-texto, .cuenta-texto {
+  color: #7f8c8d; /* Gris suave */
+}
+
+/* Contenedor para botones de acción */
+.botones-accion {
+  display: flex;
+  gap: 0.25rem; /* Espaciado entre botones */
+  justify-content: center; /* Centra los botones */
+}
+
+/* ===== 9. ANIMACIONES ===== */
+/* Animación de entrada suave para elementos */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Inicia 20px más abajo */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Termina en su posición final */
+  }
+}
+
+/* Aplica la animación a cards y tabla */
+.card-resumen, .tabla-container {
+  animation: slideIn 0.6s ease-out;
+}
+
+/* ===== 10. RESPONSIVE DESIGN ===== */
+/* Adaptaciones para pantallas medianas y pequeñas */
 @media (max-width: 768px) {
-  .contenido-principal {
-    margin-left: 0;
-    padding: 1rem;
-    width: 100%;
+  /* Reduce el tamaño del título en móviles */
+  .titulo-principal {
+    font-size: 2rem;
   }
-}
-
-@media (max-width: 600px) {
-  .contenido-principal {
-    padding: 0.5rem;
+  
+  /* Agrega margen inferior a las cards en móviles */
+  .card-resumen {
+    margin-bottom: 1.5rem;
   }
-}
-
-/* --- Paleta de verdes --- */
-:root {
-  --primary-green: #10b981;
-  --secondary-green: #34d399;
-  --dark-green: #065f46;
-  --light-green: #a7f3d0;
-  --success-color: #10b981;
-  --danger-color: #ef4444;
-  --info-color: #06b6d4;
-  --warning-color: #f59e42;
-  --bg-main: #f6fff8;
-  --bg-card: #e6f4ea;
-  --bg-modal: #ffffff;
-  --text-main: #065f46;
-  --text-muted: #6b7280;
-  --radius-lg: 1rem;
-  --shadow-lg: 0 4px 24px rgba(16, 185, 129, 0.12);
-}
-
-body.modern-theme {
-  background: var(--bg-main);
-  font-family: 'Inter', Arial, sans-serif;
-  color: var(--text-main);
+  
+  /* Reduce el tamaño de fuente de la tabla en móviles */
+  #tablaGastos {
+    font-size: 0.9rem;
+  }
+  
+  /* Ajusta el padding de los encabezados en móviles */
+  .table-header th {
+    padding: 1rem 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  /* Ajusta el padding de las celdas en móviles */
+  #tablaGastos td {
+    padding: 0.75rem 0.5rem;
+  }
 }
 
 .header-modern {
