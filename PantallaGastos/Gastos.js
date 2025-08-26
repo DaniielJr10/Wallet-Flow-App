@@ -1,4 +1,10 @@
-/* ===== PANTALLA DE GASTOS - WALLET FLOW ===== */
+/* =====================================================================
+  PANTALLA DE GASTOS - WALLET FLOW
+  Archivo: Gastos.js
+  Responsabilidad: Manejo de la lógica de la vista de gastos (CRUD local,
+  filtros simples, métricas y UI básica). Sin dependencias externas.
+  Persistencia: localStorage clave 'gastos'
+  ===================================================================== */
 
 // ===== INICIALIZACIÓN DE LA APLICACIÓN =====
 document.addEventListener('DOMContentLoaded', function () {
@@ -7,16 +13,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ===== FUNCIÓN PRINCIPAL DE INICIALIZACIÓN =====
 function inicializarApp() {
+  // Render inicial de datos y métricas
   renderGastos();
   calcularResumen();
+  // Configuración de listeners de UI
   configurarEventos();
   configurarFiltros();
+  // (Gráficos removidos según requerimiento)
+  inicializarTooltips();
+}
+
+// Inicializa tooltips Bootstrap (para botón +)
+function inicializarTooltips(){
+  if (typeof bootstrap === 'undefined') return; // Bootstrap no cargado
+  const triggers = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  triggers.forEach(el => new bootstrap.Tooltip(el));
 }
 
 // ===== CONFIGURACIÓN DE EVENTOS =====
 function configurarEventos() {
-  // Evento para agregar nuevo gasto
-  document.getElementById('btnAgregarGasto').addEventListener('click', mostrarFormularioAgregar);
+  // ===== Botones de creación =====
+  const fab = document.getElementById('fabNuevoGasto');
+  if (fab) fab.addEventListener('click', mostrarFormularioAgregar);
+  // (Botones de encabezado removidos: exportar / nuevo gasto)
   
   // Evento para cerrar sesión
   const cerrarSesionBtn = document.getElementById('cerrarSesionBtn');
@@ -36,23 +55,32 @@ function configurarEventos() {
 
 // ===== CONFIGURACIÓN DE FILTROS =====
 function configurarFiltros() {
+  // Obtiene referencias a controles simplificados
   const filtroCategoria = document.getElementById('filtroCategoria');
   const filtroMetodo = document.getElementById('filtroMetodo');
   const filtroFechaInicio = document.getElementById('filtroFechaInicio');
   const filtroFechaFin = document.getElementById('filtroFechaFin');
+  const filtroTexto = document.getElementById('buscadorGlobal');
+  const btnLimpiar = document.getElementById('btnLimpiarFiltros');
 
-  // Agregar event listeners a todos los filtros
   [filtroCategoria, filtroMetodo, filtroFechaInicio, filtroFechaFin].forEach(filtro => {
-    filtro.addEventListener('change', aplicarFiltros);
+    if (filtro) filtro.addEventListener('change', aplicarFiltros);
+  });
+  if (filtroTexto) filtroTexto.addEventListener('input', aplicarFiltros);
+  if (btnLimpiar) btnLimpiar.addEventListener('click', () => {
+    [filtroCategoria, filtroMetodo, filtroFechaInicio, filtroFechaFin, filtroTexto].forEach(el => { if (el) el.value = ''; });
+    aplicarFiltros();
   });
 }
 
 // ===== FUNCIÓN PARA APLICAR FILTROS =====
 function aplicarFiltros() {
+  // Lee valores activos de filtros
   const categoria = document.getElementById('filtroCategoria').value;
   const metodo = document.getElementById('filtroMetodo').value;
   const fechaInicio = document.getElementById('filtroFechaInicio').value;
   const fechaFin = document.getElementById('filtroFechaFin').value;
+  const texto = (document.getElementById('buscadorGlobal')?.value || '').trim().toLowerCase();
 
   let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
   
@@ -69,16 +97,22 @@ function aplicarFiltros() {
   if (fechaFin) {
     gastos = gastos.filter(gasto => gasto.fecha <= fechaFin);
   }
+  if (texto) {
+    gastos = gastos.filter(gasto => (gasto.descripcion || '').toLowerCase().includes(texto));
+  }
 
   renderGastosFiltrados(gastos);
 }
 
 // ===== FUNCIÓN PARA RENDERIZAR GASTOS =====
 function renderGastos() {
+  // Pinta la tabla completa sin filtros y actualiza contador
   const tabla = document.getElementById('tablaGastos').querySelector('tbody');
   let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
   tabla.innerHTML = '';
   
+  const estadoTabla = document.getElementById('estadoTabla');
+  if (estadoTabla) estadoTabla.textContent = gastos.length + ' registros';
   if (gastos.length === 0) {
     tabla.innerHTML = `
       <tr>
@@ -139,9 +173,12 @@ function renderGastos() {
 
 // ===== FUNCIÓN PARA RENDERIZAR GASTOS FILTRADOS =====
 function renderGastosFiltrados(gastosFiltrados) {
+  // Pinta tabla usando un subconjunto filtrado
   const tabla = document.getElementById('tablaGastos').querySelector('tbody');
   tabla.innerHTML = '';
   
+  const estadoTabla = document.getElementById('estadoTabla');
+  if (estadoTabla) estadoTabla.textContent = gastosFiltrados.length + ' registros filtrados';
   if (gastosFiltrados.length === 0) {
     tabla.innerHTML = `
       <tr>
@@ -211,6 +248,7 @@ function renderGastosFiltrados(gastosFiltrados) {
 
 // ===== CONFIGURACIÓN DE EVENTOS DE BOTONES =====
 function configurarEventosBotones() {
+  // Enlaza eventos dinámicos de cada fila (editar/eliminar)
   // Botones de eliminar
   document.querySelectorAll('.btn-eliminar').forEach(btn => {
     btn.addEventListener('click', function () {
@@ -230,6 +268,7 @@ function configurarEventosBotones() {
 
 // ===== FUNCIÓN PARA ELIMINAR GASTO =====
 function eliminarGasto(idx) {
+  // Borra un gasto por índice y recalcula métricas
   const confirmacion = confirm('¿Estás seguro de que deseas eliminar este gasto?\n\nEsta acción no se puede deshacer.');
   if (confirmacion) {
     let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
@@ -243,12 +282,14 @@ function eliminarGasto(idx) {
 
 // ===== FUNCIÓN PARA MOSTRAR FORMULARIO AGREGAR =====
 function mostrarFormularioAgregar() {
+  // Lanza formulario modal vacío para crear gasto
   const formHtml = crearFormularioHTML('Agregar Nuevo Gasto', {});
   mostrarModal(formHtml, guardarNuevoGasto);
 }
 
 // ===== FUNCIÓN PARA EDITAR GASTO =====
 function editarGasto(idx) {
+  // Abre formulario precargado para editar gasto existente
   let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
   const gasto = gastos[idx];
   
@@ -258,6 +299,7 @@ function editarGasto(idx) {
 
 // ===== FUNCIÓN PARA CREAR HTML DEL FORMULARIO =====
 function crearFormularioHTML(titulo, gasto) {
+  // Genera markup del formulario (uso reutilizable agregar/editar)
   return `
     <form id="formGasto" class="form-gasto">
       <h5 class="form-titulo">
@@ -366,6 +408,7 @@ function crearFormularioHTML(titulo, gasto) {
 
 // ===== FUNCIÓN PARA MOSTRAR MODAL =====
 function mostrarModal(contenidoHTML, funcionGuardar) {
+  // Crea contenedor modal simple (sin Bootstrap) e inserta contenido
   const modal = document.createElement('div');
   modal.id = 'modalGasto';
   modal.style.cssText = `
@@ -406,6 +449,7 @@ function mostrarModal(contenidoHTML, funcionGuardar) {
 
 // ===== FUNCIÓN PARA CERRAR MODAL =====
 function cerrarModal(modal) {
+  // Animación y retirada del modal del DOM
   modal.style.animation = 'fadeOut 0.3s ease';
   setTimeout(() => {
     document.body.removeChild(modal);
@@ -414,6 +458,7 @@ function cerrarModal(modal) {
 
 // ===== FUNCIÓN PARA VALIDAR FORMULARIO =====
 function validarFormulario(formData) {
+  // Validaciones mínimas de campos obligatorios / valores coherentes
   const monto = parseFloat(formData.get('monto'));
   const categoria = formData.get('categoria');
   const metodo = formData.get('metodo');
@@ -444,6 +489,7 @@ function validarFormulario(formData) {
 
 // ===== FUNCIÓN PARA GUARDAR NUEVO GASTO =====
 function guardarNuevoGasto(formData) {
+  // Inserta nuevo objeto gasto en localStorage
   let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
   
   const nuevoGasto = {
@@ -468,6 +514,7 @@ function guardarNuevoGasto(formData) {
 
 // ===== FUNCIÓN PARA ACTUALIZAR GASTO =====
 function actualizarGasto(idx, formData) {
+  // Sustituye datos de un gasto existente por índice
   let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
   
   gastos[idx] = {
@@ -492,11 +539,13 @@ function actualizarGasto(idx, formData) {
 
 // ===== FUNCIÓN PARA CALCULAR RESUMEN =====
 function calcularResumen() {
+  // Recalcula KPIs mostrados en tarjetas (total, categoría principal, etc.)
   const gastos = JSON.parse(localStorage.getItem('gastos')) || [];
   
   // Calcular total de gastos
   const totalGastos = gastos.reduce((total, gasto) => total + gasto.monto, 0);
-  document.getElementById('totalGastos').textContent = `$${formatearMonto(totalGastos)}`;
+  const totalGastosEl = document.getElementById('totalGastos');
+  if (totalGastosEl) totalGastosEl.textContent = `$${formatearMonto(totalGastos)}`;
   
   // Encontrar categoría principal
   const categorias = {};
@@ -512,27 +561,45 @@ function calcularResumen() {
       categoriaPrincipal = categoria;
     }
   }
-  document.getElementById('categoriaPrincipal').textContent = categoriaPrincipal;
+  const catPrincipalEl = document.getElementById('categoriaPrincipal');
+  if (catPrincipalEl) catPrincipalEl.textContent = categoriaPrincipal;
+  const porcentajeCat = document.getElementById('porcentajeCategoria');
+  if (porcentajeCat && mayorMonto>0 && totalGastos>0) porcentajeCat.textContent = ((mayorMonto/totalGastos)*100).toFixed(1)+"% del total";
+
+  // Recurrentes
+  const recurrentes = gastos.filter(g=>g.esRecurrente);
+  const totalRecurrentes = recurrentes.reduce((acc,g)=>acc+g.monto,0);
+  const totalRecurrentesEl = document.getElementById('totalRecurrentes');
+  if (totalRecurrentesEl) totalRecurrentesEl.textContent = recurrentes.length;
+  const porcentajeRecurrentes = document.getElementById('porcentajeRecurrentes');
+  if (porcentajeRecurrentes && totalGastos>0) porcentajeRecurrentes.textContent = (totalRecurrentes/totalGastos*100).toFixed(1)+"% del monto";
+
+  // (Promedio diario removido por requerimiento)
   
   // Comparación con mes anterior (simulada)
   const mesAnterior = Math.random() * totalGastos; // Simulación
   const diferencia = totalGastos - mesAnterior;
   const comparacionElement = document.getElementById('comparacion');
-  
-  if (diferencia > 0) {
-    comparacionElement.textContent = `+$${formatearMonto(Math.abs(diferencia))} vs mes anterior`;
-    comparacionElement.className = 'text-danger';
-  } else if (diferencia < 0) {
-    comparacionElement.textContent = `-$${formatearMonto(Math.abs(diferencia))} vs mes anterior`;
-    comparacionElement.className = 'text-success';
-  } else {
-    comparacionElement.textContent = 'Sin cambios vs mes anterior';
-    comparacionElement.className = 'text-muted';
+  if (comparacionElement){
+    if (diferencia > 0) {
+      comparacionElement.textContent = `+$${formatearMonto(Math.abs(diferencia))} vs mes anterior`;
+      comparacionElement.classList.remove('text-success','text-muted');
+      comparacionElement.classList.add('text-danger');
+    } else if (diferencia < 0) {
+      comparacionElement.textContent = `-$${formatearMonto(Math.abs(diferencia))} vs mes anterior`;
+      comparacionElement.classList.remove('text-danger','text-muted');
+      comparacionElement.classList.add('text-success');
+    } else {
+      comparacionElement.textContent = 'Sin cambios vs mes anterior';
+      comparacionElement.classList.remove('text-danger','text-success');
+      comparacionElement.classList.add('text-muted');
+    }
   }
 }
 
 // ===== FUNCIÓN PARA MOSTRAR MENSAJES =====
 function mostrarMensaje(mensaje, tipo) {
+  // Mensajes flotantes temporales (éxito / error)
   const alerta = document.createElement('div');
   alerta.className = `alerta-personalizada alerta-${tipo}`;
   alerta.innerHTML = `
@@ -569,6 +636,7 @@ function mostrarMensaje(mensaje, tipo) {
 
 // ===== FUNCIONES AUXILIARES PARA FORMATO =====
 function formatearMonto(monto) {
+  // Devuelve monto con formato local (2 decimales)
   return parseFloat(monto).toLocaleString('es-ES', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
@@ -576,6 +644,9 @@ function formatearMonto(monto) {
 }
 
 function formatearFecha(fecha) {
+  // Formatea fecha ISO (yyyy-mm-dd) a dd mes yyyy local
   const opciones = { day: '2-digit', month: 'short', year: 'numeric' };
   return new Date(fecha + 'T00:00:00').toLocaleDateString('es-ES', opciones);
 }
+
+/* (Lógica de gráficos removida) */
