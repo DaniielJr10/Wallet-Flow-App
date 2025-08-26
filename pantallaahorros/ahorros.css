@@ -81,11 +81,11 @@ body, html {
 
 /* ===== TÍTULO PRINCIPAL MEJORADO ===== */
 .titulo-principal {
-  background: linear-gradient(135deg, #ff6924 0%, #ff6924 100%);
+  background: linear-gradient(135deg, #fd7e14 0%, #fd7e14 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: #ff6924; /* Fallback */
+  color: #fd7e14; /* Fallback */
   border-radius: 15px;
   padding: 1rem 2rem;
   font-weight: 700;
@@ -96,7 +96,7 @@ body, html {
 
 /* ===== SUBTÍTULO MEJORADO ===== */
 .subtitulo-pagina {
-  color: #7f8c8d;
+  color: #fd7e14;
   font-size: 1.1rem;
   font-weight: 500;
   margin-top: 0.5rem;
