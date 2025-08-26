@@ -1,0 +1,103 @@
+body, html {
+  height: 100%;
+  font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
+}
+
+/* ===== MENÚ LATERAL MEJORADO ===== */
+.menu-lateral {
+  background: linear-gradient(180deg, white 0%, #f8fffe 100%);
+  border: 3px solid #2ecc71;
+  border-radius: 15px;
+  min-height: 100vh;
+  padding-top: 1.5rem;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
+}
+
+.menu-lateral .nav-link {
+  font-size: 18px;
+  background: linear-gradient(135deg, #eaf8ed 0%, #d5f4e6 100%);
+  color: #2c3e50;
+  margin: 6px 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid rgba(46, 204, 113, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  top: -40px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.menu-lateral .nav-link:hover {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  border-color: #27ae60;
+}
+
+.menu-lateral .nav-link.active {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+  border-color: #27ae60;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+.logowf {
+  position: relative;
+  display: flex;
+  align-items: center;
+  top: -30px;
+  left: -15px;
+  padding: 3px;
+}
+
+.titulologo {
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2e6835; /* Fallback */
+}
+/*hasta aqui termina el css para el menú lateral */
+
+
+
+
+
+/* CONTENIDO PRINCIPAL */
+.contenido-principal {
+  position: relative;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  color: #2c3e50;
+}
+
+/* ===== TÍTULO PRINCIPAL MEJORADO ===== */
+.titulo-principal {
+  background: linear-gradient(135deg, #ff6924 0%, #ff6924 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #ff6924; /* Fallback */
+  border-radius: 15px;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  font-size: 2.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin: 0;
+}
+
+/* ===== SUBTÍTULO MEJORADO ===== */
+.subtitulo-pagina {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
