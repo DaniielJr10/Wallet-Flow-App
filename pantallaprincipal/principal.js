@@ -1,18 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // ===== ELEMENTOS DEL DOM =====
+  // ===== ELEMENTOS DEL DOM PRINCIPALES =====
   const botonAgregar = document.getElementById('botonAgregar');
   const menuOpciones = document.getElementById('menuOpciones');
   const btnNuevoIngreso = document.getElementById('btnNuevoIngreso');
   const contenedorModalIngreso = document.getElementById('contenedorModalIngreso');
   const btnNuevaCuenta = document.getElementById('btnNuevaCuenta');
   const contenedorModalCuenta = document.getElementById('contenedorModalCuenta');
+  const btnNuevoAhorro = document.querySelector('.ahorro-item');
+  const contenedorModalAhorro = document.getElementById('contenedorModalAhorro');
 
-  // ===== INICIALIZACIÓN =====
+  // ===== INICIALIZACIÓN DE COMPONENTES Y EVENTOS =====
   inicializarComponentes();
   configurarEventos();
 
   function inicializarComponentes() {
-    // Inicializar tooltips de Bootstrap
+  // Inicializar tooltips de Bootstrap para los botones con tooltip
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl);
@@ -23,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function configurarPerfilUsuario() {
+    // Cargar y mostrar el nombre del usuario en el perfil si existe en localStorage
     const usuario = localStorage.getItem('walletflow_current_user');
     if (usuario) {
       try {
@@ -39,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function configurarEventos() {
-    // Botón flotante con efecto ripple
+  // Botón flotante: muestra menú emergente y efecto ripple
     if (botonAgregar) {
       botonAgregar.addEventListener('click', function (e) {
         e.preventDefault();
@@ -52,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    // Botón cerrar menú
+  // Botón para cerrar el menú emergente
     const btnCerrarMenu = document.getElementById('btnCerrarMenu');
     if (btnCerrarMenu) {
       btnCerrarMenu.addEventListener('click', function(e) {
@@ -61,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    // Cerrar menú al hacer clic fuera
+  // Cerrar menú emergente al hacer clic fuera de él
     document.addEventListener('click', function (event) {
       if (menuOpciones && !menuOpciones.contains(event.target) && 
           botonAgregar && !botonAgregar.contains(event.target)) {
@@ -69,29 +72,34 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // Botón nuevo ingreso
+  // Botón para mostrar el formulario de ingreso
     if (btnNuevoIngreso) {
       btnNuevoIngreso.addEventListener('click', manejarNuevoIngreso);
     }
 
-    // Botón nueva cuenta
+  // Botón para mostrar el formulario de ahorro
+    if (btnNuevoAhorro) {
+      btnNuevoAhorro.addEventListener('click', manejarNuevoAhorro);
+    }
+
+  // Botón para mostrar el formulario de cuenta
     if (btnNuevaCuenta) {
       btnNuevaCuenta.addEventListener('click', manejarNuevaCuenta);
     }
 
-    // Cerrar sesión desde el perfil
+  // Botón para cerrar sesión desde el perfil
     const cerrarSesionPerfil = document.getElementById('cerrarSesionPerfil');
     if (cerrarSesionPerfil) {
       cerrarSesionPerfil.addEventListener('click', manejarCerrarSesion);
     }
 
-    // Cerrar sesión desde el menú lateral (mantener funcionalidad existente)
+  // Botón para cerrar sesión desde el menú lateral
     const cerrarSesionBtn = document.getElementById('cerrarSesionBtn');
     if (cerrarSesionBtn) {
       cerrarSesionBtn.addEventListener('click', manejarCerrarSesion);
     }
 
-    // Efecto hover para items del menú
+  // Efecto hover para los items del menú emergente
     const menuItems = document.querySelectorAll('.menu-item');
     menuItems.forEach(item => {
       item.addEventListener('mouseenter', function() {
@@ -105,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function toggleMenuEmergente() {
+  // Alterna la visibilidad del menú emergente
     if (menuOpciones.classList.contains('d-none')) {
       abrirMenuEmergente();
     } else {
@@ -113,11 +122,13 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function abrirMenuEmergente() {
+  // Abre el menú emergente con animación
     menuOpciones.classList.remove('d-none');
     menuOpciones.style.animation = 'slideInUp 0.5s ease forwards';
   }
 
   function cerrarMenuEmergente() {
+  // Cierra el menú emergente con animación
     menuOpciones.style.animation = 'slideOutDown 0.3s ease forwards';
     setTimeout(() => {
       menuOpciones.classList.add('d-none');
@@ -125,6 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function crearEfectoRipple(e, button) {
+  // Crea el efecto visual ripple en el botón flotante
     const ripple = document.createElement('span');
     const rect = button.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height);
@@ -151,6 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   async function manejarNuevoIngreso(e) {
+  // Muestra el formulario de ingreso en el modal dinámico
     e.preventDefault();
     cerrarMenuEmergente();
     
@@ -204,7 +217,44 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  async function manejarNuevoAhorro(e) {
+  // Muestra el formulario de ahorro en el modal dinámico
+  // Muestra el formulario de cuenta en el modal dinámico
+    e.preventDefault();
+    cerrarMenuEmergente();
+
+    try {
+      const response = await fetch('../formulario ahorros/forahorros.html');
+      const html = await response.text();
+      // Si el contenedor no existe, lo creamos
+      let contenedor = contenedorModalAhorro;
+      if (!contenedor) {
+        contenedor = document.createElement('div');
+        contenedor.id = 'contenedorModalAhorro';
+        document.body.appendChild(contenedor);
+      }
+      contenedor.innerHTML = html;
+
+      const script = document.createElement('script');
+      script.src = '../formulario ahorros/forahorros.js';
+      script.onload = function() {
+        if (typeof initFormularioAhorro === 'function') {
+          initFormularioAhorro();
+        }
+        const modal = document.getElementById('modalAgregarAhorro');
+        if (modal) {
+          modal.classList.remove('d-none');
+        }
+      };
+      document.body.appendChild(script);
+    } catch (error) {
+      console.error('Error al cargar formulario de ahorro:', error);
+      mostrarNotificacion('Error al cargar el formulario de ahorro', 'danger');
+    }
+  }
+
   function manejarCerrarSesion(e) {
+  // Lógica para cerrar sesión y redirigir al inicio de sesión
     e.preventDefault();
     
     // Crear modal de confirmación personalizado más elegante
@@ -224,6 +274,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function mostrarNotificacion(mensaje, tipo = 'info') {
+  // Muestra una notificación temporal en la pantalla
     // Crear notificación temporal más elegante
     const notificacion = document.createElement('div');
     notificacion.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
@@ -270,6 +321,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }, 100);
 
   // Efecto hover mejorado para el perfil
+  // Efecto hover mejorado para el botón de perfil
   const perfilBtn = document.querySelector('.btn-perfil');
   if (perfilBtn) {
     perfilBtn.addEventListener('mouseenter', function() {
