@@ -1,93 +1,41 @@
-<!-- MODAL: Formulario mejorado para nuevo ahorro -->
-<!-- Contenedor principal del modal de ahorro -->
+
+<!-- MODAL PROFESIONAL DE AHORROS -->
+
 <div id="modalAgregarAhorro" class="modal-overlay d-none">
-  <!-- Contenido del modal -->
   <div class="modal-form">
-  <!-- Formulario de agregar ahorro -->
-  <form id="formAgregarAhorro" autocomplete="off">
-  <!-- Título del formulario -->
-  <h2>Agregar Ahorro</h2>
-  <!-- Paso 1: Datos principales del ahorro -->
-  <div class="form-step" id="step1">
-  <!-- Selección de categoría de ahorro -->
-  <label for="addCategoriaAhorro">Categoría</label>
-        <select id="addCategoriaAhorro" required>
-          <option value="meta">Meta de ahorro</option>
-          <option value="emergencia">Fondo de emergencia</option>
-          <option value="inversion">Ahorro para inversión</option>
-          <option value="otro">Otro</option>
-        </select>
-  <!-- Selección de método de ahorro -->
-  <label for="addMetodoAhorro">Método de Ahorro</label>
-        <select id="addMetodoAhorro" required>
-          <option value="efectivo">Efectivo</option>
-          <option value="cuenta_ahorros">Cuenta de Ahorros</option>
-          <option value="banco">Banco</option>
-          <option value="alcancia">Alcancía</option>
-          <option value="otro">Otro</option>
-        </select>
-  <!-- Campo para monto de ahorro -->
-  <label for="addMontoAhorro">Monto</label>
-        <input type="number" id="addMontoAhorro" required min="0" step="0.01">
-  <!-- Campo para fecha de ahorro -->
-  <label for="addFechaAhorro">Fecha</label>
-        <input type="date" id="addFechaAhorro" required>
-  <!-- Botón para pasar al siguiente paso -->
-  <div class="siguiente-container">
-          <button type="button" class="nav-btn next-step-btn" aria-label="Siguiente">➡️</button>
-        </div>
-      </div>
-  <!-- Paso 2: Descripción y opciones adicionales -->
-  <div class="form-step hidden" id="step2">
-  <!-- Campo para descripción del ahorro -->
-  <label for="addDescripcionAhorro">Descripción</label>
-        <textarea id="addDescripcionAhorro" name="descripcion"></textarea>
-  <!-- Opciones de ahorro recurrente y cuenta asociada -->
-  <div class="checkbox-options">
-          <!-- Opción: ahorro recurrente -->
-          <div class="checkbox-item">
-            <label class="checkbox-label" for="addCheckRecurrenteAhorro">
-              Ahorro Recurrente
-              <input type="checkbox" id="addCheckRecurrenteAhorro">
-            </label>
-            <!-- Selección de frecuencia si es recurrente -->
-            <div class="frecuencia-options" id="addFrecuenciaOptionsAhorro">
-              <select id="addFrecuenciaAhorro">
-                <option value="">Seleccionar frecuencia</option>
-                <option value="diario">Diario</option>
-                <option value="semanal">Semanal</option>
-                <option value="mensual">Mensual</option>
-              </select>
-            </div>
-          </div>
-          <!-- Opción: cuenta asociada -->
-          <div class="checkbox-item">
-            <label class="checkbox-label" for="addCheckCuentaAhorro">
-              Cuenta Asociada
-              <input type="checkbox" id="addCheckCuentaAhorro">
-            </label>
-            <!-- Selección de cuenta asociada -->
-            <div class="frecuencia-options" id="addCuentaAsociadaOptionsAhorro">
-              <select id="addCuentaAsociadaAhorro">
-                <option value="">Seleccionar cuenta</option>
-                <option value="bancolombia">Bancolombia</option>
-                <option value="davivienda">Davivienda</option>
-                <option value="nequi">Nequi</option>
-                <option value="efectivo">Efectivo</option>
-              </select>
-            </div>
-          </div>
-        </div>
-  <!-- Botones de acción: guardar, cancelar, limpiar -->
-  <div class="botones">
-          <button type="submit" id="guardarAhorro">Guardar</button>
-          <button type="button" id="cancelarAhorro">Cancelar</button>
-          <button type="reset">Limpiar</button>
-        </div>
-  <!-- Botón para regresar al paso anterior -->
-  <div class="flecha-container">
-          <button type="button" class="nav-btn prev-step-btn" aria-label="Anterior">⬅️</button>
-        </div>
+    <form id="formAgregarAhorro" autocomplete="off">
+      <h2>Registrar Ahorro</h2>
+      <!-- Sección única: Todos los campos en un solo bloque -->
+      <label for="addCategoriaAhorro">Tipo de ahorro <span style="color:red">*</span></label>
+      <select id="addCategoriaAhorro" required>
+        <option value="">Selecciona el tipo de ahorro</option>
+        <option value="meta">Meta específica</option>
+        <option value="emergencia">Fondo de emergencia</option>
+        <option value="inversion">Ahorro para inversión</option>
+        <option value="educacion">Educación</option>
+        <option value="viaje">Viaje</option>
+        <option value="otro">Otro</option>
+      </select>
+      <label for="addMontoAhorro">Monto a ahorrar <span style="color:red">*</span></label>
+      <input type="number" id="addMontoAhorro" required min="0" step="0.01" placeholder="Ej: 500000">
+      <label for="addFechaAhorro">Fecha de depósito <span style="color:red">*</span></label>
+      <input type="date" id="addFechaAhorro" required>
+      <label for="addMetodoAhorro">¿Dónde guardarás el ahorro?</label>
+      <select id="addMetodoAhorro">
+        <option value="">Selecciona el método</option>
+        <option value="cuenta_ahorros">Cuenta de ahorros</option>
+        <option value="banco">Banco</option>
+        <option value="alcancia">Alcancía</option>
+        <option value="efectivo">Efectivo</option>
+        <option value="otro">Otro</option>
+      </select>
+      <label for="addDescripcionAhorro">Descripción o propósito</label>
+      <textarea id="addDescripcionAhorro" name="descripcion" placeholder="Ej: Ahorro para comprar portátil"></textarea>
+  <!-- Opciones avanzadas eliminadas: ahorro recurrente y vinculación bancaria -->
+      <div class="botones">
+        <button type="submit" id="guardarAhorro">Guardar ahorro</button>
+        <button type="button" id="cancelarAhorro">Cancelar</button>
+        <button type="reset">Limpiar</button>
       </div>
     </form>
   </div>
