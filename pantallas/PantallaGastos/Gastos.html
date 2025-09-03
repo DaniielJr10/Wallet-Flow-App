@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pantalla Gastos</title>
+
+  <!-- Bootstrap y Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  
+  <!-- Estilos -->
+  <link rel="stylesheet" href="Gastos.css" />
+</head>
+<body>
+
+  <!-- Botón para mostrar menú lateral en móviles -->
+  <button class="btn btn-success d-md-none m-2" type="button" data-bs-toggle="collapse" data-bs-target="#menuLateral">
+    <i class="bi bi-list"></i> Menú
+  </button>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Menú lateral -->
+      <div id="menuLateral" class="col-md-2 collapse d-md-block menu-lateral">
+        <div class="logowf d-flex align-items-center p-3">
+          <img src="../../login/registro/Logo_Wallet_Flow-removebg-preview.png" alt="Logo" width="80" height="80">
+          <h4 class="titulologo">Wallet Flow</h4>
+        </div>
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link" href="../pantallaprincipal/principal.html"><i class="bi bi-house-door-fill me-2 icono-menu"></i>Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="../pantallaingresos/ingresos.html"><i class="bi bi-cash-stack me-2 icono-menu"></i>Ingresos</a></li>
+          <li class="nav-item"><a class="nav-link" href="../PantallaGastos/Gastos.html"><i class="bi bi-cart-fill me-2 icono-menu"></i>Gastos</a></li>
+          <li class="nav-item"><a class="nav-link" href="../pantallaahorros/ahorros.html"><i class="bi bi-piggy-bank-fill me-2 icono-menu"></i>Ahorros</a></li>
+          <li class="nav-item"><a class="nav-link" href="../pantalladeudas/deudas.html"><i class="bi bi-credit-card-2-back-fill me-2 icono-menu"></i>Deudas</a></li>
+          <li class="nav-item"><a class="nav-link" href="../pantallainversiones/inversiones.html"><i class="bi bi-graph-up-arrow me-2 icono-menu"></i>Inversiones</a></li>
+          <li class="nav-item"><a class="nav-link" href="../pantallacuentas/cuentas.html"><i class="bi bi-bank me-2 icono-menu"></i>Cuentas</a></li>
+          <li class="nav-item"><a class="nav-link" href="../PantallaObjetivos/PantallaObjetivo.html"><i class="bi bi-bullseye me-2 icono-menu"></i>Objetivos</a></li>
+          <li class="nav-item"><a class="nav-link" href="../pantallaherramientas/herramientas.html"><i class="bi bi-wrench me-2 icono-menu"></i>Herramientas</a></li>
+          <li class="nav-item"><a class="nav-link" href="../pantallaconfiguracion/configuracion.html"><i class="bi bi-gear-fill me-2 icono-menu"></i>Configuración</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" id="cerrarSesionBtn"><i class="bi bi-box-arrow-right me-2 icono-menu"></i>Cerrar sesión</a></li>
+        </ul>
+      </div>
+
+      <!-- Contenido principal (solo mejorado, menú lateral intacto) -->
+      <div class="col-md-10 contenido-principal">
+        <div class="container-fluid py-4 px-3 px-lg-4">
+          <!-- Encabezado -->
+          <!-- ===================== BLOQUE: ENCABEZADO ===================== -->
+          <!-- Título y subtítulo centrados para mayor énfasis visual -->
+          <div class="mb-4 text-center">
+            <h1 class="titulo-principal mb-2"><i class="bi bi-cart-fill me-2"></i>Gastos</h1>
+            <p class="subtitulo-pagina mb-0">Controla, analiza y optimiza tu dinero</p>
+            <!-- Botones de exportar y nuevo gasto removidos por requerimiento -->
+          </div>
+
+          <!-- ===================== BLOQUE: RESUMEN KPI ===================== -->
+          <!-- Tarjetas de indicadores clave (totales y métricas rápidas) -->
+          <div class="row g-3 kpi-row mb-4 justify-content-center kpi-row-centered">
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card" data-kpi="total">
+                <div class="kpi-icon bg-grad-rojo"><i class="bi bi-currency-dollar"></i></div>
+                <div class="kpi-body">
+                  <span class="kpi-label">Total Gastado</span>
+                  <span class="kpi-value" id="totalGastos">$0.00</span>
+                  <span class="kpi-trend" id="comparacion"><i class="bi bi-arrow-left-right"></i> vs mes anterior</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card" data-kpi="categoria">
+                <div class="kpi-icon bg-grad-amarillo"><i class="bi bi-tag-fill"></i></div>
+                <div class="kpi-body">
+                  <span class="kpi-label">Categoría Principal</span>
+                  <span class="kpi-value" id="categoriaPrincipal">-</span>
+                  <span class="kpi-trend" id="porcentajeCategoria">--</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="kpi-card" data-kpi="recurrentes">
+                <div class="kpi-icon bg-grad-morado"><i class="bi bi-repeat"></i></div>
+                <div class="kpi-body">
+                  <span class="kpi-label">Recurrentes</span>
+                  <span class="kpi-value" id="totalRecurrentes">0</span>
+                  <span class="kpi-trend" id="porcentajeRecurrentes">--</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- (Se removieron gráficos de evolución y distribución por decisión del usuario) -->
+
+          <!-- ===================== BLOQUE: FILTROS SIMPLIFICADOS ===================== -->
+          <!-- Barra de búsqueda y filtros básicos para localizar gastos rápidamente -->
+          <div class="filtros-simples mb-3" id="panelFiltros">
+            <div class="row g-2 align-items-end">
+              <div class="col-12 col-lg-4">
+                <div class="input-busqueda-global">
+                  <i class="bi bi-search"></i>
+                  <input type="text" id="buscadorGlobal" class="form-control" placeholder="Buscar (desc, categoría, método, cuenta)..." aria-label="Buscar gastos" />
+                </div>
+              </div>
+              <div class="col-6 col-lg-2">
+                <label class="form-label small mb-1">Categoría</label>
+                <select class="form-select form-select-sm" id="filtroCategoria" aria-label="Filtrar por categoría">
+                  <option value="">Todas</option>
+                  <option value="Alimentación">Alimentación</option>
+                  <option value="Transporte">Transporte</option>
+                  <option value="Entretenimiento">Entretenimiento</option>
+                  <option value="Servicios">Servicios</option>
+                  <option value="Salud">Salud</option>
+                  <option value="Educación">Educación</option>
+                  <option value="Compras">Compras</option>
+                  <option value="Otros">Otros</option>
+                </select>
+              </div>
+              <div class="col-6 col-lg-2">
+                <label class="form-label small mb-1">Método</label>
+                <select class="form-select form-select-sm" id="filtroMetodo" aria-label="Filtrar por método de pago">
+                  <option value="">Todos</option>
+                  <option value="Efectivo">Efectivo</option>
+                  <option value="Tarjeta de Débito">Tarjeta de Débito</option>
+                  <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+                  <option value="Transferencia">Transferencia</option>
+                </select>
+              </div>
+              <div class="col-6 col-lg-2">
+                <label class="form-label small mb-1">Desde</label>
+                <input type="date" id="filtroFechaInicio" class="form-control form-control-sm" aria-label="Fecha desde" />
+              </div>
+              <div class="col-6 col-lg-2">
+                <label class="form-label small mb-1">Hasta</label>
+                <div class="d-flex gap-2">
+                  <input type="date" id="filtroFechaFin" class="form-control form-control-sm" aria-label="Fecha hasta" />
+                  <button class="btn btn-outline-soft btn-sm" id="btnLimpiarFiltros" aria-label="Limpiar filtros" title="Limpiar filtros"><i class="bi bi-x-lg"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===================== BLOQUE: TABLA DE GASTOS ===================== -->
+          <!-- Listado principal con los registros almacenados -->
+          <div class="panel panel-tabla">
+            <div class="panel-header sticky-top">
+              <h6 class="panel-title mb-0"><i class="bi bi-list-ul me-2"></i>Listado de Gastos</h6>
+              <div class="panel-actions small text-muted" id="estadoTabla">0 registros</div>
+            </div>
+            <div class="panel-body p-0">
+              <div class="tabla-responsive-wrapper">
+                <table class="table align-middle mb-0" id="tablaGastos" aria-describedby="estadoTabla">
+                  <thead class="table-header">
+                    <tr>
+                      <th scope="col">Categoría</th>
+                      <th scope="col">Método</th>
+                      <th scope="col">Monto</th>
+                      <th scope="col">Fecha</th>
+                      <th scope="col" class="col-desc">Descripción</th>
+                      <th scope="col">Rec.</th>
+                      <th scope="col">Freq.</th>
+                      <th scope="col">Cuenta</th>
+                      <th scope="col" class="text-center">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- filas dinámicas -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón flotante accesible -->
+  <button id="fabNuevoGasto" class="fab-gasto" aria-label="Agregar nuevo gasto" title="Agregar nuevo gasto" data-bs-toggle="tooltip" data-bs-placement="left">
+          <i class="bi bi-plus-lg"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="Gastos.js"></script>
+</body>
+</html>
