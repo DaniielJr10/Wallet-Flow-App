@@ -15,6 +15,8 @@
     --accent-green: #20c997;
     --light-green: #d4edda;
     --dark-green: #155724;
+    --menu-green: #2ecc71;
+    --menu-green-hover: #27ae60;
 }
 
 [data-theme="dark"] {
@@ -47,6 +49,7 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     transition: all 0.3s ease;
+    overflow-x: hidden;
 }
 
 body.bold-text {
@@ -65,10 +68,98 @@ body[data-font="monospace"] {
     font-family: 'Courier New', Courier, monospace;
 }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
+/* Layout Principal */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Estilos del Menú Lateral */
+.menu-lateral {
+    background: linear-gradient(180deg, white 0%, #f8fffe 100%);
+    border: 3px solid var(--menu-green);
+    border-radius: 15px;
+    min-height: 100vh;
+    padding-top: 1.5rem;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
+    width: 280px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.menu-lateral .nav-link {
+    font-size: 18px;
+    background: linear-gradient(135deg, #eaf8ed 0%, #d5f4e6 100%);
+    color: #2c3e50;
+    margin: 6px 8px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 2px solid rgba(46, 204, 113, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    top: -40px;
+    font-weight: 500;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.menu-lateral .nav-link:hover {
+    background: linear-gradient(135deg, var(--menu-green) 0%, var(--menu-green-hover) 100%);
+    color: white;
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    border-color: var(--menu-green-hover);
+}
+
+.menu-lateral .nav-link.active {
+    background: linear-gradient(135deg, var(--menu-green) 0%, var(--menu-green-hover) 100%);
+    color: white;
+    border-color: var(--menu-green-hover);
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+.logowf {
+    position: relative;
+    display: flex;
+    align-items: center;
+    top: -30px;
+    left: 1px;
+    padding: 10px;
+}
+
+.titulologo {
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--menu-green) 0%, var(--menu-green-hover) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #2e6835; /* Fallback */
+    margin-left: 10px;
+}
+
+.icono-menu {
+    font-size: 20px;
+    margin-right: 15px;
+}
+
+/* Contenido Principal */
+.main-content {
+    margin-left: 280px;
     padding: 20px;
+    width: calc(100% - 280px);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0;
     min-height: 100vh;
 }
 
@@ -76,7 +167,7 @@ body[data-font="monospace"] {
     display: flex;
     align-items: center;
     margin-bottom: 30px;
-    padding-bottom: 20px;
+    padding: 20px 0;
     border-bottom: 2px solid var(--border-color);
 }
 
@@ -97,19 +188,31 @@ body[data-font="monospace"] {
 }
 
 .header h1 {
-    font-size: 28px;
-    font-weight: 600;
+    font-size: 32px;
+    font-weight: 700;
     color: var(--primary-color);
-    text-shadow: 0 1px 2px rgba(40, 167, 69, 0.1);
+    text-shadow: 0 2px 4px rgba(40, 167, 69, 0.1);
 }
 
 .config-section {
     margin-bottom: 40px;
     background: linear-gradient(135deg, var(--light-color) 0%, var(--light-green) 100%);
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(40, 167, 69, 0.1);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.12);
+    border: 1px solid rgba(40, 167, 69, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.config-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-green));
 }
 
 .config-section.danger-section {
@@ -117,14 +220,23 @@ body[data-font="monospace"] {
     border: 1px solid rgba(220, 53, 69, 0.2);
 }
 
+.config-section.danger-section::before {
+    background: linear-gradient(90deg, var(--danger-color), #c82333);
+}
+
 .section-title {
     display: flex;
     align-items: center;
-    font-size: 24px;
-    font-weight: 600;
+    font-size: 26px;
+    font-weight: 700;
     margin-bottom: 25px;
     color: var(--primary-color);
-    text-shadow: 0 1px 2px rgba(40, 167, 69, 0.1);
+    text-shadow: 0 2px 4px rgba(40, 167, 69, 0.1);
+}
+
+.section-title .icon {
+    margin-right: 12px;
+    font-size: 28px;
 }
 
 .section-title.danger-title {
@@ -141,27 +253,48 @@ body[data-font="monospace"] {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    padding: 20px;
     background-color: var(--bg-color);
-    border-radius: 10px;
+    border-radius: 15px;
     border: 1px solid var(--border-color);
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.option-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--primary-color), var(--accent-green));
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
 }
 
 .option-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.2);
+    border-color: var(--primary-color);
+}
+
+.option-item:hover::before {
+    transform: scaleY(1);
 }
 
 .option-info h3 {
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 19px;
+    font-weight: 600;
     margin-bottom: 5px;
+    color: var(--text-color);
 }
 
 .option-info p {
     font-size: 14px;
     color: var(--secondary-color);
+    line-height: 1.4;
 }
 
 .toggle {
@@ -490,6 +623,26 @@ input:checked + .slider:before {
 }
 
 @media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+    
+    .menu-lateral {
+        position: relative;
+        width: 100%;
+        min-height: auto;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        order: -1;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 15px;
+    }
+    
     .container {
         padding: 15px;
     }
@@ -514,5 +667,18 @@ input:checked + .slider:before {
         bottom: auto;
         right: auto;
         margin-top: 20px;
+    }
+    
+    .header h1 {
+        font-size: 24px;
+    }
+    
+    .section-title {
+        font-size: 22px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
     }
 }
