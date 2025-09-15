@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const menuOpciones = document.getElementById('menuOpciones');
   const btnNuevoIngreso = document.getElementById('btnNuevoIngreso');
   const contenedorModalIngreso = document.getElementById('contenedorModalIngreso');
+  const btnNuevoGasto = document.getElementById('btnNuevoGasto');
+  const contenedorModalGasto = document.getElementById('contenedorModalGasto');
   const btnNuevaCuenta = document.getElementById('btnNuevaCuenta');
   const contenedorModalCuenta = document.getElementById('contenedorModalCuenta');
   const btnNuevoAhorro = document.querySelector('.ahorro-item');
@@ -75,6 +77,31 @@ document.addEventListener('DOMContentLoaded', function () {
   // Botón para mostrar el formulario de ingreso
     if (btnNuevoIngreso) {
       btnNuevoIngreso.addEventListener('click', manejarNuevoIngreso);
+    }
+
+  // Botón para mostrar el formulario de gasto
+    if (btnNuevoGasto) {
+      btnNuevoGasto.addEventListener('click', manejarNuevoGasto);
+      
+      // Funcionalidad adicional: clic derecho para ir a la pantalla de gastos
+      btnNuevoGasto.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        cerrarMenuEmergente();
+        window.location.href = '../PantallaGastos/Gastos.html';
+      });
+      
+      // Para móviles: mantener presionado para ir a la pantalla de gastos
+      let pressTimer;
+      btnNuevoGasto.addEventListener('touchstart', function(e) {
+        pressTimer = setTimeout(() => {
+          cerrarMenuEmergente();
+          window.location.href = '../PantallaGastos/Gastos.html';
+        }, 800);
+      });
+      
+      btnNuevoGasto.addEventListener('touchend', function(e) {
+        clearTimeout(pressTimer);
+      });
     }
 
   // Botón para mostrar el formulario de ahorro
@@ -187,6 +214,34 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (error) {
       console.error('Error al cargar formulario de ingreso:', error);
       mostrarNotificacion('Error al cargar el formulario', 'danger');
+    }
+  }
+
+  async function manejarNuevoGasto(e) {
+  // Muestra el formulario de gasto en el modal dinámico
+    e.preventDefault();
+    cerrarMenuEmergente();
+    
+    try {
+      const response = await fetch('../../formularios/FormularioGastos/FormularioG.html');
+      const html = await response.text();
+      contenedorModalGasto.innerHTML = html;
+      
+      const script = document.createElement('script');
+      script.src = '../../formularios/FormularioGastos/FormularioG.js';
+      script.onload = function() {
+        if (typeof initFormularioGasto === 'function') {
+          initFormularioGasto();
+        }
+        const modal = document.getElementById('modalAgregar');
+        if (modal) {
+          modal.style.display = 'flex';
+        }
+      };
+      document.body.appendChild(script);
+    } catch (error) {
+      console.error('Error al cargar formulario de gasto:', error);
+      mostrarNotificacion('Error al cargar el formulario de gasto', 'danger');
     }
   }
 

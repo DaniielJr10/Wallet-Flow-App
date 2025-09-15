@@ -11,6 +11,12 @@ document.addEventListener('DOMContentLoaded', function () {
   inicializarApp();
 });
 
+// Actualizar datos cuando la ventana recibe el foco (por si viene desde otra pantalla)
+window.addEventListener('focus', function() {
+  renderGastos();
+  calcularResumen();
+});
+
 // ===== FUNCIÓN PRINCIPAL DE INICIALIZACIÓN =====
 function inicializarApp() {
   // Render inicial de datos y métricas

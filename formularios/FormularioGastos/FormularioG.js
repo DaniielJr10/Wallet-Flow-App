@@ -1,3 +1,17 @@
+// Función de inicialización del formulario de gasto
+function initFormularioGasto() {
+    // Configurar la fecha actual como valor por defecto
+    const fechaInput = document.getElementById('addFecha');
+    if (fechaInput) {
+        const hoy = new Date().toISOString().split('T')[0];
+        fechaInput.value = hoy;
+    }
+    
+    // Debug: Verificar que el localStorage está funcionando
+    console.log('Formulario de gastos inicializado');
+    console.log('Gastos actuales en localStorage:', JSON.parse(localStorage.getItem('gastos') || '[]'));
+}
+
 // Selecciona los elementos del formulario y los pasos
 const formAgregar = document.getElementById('formAgregar');
 const step1 = document.getElementById('step1');
@@ -53,10 +67,15 @@ function toggleCuenta() {
 
 // Cierra el modal (puedes personalizar esta función)
 function cerrarModal() {
-    document.getElementById('modalAgregar').style.display = 'none';
-    formAgregar.reset();
-    // Opcional: vuelve al primer paso al cerrar
-    volverAlPasoAnterior();
+    const modal = document.getElementById('modalAgregar');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+    if (formAgregar) {
+        formAgregar.reset();
+        // Opcional: vuelve al primer paso al cerrar
+        volverAlPasoAnterior();
+    }
 }
 
 // Envía el formulario y guarda el gasto en localStorage
@@ -73,11 +92,11 @@ formAgregar.addEventListener('submit', function(e) {
         metodo: document.getElementById('addMetodo').value,
         monto: monto,
         fecha: document.getElementById('addFecha').value,
-        descripcion: document.getElementById('addDescripcion').value,
+        descripcion: document.getElementById('addDescripcion').value || '',
         esRecurrente: document.getElementById('addCheckRecurrente')?.checked || false,
         frecuencia: document.getElementById('addFrecuencia')?.value || '',
-        tieneCuenta: document.getElementById('addCheckCuenta')?.checked || false,
-        cuenta: document.getElementById('addCuentaAsociada')?.value || ''
+        cuenta: document.getElementById('addCuentaAsociada')?.value || '',
+        fechaCreacion: new Date().toISOString()
     };
 
     // Guardar en localStorage
@@ -85,9 +104,24 @@ formAgregar.addEventListener('submit', function(e) {
     gastos.push(datos);
     localStorage.setItem('gastos', JSON.stringify(gastos));
 
+    // Mostrar notificación de éxito
+    if (typeof mostrarNotificacion === 'function') {
+        mostrarNotificacion('Gasto guardado exitosamente', 'success');
+    } else {
+        // Fallback: alert simple si no está disponible la función
+        alert('¡Gasto guardado exitosamente!');
+    }
+
     cerrarModal();
-    // Redirigir a la pantalla de gastos principal
-    window.location.href = '../PantallaGastos/Gastos.html';
+    
+    // Preguntar al usuario si quiere ver la pantalla de gastos
+    setTimeout(() => {
+        const irAGastos = confirm('¿Deseas ver todos tus gastos en la pantalla de Gastos?');
+        if (irAGastos) {
+            window.location.href = '../PantallaGastos/Gastos.html';
+        }
+    }, 1500);
+    // Opcional: actualizar los datos en la pantalla principal
 });
 
 // Permite cerrar el modal con la tecla ESC
