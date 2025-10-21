@@ -1,10 +1,6 @@
-// ===== SISTEMA DE INICIO DE SESIÓN - WALLET FLOW =====
+// ===== SISTEMA DE INICIO DE SESIÓN CON FIREBASE - WALLET FLOW =====
 // Archivo: inicio.js
-// Descripción: Maneja toda la lógica de autenticación y validación del login
-
-// ===== VARIABLES GLOBALES =====
-let users = JSON.parse(localStorage.getItem('walletflow_users') || '[]');
-let currentUser = JSON.parse(localStorage.getItem('walletflow_current_user') || 'null');
+// Descripción: Maneja toda la lógica de autenticación con Firebase
 
 // ===== ELEMENTOS DEL DOM =====
 const loginForm = document.getElementById('loginForm');
@@ -19,69 +15,53 @@ const loginSpinner = document.getElementById('loginSpinner');
 const forgotPasswordLink = document.getElementById('forgotPassword');
 
 // ===== INICIALIZACIÓN DE LA APLICACIÓN =====
-document.addEventListener('DOMContentLoaded', function() {
-    initializeLogin();
+document.addEventListener('DOMContentLoaded', async function() {
+    await initializeFirebase();
     setupEventListeners();
     checkRememberedUser();
+    checkAuthState();
 });
+
+// ===== INICIALIZACIÓN DE FIREBASE =====
+async function initializeFirebase() {
+    try {
+        const initialized = await window.firebaseAuth.init();
+        if (initialized) {
+            console.log('Firebase inicializado correctamente para login');
+        } else {
+            showMessage('Error al inicializar el sistema de autenticación', 'danger');
+        }
+    } catch (error) {
+        console.error('Error en inicialización:', error);
+        showMessage('Error de conexión. Verifica tu internet', 'danger');
+    }
+}
 
 // ===== CONFIGURACIÓN DE EVENT LISTENERS =====
 function setupEventListeners() {
     // Evento del formulario de login
-    loginForm.addEventListener('submit', handleLogin);
+    loginForm.addEventListener('submit', handleFirebaseLogin);
     
     // Toggle para mostrar/ocultar contraseña
     togglePasswordBtn.addEventListener('click', togglePasswordVisibility);
     
-    // Enlace para "olvidaste contraseña"
-    forgotPasswordLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        window.location.href = '../cambiar contraseña/index.html';
-    });
+    // Enlace para "olvidaste contraseña" - funciona automáticamente con href
     
     // Validación en tiempo real
     loginIdentifier.addEventListener('input', clearValidation);
     loginPassword.addEventListener('input', clearValidation);
 }
 
-// ===== INICIALIZACIÓN DE LA PÁGINA DE LOGIN =====
-function initializeLogin() {
-    // Crear usuarios de prueba si no existen
-    createTestUsers();
-}
-
-// ===== GESTIÓN DE USUARIOS DE PRUEBA =====
-function createTestUsers() {
-    if (users.length === 0) {
-        const testUsers = [
-            {
-                id: 1,
-                username: 'admin',
-                email: 'admin@walletflow.com',
-                password: 'WalletFlow123!',
-                name: 'Administrador',
-                lastname: 'Sistema',
-                phone: '1234567890',
-                birthdate: '1990-01-01',
-                createdAt: new Date().toISOString()
-            },
-            {
-                id: 2,
-                username: 'usuario',
-                email: 'usuario@ejemplo.com',
-                password: 'MiPassword123!',
-                name: 'Usuario',
-                lastname: 'Ejemplo',
-                phone: '0987654321',
-                birthdate: '1995-06-15',
-                createdAt: new Date().toISOString()
-            }
-        ];
-        
-        users = testUsers;
-        localStorage.setItem('walletflow_users', JSON.stringify(users));
+// ===== VERIFICAR ESTADO DE AUTENTICACIÓN =====
+function checkAuthState() {
+    // Si ya hay un usuario autenticado, redirigir a la pantalla principal
+    if (window.firebaseAuth && window.firebaseAuth.isAuthenticated()) {
+        console.log('Usuario ya autenticado, redirigiendo...');
+        // window.location.href = '../../pantallas/pantallaprincipal/principal.html';
     }
 }
+
+
 
 // ===== FUNCIONALIDAD "RECORDAR USUARIO" =====
 function checkRememberedUser() {
@@ -93,41 +73,81 @@ function checkRememberedUser() {
     }
 }
 
-// ===== MANEJO DEL FORMULARIO DE LOGIN =====
-async function handleLogin(e) {
+// ===== MANEJO DEL LOGIN CON FIREBASE =====
+async function handleFirebaseLogin(e) {
     e.preventDefault();
     
     if (!validateLoginForm()) {
         return;
     }
     
-    const identifier = loginIdentifier.value.trim();
+    const email = loginIdentifier.value.trim();
     const password = loginPassword.value;
     
     // Mostrar spinner de carga
     showLoginLoading(true);
+    hideMessage();
     
-    // Simular delay de autenticación (en una app real sería una petición al servidor)
-    setTimeout(() => {
-        const user = authenticateUser(identifier, password);
+    try {
+        // Intentar iniciar sesión con Firebase
+        const result = await window.firebaseAuth.iniciarSesion(email, password);
         
-        if (user) {
-            handleSuccessfulLogin(user);
+        if (result.success) {
+            handleSuccessfulLogin(result.user);
         } else {
-            handleFailedLogin();
+            handleFailedLogin(result.message);
         }
-        
+    } catch (error) {
+        console.error('Error en login:', error);
+        handleFailedLogin('Error de conexión. Intenta nuevamente.');
+    } finally {
         showLoginLoading(false);
-    }, 1500);
+    }
+}
+
+// ===== MANEJO DE OLVIDO DE CONTRASEÑA =====
+async function handleForgotPassword() {
+    const email = loginIdentifier.value.trim();
+    
+    if (!email) {
+        showMessage('Por favor ingresa tu correo electrónico para recuperar tu contraseña', 'warning');
+        loginIdentifier.focus();
+        return;
+    }
+    
+    if (!isValidEmail(email)) {
+        showMessage('Por favor ingresa un correo electrónico válido', 'warning');
+        loginIdentifier.focus();
+        return;
+    }
+    
+    try {
+        showLoginLoading(true);
+        const result = await window.firebaseAuth.recuperarContrasena(email);
+        
+        if (result.success) {
+            showMessage(result.message, 'success');
+        } else {
+            showMessage(result.message, 'danger');
+        }
+    } catch (error) {
+        console.error('Error al recuperar contraseña:', error);
+        showMessage('Error al enviar email de recuperación. Intenta nuevamente.', 'danger');
+    } finally {
+        showLoginLoading(false);
+    }
 }
 
 // ===== VALIDACIÓN DEL FORMULARIO =====
 function validateLoginForm() {
     let isValid = true;
     
-    // Validar campo de usuario/email
+    // Validar campo de email
     if (!loginIdentifier.value.trim()) {
-        showFieldError(loginIdentifier, 'Por favor ingresa tu usuario o email.');
+        showFieldError(loginIdentifier, 'Por favor ingresa tu correo electrónico.');
+        isValid = false;
+    } else if (!isValidEmail(loginIdentifier.value.trim())) {
+        showFieldError(loginIdentifier, 'Por favor ingresa un correo electrónico válido.');
         isValid = false;
     } else {
         showFieldSuccess(loginIdentifier);
@@ -137,6 +157,9 @@ function validateLoginForm() {
     if (!loginPassword.value) {
         showFieldError(loginPassword, 'Por favor ingresa tu contraseña.');
         isValid = false;
+    } else if (loginPassword.value.length < 6) {
+        showFieldError(loginPassword, 'La contraseña debe tener al menos 6 caracteres.');
+        isValid = false;
     } else {
         showFieldSuccess(loginPassword);
     }
@@ -144,59 +167,48 @@ function validateLoginForm() {
     return isValid;
 }
 
-// ===== AUTENTICACIÓN DE USUARIO =====
-function authenticateUser(identifier, password) {
-    // Por el momento, cualquier combinación es válida para fines de desarrollo
-    // Crear un usuario temporal para la sesión
-    return {
-        id: Math.floor(Math.random() * 1000),
-        username: identifier.includes('@') ? identifier.split('@')[0] : identifier,
-        email: identifier.includes('@') ? identifier : `${identifier}@walletflow.com`,
-        name: identifier.includes('@') ? identifier.split('@')[0] : identifier,
-        lastname: 'Usuario',
-        password: password
-    };
+// ===== VALIDACIÓN DE EMAIL =====
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
 }
+
+
 
 // ===== MANEJO DE LOGIN EXITOSO =====
 function handleSuccessfulLogin(user) {
-    // Guardar usuario actual en localStorage
-    currentUser = {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        name: user.name,
-        lastname: user.lastname,
-        loginTime: new Date().toISOString()
-    };
+    console.log('Login exitoso:', user);
     
-    localStorage.setItem('walletflow_current_user', JSON.stringify(currentUser));
-    
-    // Manejar funcionalidad "recordar usuario"
+    // Guardar usuario recordado si está marcado
     if (rememberMe.checked) {
-        localStorage.setItem('walletflow_remembered_user', loginIdentifier.value.trim());
+        localStorage.setItem('walletflow_remembered_user', user.email);
     } else {
         localStorage.removeItem('walletflow_remembered_user');
     }
     
     // Mostrar mensaje de éxito
-    showMessage(`¡Bienvenido/a, ${user.name}!`, 'success');
+    showMessage('¡Inicio de sesión exitoso! Bienvenido a WalletFlow.', 'success');
     
-    // Redireccionar a la pantalla principal después de un breve delay
+    // Redirigir después de un breve delay
     setTimeout(() => {
-    window.location.href = '../../pantallas/pantallaprincipal/principal.html';
+        // Redirigir a la pantalla principal
+        window.location.href = '../../pantallas/pantallaprincipal/principal.html';
     }, 1500);
 }
 
 // ===== MANEJO DE LOGIN FALLIDO =====
-function handleFailedLogin() {
-    showMessage('Usuario o contraseña incorrectos. Por favor verifica tus datos.', 'danger');
+function handleFailedLogin(errorMessage = 'Credenciales incorrectas. Verifica tu email y contraseña.') {
+    showMessage(errorMessage, 'danger');
+    
+    // Limpiar contraseña por seguridad
     loginPassword.value = '';
     loginPassword.focus();
     
-    // Agregar clase de error a los campos
-    loginIdentifier.classList.add('is-invalid');
-    loginPassword.classList.add('is-invalid');
+    // Aplicar efecto de shake al formulario
+    loginForm.classList.add('shake');
+    setTimeout(() => {
+        loginForm.classList.remove('shake');
+    }, 500);
 }
 
 // ===== TOGGLE PARA MOSTRAR/OCULTAR CONTRASEÑA =====
@@ -249,13 +261,19 @@ function clearValidation() {
 
 // Mostrar/ocultar spinner de carga durante el login
 function showLoginLoading(show) {
-    loginSpinner.classList.toggle('d-none', !show);
-    loginBtn.disabled = show;
-    loginBtn.textContent = show ? 'Iniciando sesión...' : 'Iniciar Sesión';
-    
     if (show) {
-        loginBtn.prepend(loginSpinner);
+        loginSpinner.classList.remove('d-none');
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Iniciando sesión...';
+    } else {
+        loginSpinner.classList.add('d-none');
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = 'Iniciar Sesión';
     }
+}
+
+function hideMessage() {
+    loginMessage.classList.add('d-none');
 }
 
 // ===== FUNCIONES GLOBALES PARA GESTIÓN DE SESIÓN =====
@@ -277,13 +295,38 @@ window.checkAuth = function() {
     return currentUser;
 };
 
-// ===== HERRAMIENTAS DE DESARROLLO =====
-// Mostrar usuarios disponibles en consola (solo en desarrollo)
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    console.log('=== WALLETFLOW - USUARIOS DE PRUEBA ===');
-    console.log('Admin: usuario="admin", password="WalletFlow123!"');
-    console.log('Usuario: usuario="usuario", password="MiPassword123!"');
-    console.log('Email Admin: admin@walletflow.com');
-    console.log('Email Usuario: usuario@ejemplo.com');
-    console.log('========================================');
-}
+// ===== ESTILOS CSS ADICIONALES =====
+// Agregar CSS para animación de shake
+const style = document.createElement('style');
+style.textContent = `
+    .shake {
+        animation: shake 0.5s;
+    }
+    
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+`;
+document.head.appendChild(style);
+
+// ===== FUNCIONES GLOBALES PARA GESTIÓN DE SESIÓN =====
+
+// Función para cerrar sesión (disponible globalmente)
+window.logout = function() {
+    if (window.firebaseAuth) {
+        window.firebaseAuth.cerrarSesion();
+    }
+    localStorage.removeItem('walletflow_current_user');
+    localStorage.removeItem('walletflow_remembered_user');
+    window.location.href = '../inicio de sesion/inicio.html';
+};
+
+// Función para verificar autenticación (disponible globalmente)
+window.checkAuth = function() {
+    if (window.firebaseAuth && window.firebaseAuth.isAuthenticated()) {
+        return window.firebaseAuth.getCurrentUser();
+    }
+    return null;
+};

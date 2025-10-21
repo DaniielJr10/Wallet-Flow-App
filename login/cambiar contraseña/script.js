@@ -1,16 +1,43 @@
+// ===== SISTEMA DE RECUPERACIÓN DE CONTRASEÑA CON FIREBASE - WALLET FLOW =====
+// Archivo: script.js
+// Descripción: Maneja la recuperación de contraseña con Firebase
+
 class WalletFlowPasswordRecovery {
   constructor() {
     this.currentStep = "email"
     this.userEmail = ""
-    this.countdownTimer = null
-    this.countdownTime = 600 // 10 minutos en segundos
+    this.firebaseInitialized = false
 
     this.init()
   }
 
-  init() {
+  async init() {
+    await this.initializeFirebase()
     this.bindEvents()
     this.updateStepTitle()
+    this.checkAuthState()
+  }
+
+  async initializeFirebase() {
+    try {
+      const initialized = await window.firebaseAuth.init()
+      if (initialized) {
+        console.log('Firebase inicializado correctamente para recuperación')
+        this.firebaseInitialized = true
+      } else {
+        this.showErrorMessage('Error al inicializar el sistema de autenticación')
+      }
+    } catch (error) {
+      console.error('Error en inicialización:', error)
+      this.showErrorMessage('Error de conexión. Verifica tu internet')
+    }
+  }
+
+  checkAuthState() {
+    // Si ya hay un usuario autenticado, mostrar opción de cambio directo
+    if (window.firebaseAuth && window.firebaseAuth.isAuthenticated()) {
+      this.showAuthenticatedUserOptions()
+    }
   }
 
   bindEvents() {
@@ -70,6 +97,11 @@ class WalletFlowPasswordRecovery {
       return
     }
 
+    if (!this.firebaseInitialized) {
+      this.showError("Sistema no disponible. Recarga la página.")
+      return
+    }
+
     emailInput.classList.remove("is-invalid")
     emailInput.classList.add("is-valid")
 
@@ -77,18 +109,22 @@ class WalletFlowPasswordRecovery {
     this.hideMessages()
 
     try {
-      // Simular llamada a API
-      await this.delay(2000)
+      // Enviar email de recuperación con Firebase
+      const result = await window.firebaseAuth.recuperarContrasena(email)
 
-      this.userEmail = email
-      this.showSuccess(`Código enviado a ${email}`)
-
-      setTimeout(() => {
-        this.goToStep("code")
-        this.startCountdown()
-      }, 1500)
+      if (result.success) {
+        this.userEmail = email
+        this.showSuccess(result.message)
+        
+        setTimeout(() => {
+          this.showPasswordResetSent()
+        }, 2000)
+      } else {
+        this.showError(result.message)
+      }
     } catch (error) {
-      this.showError("Error al enviar el código. Inténtalo de nuevo.")
+      console.error('Error al enviar email de recuperación:', error)
+      this.showError("Error al enviar el email. Inténtalo de nuevo.")
     } finally {
       this.setLoading(button, false)
     }
@@ -396,14 +432,8 @@ class WalletFlowPasswordRecovery {
   }
 
   goToLogin() {
-    // En un proyecto real, redirigirías a la página de login
-    const toast = new bootstrap.Toast(this.createToast("Redirigiendo al inicio de sesión..."))
-    toast.show()
-
-    setTimeout(() => {
-      // window.location.href = '/login';
-      alert("Redirigiendo al inicio de sesión...")
-    }, 2000)
+    // Redirigir a la página de inicio de sesión
+    window.location.href = '../inicio de sesion/inicio.html';
   }
 
   createToast(message) {
@@ -424,6 +454,73 @@ class WalletFlowPasswordRecovery {
 
   delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms))
+  }
+
+  // ===== MÉTODOS ESPECÍFICOS PARA FIREBASE =====
+  
+  showPasswordResetSent() {
+    // Ocultar todos los pasos
+    document.querySelectorAll('.step-container').forEach(step => {
+      step.classList.add('d-none')
+    })
+    
+    // Mostrar mensaje de éxito personalizado
+    const formContent = document.querySelector('.form-content')
+    formContent.innerHTML = `
+      <div class="text-center py-4">
+        <div class="mb-4">
+          <i class="fas fa-envelope-circle-check text-success" style="font-size: 4rem;"></i>
+        </div>
+        <h3 class="text-success mb-3">¡Email Enviado!</h3>
+        <p class="text-muted mb-4">
+          Hemos enviado un enlace de recuperación a <strong>${this.userEmail}</strong>
+        </p>
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle me-2"></i>
+          <strong>Instrucciones:</strong><br>
+          1. Revisa tu bandeja de entrada (y spam)<br>
+          2. Haz clic en el enlace del email<br>
+          3. Sigue las instrucciones para crear una nueva contraseña
+        </div>
+        <div class="d-grid gap-2 mt-4">
+          <button class="btn btn-success btn-lg" onclick="window.location.href='../inicio de sesion/inicio.html'">
+            <i class="fas fa-arrow-left me-2"></i>
+            Volver al Inicio de Sesión
+          </button>
+          <button class="btn btn-outline-secondary" onclick="window.location.reload()">
+            <i class="fas fa-redo me-2"></i>
+            Enviar Otro Email
+          </button>
+        </div>
+      </div>
+    `
+    
+    // Actualizar título
+    document.getElementById('step-title').textContent = 'Revisa tu Email'
+  }
+
+  showAuthenticatedUserOptions() {
+    // Si hay un usuario autenticado, mostrar opción de cambio directo
+    const user = window.firebaseAuth.getCurrentUser()
+    if (user) {
+      const formContent = document.querySelector('.step-description')
+      if (formContent) {
+        formContent.innerHTML = `
+          <div class="alert alert-info mb-3">
+            <i class="fas fa-user me-2"></i>
+            Sesión activa como: <strong>${user.email}</strong>
+          </div>
+          <p class="text-muted">
+            Como ya tienes una sesión activa, también puedes cambiar tu contraseña directamente 
+            desde tu perfil en la aplicación.
+          </p>
+        `
+      }
+    }
+  }
+
+  showErrorMessage(message) {
+    this.showError(message)
   }
 }
 
