@@ -1,60 +1,152 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background: #f0f0f0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+/* Estilos personalizados para el modal de objetivos */
+:root {
+  --objetivo-primary: #ff8c00;
+  --objetivo-secondary: #ff9f2e;
+  --objetivo-dark: #e67700;
+  --objetivo-light: #ffb366;
 }
 
-.form-container {
-  width: 500px;
-  padding: 20px;
-  background: #e0e0e0;
-  border-radius: 20px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+/* Header del modal */
+#modalAgregarObjetivo .modal-header {
+  background: linear-gradient(135deg, var(--objetivo-primary), var(--objetivo-secondary));
+  color: white;
+  border-bottom: none;
 }
 
-form label {
-  display: block;
-  margin-top: 10px;
-  font-weight: bold;
+#modalAgregarObjetivo .modal-title {
+  font-weight: 600;
+  font-size: 1.25rem;
 }
 
-form input,
-form textarea,
-form select {
-  width: 100%;
-  margin-top: 5px;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+#modalAgregarObjetivo .btn-close {
+  filter: brightness(0) invert(1);
 }
 
-.form-botones {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
+/* Contenido del modal */
+#modalAgregarObjetivo .modal-body {
+  background-color: #fafafa;
+  padding: 2rem;
 }
 
-.btn {
-  padding: 8px 15px;
+#modalAgregarObjetivo .form-label {
+  font-weight: 600;
+  color: var(--objetivo-dark);
+  margin-bottom: 0.5rem;
+}
+
+#modalAgregarObjetivo .form-control,
+#modalAgregarObjetivo .form-select {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+#modalAgregarObjetivo .form-control:focus,
+#modalAgregarObjetivo .form-select:focus {
+  border-color: var(--objetivo-primary);
+  box-shadow: 0 0 0 0.2rem rgba(255, 140, 0, 0.25);
+  background-color: white;
+}
+
+#modalAgregarObjetivo .form-control:hover,
+#modalAgregarObjetivo .form-select:hover {
+  border-color: var(--objetivo-secondary);
+}
+
+/* Footer del modal */
+#modalAgregarObjetivo .modal-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+  padding: 1.5rem 2rem;
+}
+
+/* Botones personalizados */
+#modalAgregarObjetivo .btn-warning {
+  background: linear-gradient(135deg, var(--objetivo-primary), var(--objetivo-secondary));
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
-.btn.verde {
-  background-color: #2e8b57;
+#modalAgregarObjetivo .btn-warning:hover {
+  background: linear-gradient(135deg, var(--objetivo-dark), var(--objetivo-primary));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+}
+
+#modalAgregarObjetivo .btn-outline-warning {
+  border-color: var(--objetivo-primary);
+  color: var(--objetivo-primary);
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+#modalAgregarObjetivo .btn-outline-warning:hover {
+  background-color: var(--objetivo-primary);
+  border-color: var(--objetivo-primary);
   color: white;
+  transform: translateY(-1px);
 }
 
-.btn.gris {
-  background-color: #ccc;
+#modalAgregarObjetivo .btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
-.btn.rojo {
-  background-color: #c0392b;
-  color: white;
+#modalAgregarObjetivo .btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+  transform: translateY(-1px);
+}
+
+/* Animaciones */
+#modalAgregarObjetivo.fade .modal-dialog {
+  transition: transform 0.3s ease-out;
+  transform: translate(0, -50px);
+}
+
+#modalAgregarObjetivo.show .modal-dialog {
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #modalAgregarObjetivo .modal-body {
+    padding: 1.5rem;
+  }
+  
+  #modalAgregarObjetivo .modal-footer {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+  }
+  
+  #modalAgregarObjetivo .modal-footer .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  #modalAgregarObjetivo .modal-footer .btn:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Estilos para validación */
+#modalAgregarObjetivo .form-control.is-invalid,
+#modalAgregarObjetivo .form-select.is-invalid {
+  border-color: #dc3545;
+}
+
+#modalAgregarObjetivo .form-control.is-valid,
+#modalAgregarObjetivo .form-select.is-valid {
+  border-color: var(--objetivo-primary);
 }

@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const contenedorModalDeuda = document.getElementById('contenedorModalDeuda');
   const btnNuevaInversion = document.querySelector('.inversion-item');
   const contenedorModalInversion = document.getElementById('contenedorModalInversion');
+  const btnNuevoObjetivo = document.querySelector('.objetivo-item');
+  const contenedorModalObjetivo = document.getElementById('contenedorModalObjetivo');
 
   // ===== INICIALIZACIÓN DE COMPONENTES Y EVENTOS =====
   inicializarComponentes();
@@ -126,6 +128,14 @@ document.addEventListener('DOMContentLoaded', function () {
   // Botón para mostrar el formulario de inversión
     if (btnNuevaInversion) {
       btnNuevaInversion.addEventListener('click', manejarNuevaInversion);
+    }
+
+  // Botón para mostrar el formulario de objetivo
+    if (btnNuevoObjetivo) {
+      console.log('Elemento objetivo encontrado, agregando event listener');
+      btnNuevoObjetivo.addEventListener('click', manejarNuevoObjetivo);
+    } else {
+      console.log('Elemento objetivo NO encontrado');
     }
 
   // Botón para cerrar sesión desde el perfil
@@ -379,6 +389,54 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (error) {
       console.error('Error al cargar formulario de inversión:', error);
       mostrarNotificacion('Error al cargar el formulario de inversión', 'danger');
+    }
+  }
+
+  async function manejarNuevoObjetivo(e) {
+  // Muestra el formulario de objetivo en el modal dinámico
+    e.preventDefault();
+    console.log('Función manejarNuevoObjetivo ejecutada');
+    cerrarMenuEmergente();
+
+    try {
+      console.log('Intentando cargar formulario de objetivo...');
+      const response = await fetch('../../formularios/FormularioObjetivo/FormularioOb.html');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const html = await response.text();
+      console.log('HTML cargado exitosamente');
+      contenedorModalObjetivo.innerHTML = html;
+
+      const script = document.createElement('script');
+      script.src = '../../formularios/FormularioObjetivo/FormularioObj.js';
+      script.onload = function() {
+        console.log('Script cargado');
+        if (typeof initFormularioObjetivo === 'function') {
+          console.log('Función initFormularioObjetivo encontrada');
+          // Pasar función de callback para refrescar si existe
+          const refreshCallback = window.renderObjetivos || null;
+          initFormularioObjetivo(refreshCallback);
+        } else {
+          console.log('Función initFormularioObjetivo NO encontrada');
+        }
+        // Mostrar el modal usando Bootstrap
+        const modalElement = document.getElementById('modalAgregarObjetivo');
+        if (modalElement) {
+          console.log('Modal encontrado, mostrando...');
+          const modal = new bootstrap.Modal(modalElement);
+          modal.show();
+        } else {
+          console.log('Modal NO encontrado');
+        }
+      };
+      script.onerror = function() {
+        console.error('Error al cargar el script del formulario');
+      };
+      document.body.appendChild(script);
+    } catch (error) {
+      console.error('Error al cargar formulario de objetivo:', error);
+      mostrarNotificacion('Error al cargar el formulario de objetivo', 'danger');
     }
   }
 

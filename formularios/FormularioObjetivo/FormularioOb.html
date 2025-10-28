@@ -1,40 +1,66 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <title>Crear Objetivo Financiero</title>
-  <link rel="stylesheet" href="FormularioObj.css" />
-  
-</head>
-<body>
-  <div class="form-container">
-    <form id="formCrear">
-      <label>Objetivo</label>
-      <input type="text" id="crearTitulo" required />
-
-      <label>Descripción</label>
-      <textarea id="crearDescripcion" rows="3" required></textarea>
-
-      <label>Fecha de Creación</label>
-      <input type="date" id="crearFechaCreacion" required />
-
-      <label>Fecha Límite</label>
-      <input type="date" id="crearFechaLimite" required />
-
-      <label>Estado del Objetivo</label>
-      <select id="crearEstado" required>
-        <option value="">Seleccionar Estado</option>
-        <option value="Pendiente">Pendiente</option>
-        <option value="Completado">Completado</option>
-      </select>
-
-      <div class="form-botones">
-        <button type="submit" class="btn verde">Guardar</button>
-        <button type="button" class="btn gris" onclick="limpiarFormulario()">Limpiar</button>
-        <button type="button" class="btn rojo" onclick="volverAtras()">Cancelar</button>
+<!-- Modal Bootstrap para Agregar Objetivo -->
+<div class="modal fade" id="modalAgregarObjetivo" tabindex="-1" aria-labelledby="modalAgregarObjetivoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalAgregarObjetivoLabel">
+          <i class="bi bi-bullseye me-2"></i>Crear Nuevo Objetivo
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </form>
+      <div class="modal-body">
+        <form id="formCrear">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="crearTitulo" class="form-label">Objetivo</label>
+                <input type="text" class="form-control" id="crearTitulo" required />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="crearEstado" class="form-label">Estado del Objetivo</label>
+                <select class="form-select" id="crearEstado" required>
+                  <option value="">Seleccionar Estado</option>
+                  <option value="Pendiente">Pendiente</option>
+                  <option value="Completado">Completado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="crearDescripcion" class="form-label">Descripción</label>
+            <textarea class="form-control" id="crearDescripcion" rows="3" required></textarea>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="crearFechaCreacion" class="form-label">Fecha de Creación</label>
+                <input type="date" class="form-control" id="crearFechaCreacion" required />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="crearFechaLimite" class="form-label">Fecha Límite</label>
+                <input type="date" class="form-control" id="crearFechaLimite" required />
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i>Cancelar
+        </button>
+        <button type="button" class="btn btn-outline-warning" onclick="limpiarFormulario()">
+          <i class="bi bi-arrow-clockwise me-1"></i>Limpiar
+        </button>
+        <button type="submit" class="btn btn-warning" form="formCrear">
+          <i class="bi bi-check-circle me-1"></i>Guardar Objetivo
+        </button>
+      </div>
+    </div>
   </div>
-  <script src="FormularioObj.js"></script>
-</body>
-</html>
+</div>
