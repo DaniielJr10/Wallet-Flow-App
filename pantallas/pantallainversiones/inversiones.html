@@ -11,6 +11,7 @@
   
   <!-- Estilos -->
   <link rel="stylesheet" href="inversiones.css" />
+  <link rel="stylesheet" href="../../formularios/formulario-inversiones/forinversiones.css" />
 </head>
 <body>
 
@@ -52,6 +53,96 @@
             <h1 class="titulo-principal mb-2"><i class="bi bi-graph-up-arrow me-2"></i>Inversiones</h1>
             <p class="subtitulo-pagina mb-0">Invierte, Gestiona y haz crecer tu dinero</p>
           </div>
+
+          <!-- Botón para agregar nueva inversión -->
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <button id="btnAgregarInversionPage" class="btn btn-primary">
+              <i class="bi bi-plus-circle me-2"></i>Agregar Inversión
+            </button>
+          </div>
+
+          <!-- Métricas de resumen -->
+          <div class="row mb-4">
+            <div class="col-md-3">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <h5 class="card-title text-success">Total Invertido</h5>
+                  <h2 id="totalInvertido" class="text-success">$0</h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <h5 class="card-title text-info">Número de Inversiones</h5>
+                  <h2 id="numeroInversiones" class="text-info">0</h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <h5 class="card-title text-warning">Rendimiento Promedio</h5>
+                  <h2 id="rendimientoPromedio" class="text-warning">0%</h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card text-center h-100">
+                <div class="card-body">
+                  <h5 class="card-title text-primary">Inversiones Activas</h5>
+                  <h2 id="inversionesActivas" class="text-primary">0</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabla de inversiones -->
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="bi bi-table me-2"></i>Lista de Inversiones
+              </h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table id="tablaInversiones" class="table table-hover mb-0">
+                  <thead>
+                    <tr>
+                      <th>Tipo</th>
+                      <th>Monto</th>
+                      <th>Fecha Inicio</th>
+                      <th>Riesgo</th>
+                      <th>Rendimiento Esperado</th>
+                      <th>Descripción</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Las inversiones se cargarán dinámicamente aquí -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mensaje cuando no hay inversiones -->
+          <div id="mensajeVacio" class="text-center" style="display: none;">
+            <i class="bi bi-graph-up-arrow display-1 text-muted mb-3"></i>
+            <h3 class="text-muted">No hay inversiones registradas</h3>
+            <p class="text-muted">Comienza a invertir haciendo clic en "Agregar Inversión"</p>
+            <button class="btn btn-primary" onclick="document.getElementById('btnAgregarInversionPage').click()">
+              <i class="bi bi-plus-circle me-2"></i>Agregar Primera Inversión
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Contenedor para modal de inversión -->
+        <div id="contenedorModalInversion"></div>
+
+        <!-- Contenedor para modal de edición -->
+        <div id="contenedorModalEditarInversion"></div>
 
         </div>
     </div>

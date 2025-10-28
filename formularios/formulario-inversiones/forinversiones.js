@@ -70,13 +70,22 @@ function initFormularioInversion(callbackRender) {
       }
       // Guardar en localStorage
       const inversiones = JSON.parse(localStorage.getItem("inversiones")) || []
+      datos.id = Date.now(); // Agregar ID único
       inversiones.push(datos)
       localStorage.setItem("inversiones", JSON.stringify(inversiones))
+      
       // Mensaje de éxito (opcional)
       alert("¡Inversión guardada exitosamente!")
       cerrarModalInversion()
+      
+      // Actualizar la pantalla si hay callback de renderizado
       if (callbackRender) {
         callbackRender() // Call the render function from the parent page
+      }
+      
+      // Si estamos en la pantalla principal, mostrar notificación adicional
+      if (typeof mostrarNotificacion === 'function') {
+        mostrarNotificacion('Inversión guardada correctamente', 'success');
       }
     })
   }

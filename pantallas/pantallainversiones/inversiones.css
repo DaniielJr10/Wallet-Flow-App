@@ -81,11 +81,11 @@ body, html {
 
 /* ===== TÍTULO PRINCIPAL MEJORADO ===== */
 .titulo-principal {
-  background: linear-gradient(135deg, #007bff 0%, #007bff 100%);
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: #6f42c1; /* Fallback */
+  color: #007bff; /* Fallback */
   border-radius: 15px;
   padding: 1rem 2rem;
   font-weight: 700;
@@ -96,8 +96,188 @@ body, html {
 
 /* ===== SUBTÍTULO MEJORADO ===== */
 .subtitulo-pagina {
-  color:#007bff;
+  color: #007bff;
   font-size: 1.1rem;
   font-weight: 500;
   margin-top: 0.5rem;
+}
+
+/* ===== ESTILOS ESPECÍFICOS PARA INVERSIONES ===== */
+
+/* Tarjetas de resumen */
+.card {
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Tabla de inversiones */
+.table-responsive {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table th {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  border: none;
+  font-weight: 600;
+  padding: 15px 12px;
+}
+
+.table td {
+  vertical-align: middle;
+  padding: 12px;
+  border-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+  transform: scale(1.01);
+  transition: all 0.2s ease;
+}
+
+/* Botones de acción */
+.btn-editar {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-editar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+  color: white;
+}
+
+.btn-eliminar {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-eliminar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+  color: white;
+}
+
+/* Botón agregar inversión */
+#btnAgregarInversionPage {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  color: white;
+}
+
+#btnAgregarInversionPage:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 86, 179, 0.4);
+}
+
+/* Estados de riesgo */
+.riesgo-bajo {
+  background-color: #d1edff;
+  color: #0c5460;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.riesgo-medio {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.riesgo-alto {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Mensaje de sin inversiones */
+#mensajeVacio {
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #cce7ff 0%, #b3d9ff 100%);
+  border-radius: 20px;
+  border: 2px solid #99ccff;
+}
+
+/* Formulario de edición inline */
+.form-editar {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.form-titulo {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  padding: 15px;
+  margin: -30px -30px 25px -30px;
+  border-radius: 20px 20px 0 0;
+  text-align: center;
+  font-weight: 600;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 15px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  margin-top: 5px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  outline: none;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.form-buttons button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }

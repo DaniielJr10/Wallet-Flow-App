@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const contenedorModalAhorro = document.getElementById('contenedorModalAhorro');
   const btnNuevaDeuda = document.querySelector('.deuda-item');
   const contenedorModalDeuda = document.getElementById('contenedorModalDeuda');
+  const btnNuevaInversion = document.querySelector('.inversion-item');
+  const contenedorModalInversion = document.getElementById('contenedorModalInversion');
 
   // ===== INICIALIZACIÓN DE COMPONENTES Y EVENTOS =====
   inicializarComponentes();
@@ -119,6 +121,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // Botón para mostrar el formulario de deuda
     if (btnNuevaDeuda) {
       btnNuevaDeuda.addEventListener('click', manejarNuevaDeuda);
+    }
+
+  // Botón para mostrar el formulario de inversión
+    if (btnNuevaInversion) {
+      btnNuevaInversion.addEventListener('click', manejarNuevaInversion);
     }
 
   // Botón para cerrar sesión desde el perfil
@@ -342,6 +349,36 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (error) {
       console.error('Error al cargar formulario de deuda:', error);
       mostrarNotificacion('Error al cargar el formulario de deuda', 'danger');
+    }
+  }
+
+  async function manejarNuevaInversion(e) {
+  // Muestra el formulario de inversión en el modal dinámico
+    e.preventDefault();
+    cerrarMenuEmergente();
+
+    try {
+      const response = await fetch('../../formularios/formulario-inversiones/forinversiones.html');
+      const html = await response.text();
+      contenedorModalInversion.innerHTML = html;
+
+      const script = document.createElement('script');
+      script.src = '../../formularios/formulario-inversiones/forinversiones.js';
+      script.onload = function() {
+        if (typeof initFormularioInversion === 'function') {
+          // Pasar función de callback para refrescar si existe
+          const refreshCallback = window.renderInversiones || null;
+          initFormularioInversion(refreshCallback);
+        }
+        const modal = document.getElementById('modalAgregarInversion');
+        if (modal) {
+          modal.classList.remove('d-none');
+        }
+      };
+      document.body.appendChild(script);
+    } catch (error) {
+      console.error('Error al cargar formulario de inversión:', error);
+      mostrarNotificacion('Error al cargar el formulario de inversión', 'danger');
     }
   }
 

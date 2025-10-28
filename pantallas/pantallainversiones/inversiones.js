@@ -1,6 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
   renderInversiones()
 
+  // Exponer función renderInversiones globalmente para que otros componentes puedan actualizar la pantalla
+  window.renderInversiones = renderInversiones
+
+  // Event listener para cerrar sesión
+  const cerrarSesionBtn = document.getElementById('cerrarSesionBtn');
+  if (cerrarSesionBtn) {
+    cerrarSesionBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const confirmar = confirm('¿Estás seguro de que deseas cerrar sesión?');
+      if (confirmar) {
+        localStorage.removeItem('walletflow_current_user');
+        localStorage.removeItem('walletflow_remembered_user');
+        window.location.href = '../../login/inicio de sesion/inicio.html';
+      }
+    });
+  }
+
   // Check for openForm query parameter
   const urlParams = new URLSearchParams(window.location.search)
   if (urlParams.get("openForm") === "true") {
@@ -21,13 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
     contenedorModalInversion.innerHTML = ""
 
     // Load HTML for the add form
-    fetch("../formulario-inversiones/forinversiones.html")
+    fetch("../../formularios/formulario-inversiones/forinversiones.html")
       .then((response) => response.text())
       .then((html) => {
         contenedorModalInversion.innerHTML = html
         // Load JS for the add form
         const script = document.createElement("script")
-        script.src = "../formulario-inversiones/forinversiones.js"
+        script.src = "../../formularios/formulario-inversiones/forinversiones.js"
         script.onload = () => {
           const initFormularioInversion = window.initFormularioInversion // Declare the variable before using it
           if (typeof initFormularioInversion === "function") {
@@ -48,58 +65,75 @@ document.addEventListener("DOMContentLoaded", () => {
     const inversiones = JSON.parse(localStorage.getItem("inversiones")) || []
     tabla.innerHTML = ""
 
+    // Actualizar mensaje vacío
+    const mensajeVacio = document.getElementById("mensajeVacio")
+    if (inversiones.length === 0) {
+      mensajeVacio.style.display = 'block'
+      document.getElementById("tablaInversiones").closest('.card').style.display = 'none'
+    } else {
+      mensajeVacio.style.display = 'none'
+      document.getElementById("tablaInversiones").closest('.card').style.display = 'block'
+    }
+
     let totalInvertido = 0
-    const tipoCount = {}
     let totalRendimiento = 0
+    let inversionesActivas = 0
 
     inversiones.forEach((inversion, index) => {
       totalInvertido += Number.parseFloat(inversion.monto)
-      tipoCount[inversion.tipo] = (tipoCount[inversion.tipo] || 0) + Number.parseFloat(inversion.monto)
       totalRendimiento += Number.parseFloat(inversion.rendimientoEsperado || 0)
+      
+      // Contar inversiones activas (sin fecha fin o fecha fin en el futuro)
+      if (!inversion.fechaFin || new Date(inversion.fechaFin) > new Date()) {
+        inversionesActivas++
+      }
+
+      // Determinar clase CSS para el riesgo
+      let riesgoClass = ''
+      switch(inversion.riesgo) {
+        case 'bajo': riesgoClass = 'riesgo-bajo'; break
+        case 'medio': riesgoClass = 'riesgo-medio'; break
+        case 'alto': riesgoClass = 'riesgo-alto'; break
+        default: riesgoClass = 'riesgo-medio'
+      }
 
       const fila = document.createElement("tr")
       fila.innerHTML = `
-        <td>${inversion.tipo}</td>
-        <td>$${Number.parseFloat(inversion.monto).toFixed(2)}</td>
+        <td><strong>${inversion.tipo}</strong></td>
+        <td><strong>$${Number.parseFloat(inversion.monto).toLocaleString()}</strong></td>
         <td>${inversion.fechaInicio}</td>
-        <td>${inversion.fechaFin || "-"}</td>
-        <td>${inversion.riesgo}</td>
-        <td>${inversion.rendimientoEsperado ? `${inversion.rendimientoEsperado}%` : "-"}</td>
+        <td><span class="${riesgoClass}">${inversion.riesgo}</span></td>
+        <td>${inversion.rendimientoEsperado ? `<strong>${inversion.rendimientoEsperado}%</strong>` : "-"}</td>
         <td>${inversion.descripcion || "-"}</td>
         <td>
-          <button class="btn btn-sm btn-warning me-2 btn-editar" data-index="${index}"><i class="bi bi-pencil"></i></button>
-          <button class="btn btn-sm btn-danger btn-eliminar" data-index="${index}"><i class="bi bi-trash"></i></button>
+          <button class="btn btn-sm btn-warning me-2 btn-editar" data-index="${index}" title="Editar">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-sm btn-danger btn-eliminar" data-index="${index}" title="Eliminar">
+            <i class="bi bi-trash"></i>
+          </button>
         </td>
       `
       tabla.appendChild(fila)
     })
 
-    // Update summary
-    document.getElementById("totalInvertido").textContent = `$${totalInvertido.toFixed(2)}`
-
-    let principalInversionTipo = "N/A"
-    let maxMonto = 0
-    for (const tipo in tipoCount) {
-      if (tipoCount[tipo] > maxMonto) {
-        maxMonto = tipoCount[tipo]
-        principalInversionTipo = tipo
-      }
-    }
-    document.getElementById("inversionPrincipal").textContent = principalInversionTipo
-
-    const promedioRendimiento = inversiones.length > 0 ? (totalRendimiento / inversiones.length).toFixed(2) : "0.00"
+    // Actualizar métricas
+    document.getElementById("totalInvertido").textContent = `$${totalInvertido.toLocaleString()}`
+    document.getElementById("numeroInversiones").textContent = inversiones.length
+    document.getElementById("inversionesActivas").textContent = inversionesActivas
+    
+    const promedioRendimiento = inversiones.length > 0 ? (totalRendimiento / inversiones.length).toFixed(1) : "0.0"
     document.getElementById("rendimientoPromedio").textContent = `${promedioRendimiento}%`
 
+    // Configurar event listeners para botones de acción
+    configurarEventosBotones()
+  }
+
+  function configurarEventosBotones() {
     document.querySelectorAll(".btn-eliminar").forEach((btn) => {
       btn.addEventListener("click", function () {
         const idx = this.getAttribute("data-index")
-        const confirmacion = confirm("¿Estás seguro de que deseas eliminar esta inversión?")
-        if (confirmacion) {
-          inversiones.splice(idx, 1)
-          localStorage.setItem("inversiones", JSON.stringify(inversiones))
-          renderInversiones()
-          alert("¡Inversión eliminada exitosamente!")
-        }
+        eliminarInversion(idx)
       })
     })
 
@@ -109,6 +143,25 @@ document.addEventListener("DOMContentLoaded", () => {
         editarInversion(idx)
       })
     })
+  }
+
+  function eliminarInversion(idx) {
+    const inversiones = JSON.parse(localStorage.getItem("inversiones")) || []
+    const inversion = inversiones[idx]
+    
+    const confirmacion = confirm(`¿Estás seguro de que deseas eliminar la inversión "${inversion.tipo}" de $${Number.parseFloat(inversion.monto).toLocaleString()}?`)
+    if (confirmacion) {
+      inversiones.splice(idx, 1)
+      localStorage.setItem("inversiones", JSON.stringify(inversiones))
+      renderInversiones()
+      
+      // Mostrar notificación de éxito más elegante
+      if (typeof mostrarNotificacion === 'function') {
+        mostrarNotificacion('Inversión eliminada correctamente', 'success')
+      } else {
+        alert("¡Inversión eliminada exitosamente!")
+      }
+    }
   }
 
   function editarInversion(idx) {
