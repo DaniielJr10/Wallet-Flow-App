@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const contenedorModalCuenta = document.getElementById('contenedorModalCuenta');
   const btnNuevoAhorro = document.querySelector('.ahorro-item');
   const contenedorModalAhorro = document.getElementById('contenedorModalAhorro');
+  const btnNuevaDeuda = document.querySelector('.deuda-item');
+  const contenedorModalDeuda = document.getElementById('contenedorModalDeuda');
 
   // ===== INICIALIZACIÓN DE COMPONENTES Y EVENTOS =====
   inicializarComponentes();
@@ -112,6 +114,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // Botón para mostrar el formulario de cuenta
     if (btnNuevaCuenta) {
       btnNuevaCuenta.addEventListener('click', manejarNuevaCuenta);
+    }
+
+  // Botón para mostrar el formulario de deuda
+    if (btnNuevaDeuda) {
+      btnNuevaDeuda.addEventListener('click', manejarNuevaDeuda);
     }
 
   // Botón para cerrar sesión desde el perfil
@@ -305,6 +312,36 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (error) {
       console.error('Error al cargar formulario de ahorro:', error);
       mostrarNotificacion('Error al cargar el formulario de ahorro', 'danger');
+    }
+  }
+
+  async function manejarNuevaDeuda(e) {
+  // Muestra el formulario de deuda en el modal dinámico
+    e.preventDefault();
+    cerrarMenuEmergente();
+
+    try {
+      const response = await fetch('../../formularios/formulario-deudas/fordeudas.html');
+      const html = await response.text();
+      contenedorModalDeuda.innerHTML = html;
+
+      const script = document.createElement('script');
+      script.src = '../../formularios/formulario-deudas/fordeudas.js';
+      script.onload = function() {
+        if (typeof initFormularioDeuda === 'function') {
+          // Pasar función de callback para refrescar si existe
+          const refreshCallback = window.renderDeudas || null;
+          initFormularioDeuda(refreshCallback);
+        }
+        const modal = document.getElementById('modalAgregarDeuda');
+        if (modal) {
+          modal.classList.remove('d-none');
+        }
+      };
+      document.body.appendChild(script);
+    } catch (error) {
+      console.error('Error al cargar formulario de deuda:', error);
+      mostrarNotificacion('Error al cargar el formulario de deuda', 'danger');
     }
   }
 

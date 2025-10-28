@@ -70,13 +70,22 @@ function initFormularioDeuda(callbackRender) {
       }
       // Guardar en localStorage
       const deudas = JSON.parse(localStorage.getItem("deudas")) || []
+      datos.id = Date.now(); // Agregar ID único
       deudas.push(datos)
       localStorage.setItem("deudas", JSON.stringify(deudas))
+      
       // Mensaje de éxito (opcional)
       alert("¡Deuda guardada exitosamente!")
       cerrarModalDeuda()
+      
+      // Actualizar la pantalla si hay callback de renderizado
       if (callbackRender) {
         callbackRender() // Call the render function from the parent page
+      }
+      
+      // Si estamos en la pantalla principal, mostrar notificación adicional
+      if (typeof mostrarNotificacion === 'function') {
+        mostrarNotificacion('Deuda guardada correctamente', 'success');
       }
     })
   }
