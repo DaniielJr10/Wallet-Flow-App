@@ -7,7 +7,10 @@ function initFormularioObjetivo(callback) {
   
   // Establecer fecha actual como predeterminada
   const fechaHoy = new Date().toISOString().split('T')[0];
-  document.getElementById('crearFechaCreacion').value = fechaHoy;
+  const fechaCreacionField = document.getElementById('crearFechaCreacion');
+  if (fechaCreacionField) {
+    fechaCreacionField.value = fechaHoy;
+  }
   
   // Configurar eventos
   configurarEventosFormulario();
@@ -37,15 +40,21 @@ function manejarSubmitFormulario(e) {
     return;
   }
 
+  // Deshabilitar botón temporalmente
+  const submitBtn = document.querySelector('button[type="submit"][form="formCrear"]');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+  }
+
   // Crear el nuevo objetivo
   const nuevoObjetivo = {
-    id: Date.now(), // ID único basado en timestamp
+    id: Date.now(),
     titulo: titulo,
     descripcion: descripcion,
     fechaCreacion: formatearFecha(fechaCreacion),
     fechaLimite: formatearFecha(fechaLimite),
     estado: estado,
-    progreso: "0",
+    progreso: 0,
     fechaCreacionISO: fechaCreacion,
     fechaLimiteISO: fechaLimite,
     createdAt: new Date().toISOString()
@@ -66,16 +75,24 @@ function manejarSubmitFormulario(e) {
       modal.hide();
     }
     
-    // Ejecutar callback para refrescar la pantalla principal
+    // Limpiar formulario
+    limpiarFormulario();
+    
+    // Ejecutar callback para refrescar la pantalla
     if (refreshCallback && typeof refreshCallback === 'function') {
       setTimeout(refreshCallback, 300);
     }
     
-    console.log('Objetivo guardado:', nuevoObjetivo);
-    
   } catch (error) {
     console.error('Error al guardar el objetivo:', error);
     mostrarNotificacion('Error al guardar el objetivo', 'danger');
+  }
+  
+  // Rehabilitar botón
+  if (submitBtn) {
+    setTimeout(() => {
+      submitBtn.disabled = false;
+    }, 1000);
   }
 }
 
@@ -91,9 +108,10 @@ function limpiarFormulario() {
   
   // Restablecer fecha actual
   const fechaHoy = new Date().toISOString().split('T')[0];
-  document.getElementById('crearFechaCreacion').value = fechaHoy;
-  
-  mostrarNotificacion('Formulario limpiado', 'info');
+  const fechaCreacionField = document.getElementById('crearFechaCreacion');
+  if (fechaCreacionField) {
+    fechaCreacionField.value = fechaHoy;
+  }
 }
 
 function formatearFecha(fechaStr) {
@@ -102,16 +120,30 @@ function formatearFecha(fechaStr) {
   return `${partes[2]}/${partes[1]}/${partes[0]}`;
 }
 
-// Función para mostrar notificaciones (debe existir en el contexto padre)
+// Función para mostrar notificaciones
 function mostrarNotificacion(mensaje, tipo = 'info') {
-  // Verificar si existe la función en el contexto padre
-  if (window.parent && typeof window.parent.mostrarNotificacion === 'function') {
-    window.parent.mostrarNotificacion(mensaje, tipo);
-    return;
-  }
+  // Crear elemento de notificación
+  const notification = document.createElement('div');
+  notification.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
+  notification.style.cssText = `
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    min-width: 300px;
+  `;
+  notification.innerHTML = `
+    ${mensaje}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  `;
   
-  // Función de respaldo simple
-  console.log(`[${tipo.toUpperCase()}] ${mensaje}`);
+  document.body.appendChild(notification);
+  
+  // Auto-eliminar después de 3 segundos
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.remove();
+    }
+  }, 3000);
 }
 
 // Función legacy para compatibilidad
@@ -125,4 +157,5 @@ function volverAtras() {
 // Exponer función globalmente para que pueda ser llamada desde principal.js
 if (typeof window !== 'undefined') {
   window.initFormularioObjetivo = initFormularioObjetivo;
+  window.eliminarDuplicadosObjetivos = eliminarDuplicados; // Para usar desde consola si es necesario
 }
