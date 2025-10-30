@@ -12,6 +12,9 @@ function initFormularioGasto() {
     console.log('Gastos actuales en localStorage:', JSON.parse(localStorage.getItem('gastos') || '[]'));
 }
 
+// Inicializar cuando se carga la página
+document.addEventListener('DOMContentLoaded', initFormularioGasto);
+
 // Selecciona los elementos del formulario y los pasos
 const formAgregar = document.getElementById('formAgregar');
 const step1 = document.getElementById('step1');
@@ -76,6 +79,8 @@ function cerrarModal() {
         // Opcional: vuelve al primer paso al cerrar
         volverAlPasoAnterior();
     }
+    // Regresar a la pantalla de gastos
+    window.location.href = '../../pantallas/PantallaGastos/Gastos.html';
 }
 
 // Envía el formulario y guarda el gasto en localStorage
@@ -88,6 +93,7 @@ formAgregar.addEventListener('submit', function(e) {
     monto = parseFloat(monto) || 0;
 
     const datos = {
+        id: Date.now().toString(), // ID único
         categoria: document.getElementById('addCategoria').value,
         metodo: document.getElementById('addMetodo').value,
         monto: monto,
@@ -95,7 +101,7 @@ formAgregar.addEventListener('submit', function(e) {
         descripcion: document.getElementById('addDescripcion').value || '',
         esRecurrente: document.getElementById('addCheckRecurrente')?.checked || false,
         frecuencia: document.getElementById('addFrecuencia')?.value || '',
-        cuenta: document.getElementById('addCuentaAsociada')?.value || '',
+        cuenta: document.getElementById('addCuentaAsociada')?.value || 'Sin cuenta',
         fechaCreacion: new Date().toISOString()
     };
 
@@ -118,7 +124,13 @@ formAgregar.addEventListener('submit', function(e) {
     setTimeout(() => {
         const irAGastos = confirm('¿Deseas ver todos tus gastos en la pantalla de Gastos?');
         if (irAGastos) {
-            window.location.href = '../PantallaGastos/Gastos.html';
+            window.location.href = '../../pantallas/PantallaGastos/Gastos.html';
+        } else {
+            // Si no quiere ir a gastos, ofrecer volver al principal
+            const irAPrincipal = confirm('¿Deseas volver a la pantalla principal?');
+            if (irAPrincipal) {
+                window.location.href = '../../pantallas/pantallaprincipal/principal.html';
+            }
         }
     }, 1500);
     // Opcional: actualizar los datos en la pantalla principal

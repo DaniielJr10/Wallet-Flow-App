@@ -16,6 +16,21 @@ document.addEventListener('DOMContentLoaded', function() {
     configurarFiltros();
 });
 
+// Actualizar datos cuando la ventana recibe el foco (por si viene desde el formulario)
+window.addEventListener('focus', function() {
+    cargarGastos();
+    actualizarInterfaz();
+});
+
+// Actualizar cada 2 segundos para detectar cambios en localStorage
+setInterval(function() {
+    const gastosActuales = JSON.parse(localStorage.getItem('gastos') || '[]');
+    if (gastosActuales.length !== gastos.length) {
+        cargarGastos();
+        actualizarInterfaz();
+    }
+}, 2000);
+
 // ===== GESTIÓN DE DATOS =====
 function cargarGastos() {
     const gastosGuardados = localStorage.getItem('gastos');
@@ -86,10 +101,8 @@ function inicializarEventListeners() {
 
 // ===== FORMULARIO =====
 function mostrarFormularioAgregar() {
-    gastoEditando = null;
-    limpiarFormulario();
-    document.getElementById('tituloFormulario').textContent = 'Agregar Nuevo Gasto';
-    document.getElementById('overlayFormulario').style.display = 'flex';
+    // Redirigir al formulario de gastos separado
+    window.location.href = '../../formularios/FormularioGastos/FormularioG.html';
 }
 
 function mostrarFormularioEditar(id) {
