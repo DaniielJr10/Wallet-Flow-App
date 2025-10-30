@@ -1405,7 +1405,7 @@ input[type="checkbox"] {
 .tabla-responsive-wrapper{max-height:520px;overflow:auto;}
 .tabla-responsive-wrapper::-webkit-scrollbar{width:8px;height:8px;}
 .tabla-responsive-wrapper::-webkit-scrollbar-thumb{background:rgba(231,76,60,.4);border-radius:10px;}
-#tablaGastos thead th{background:var(--grad-rojo);color:#fff;font-weight:600;font-size:.7rem;letter-spacing:.5px;text-transform:uppercase;border:none;position:sticky;top:0;z-index:4;}
+#tablaGastos thead th{background:var(--grad-rojo);color:#fff;font-weight:600;font-size:.9rem;letter-spacing:.5px;text-transform:uppercase;border:none;position:sticky;top:0;z-index:4;}
 #tablaGastos tbody tr{transition:var(--transition);} 
 #tablaGastos tbody tr:hover{background:linear-gradient(135deg,rgba(231,76,60,.05),rgba(231,76,60,.09));} 
 #tablaGastos td,#tablaGastos th{padding:.85rem .9rem;vertical-align:middle;} 
@@ -1868,4 +1868,14 @@ input[type="checkbox"] {
     font-size: 1rem;
     padding: 0.8rem 1.5rem;
   }
+}
+
+/* ===== TEXTO EN NEGRILLA PARA TABLA ===== */
+#tablaGastos th,
+#tablaGastos td {
+  font-weight: bold !important;
+}
+
+#tablaGastos tbody tr td {
+  font-weight: bold !important;
 }
