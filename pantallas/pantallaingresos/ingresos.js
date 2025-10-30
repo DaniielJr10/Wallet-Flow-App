@@ -227,13 +227,13 @@ document.addEventListener('DOMContentLoaded', function () {
           <span class="categoria-badge">${ingreso.categoria}</span>
         </td>
         <td>
+          <span class="fecha-formato">${formatearFecha(ingreso.fecha)}</span>
+        </td>
+        <td>
           <span class="metodo-pago">${ingreso.metodo}</span>
         </td>
         <td>
           <span class="monto-destacado">$${formatearMonto(ingreso.monto)}</span>
-        </td>
-        <td>
-          <span class="fecha-formato">${formatearFecha(ingreso.fecha)}</span>
         </td>
         <td>
           <span class="descripcion-texto" title="${ingreso.descripcion || 'Sin descripción'}">

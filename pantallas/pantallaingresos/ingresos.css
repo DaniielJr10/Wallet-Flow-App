@@ -129,18 +129,12 @@ h2 {
 }
 
 /* ===== TABLA MEJORADA ===== */
-.table-header-actions {
+.table-actions-only {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   margin-bottom: 1rem;
   padding: 0 1rem;
-}
-
-.table-header-actions h4 {
-  margin: 0;
-  color: #2c3e50;
-  font-weight: 600;
 }
 
 .table-actions {
@@ -173,10 +167,23 @@ h2 {
   color: white !important;
   font-weight: 600;
   border: none;
-  padding: 1rem 0.75rem;
+  padding: 0.4rem 0.75rem;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.table-header th i {
+  display: inline;
+  vertical-align: middle;
+}
+
+.table-header th span {
+  display: inline;
+  vertical-align: middle;
 }
 
 #tablaIngresos tbody tr {
@@ -189,7 +196,7 @@ h2 {
 }
 
 #tablaIngresos td {
-  padding: 1rem 0.75rem;
+  padding: 0.6rem 0.75rem;
   border-bottom: 1px solid #f1f3f4;
   vertical-align: middle;
 }
@@ -363,10 +370,9 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 768px) {
-  .table-header-actions {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
+  .table-actions-only {
+    justify-content: center;
+    margin-bottom: 1rem;
   }
   
   .table-actions {
@@ -677,12 +683,12 @@ input[type="checkbox"] {
   }
   
   .table-header th {
-    padding: 1rem 0.5rem;
+    padding: 0.3rem 0.5rem;
     font-size: 0.8rem;
   }
   
   #tablaIngresos td {
-    padding: 0.75rem 0.5rem;
+    padding: 0.5rem 0.5rem;
   }
 }
 
