@@ -199,6 +199,21 @@ h2 {
   padding: 0.6rem 0.75rem;
   border-bottom: 1px solid #f1f3f4;
   vertical-align: middle;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Estilos específicos para elementos dentro de las celdas */
+#tablaIngresos td .categoria-badge,
+#tablaIngresos td .metodo-pago,
+#tablaIngresos td .monto-destacado,
+#tablaIngresos td .fecha-formato,
+#tablaIngresos td .descripcion-texto,
+#tablaIngresos td .status-badge,
+#tablaIngresos td .frecuencia-texto,
+#tablaIngresos td .cuenta-texto {
+  font-size: 0.9rem;
+  display: inline-block;
 }
 
 /* ===== PAGINACIÓN ===== */
@@ -240,7 +255,7 @@ h2 {
 .status-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
-  font-size: 0.8rem;
+  font-size: 0.9rem !important;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -254,6 +269,15 @@ h2 {
 .badge-no-recurrente {
   background: linear-gradient(135deg, #95a5a6, #7f8c8d);
   color: white;
+}
+
+.categoria-badge { 
+  background: linear-gradient(135deg, #3498db, #2980b9); 
+  color: white; 
+  padding: 0.25rem 0.75rem; 
+  border-radius: 20px; 
+  font-size: 0.9rem !important; 
+  font-weight: 500; 
 }
 
 /* ===== CHECKBOXES PERSONALIZADOS ===== */
@@ -277,6 +301,39 @@ input[type="checkbox"] {
   background: linear-gradient(135deg, #27ae60, #229954);
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+}
+
+/* Botón de editar con color azul profesional */
+.btn-editar {
+  background: linear-gradient(135deg, #3498db, #2980b9) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.btn-editar:hover {
+  background: linear-gradient(135deg, #2980b9, #1f4e79) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+}
+
+/* Botón de eliminar con rojo chimba */
+.btn-eliminar {
+  background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.btn-eliminar:hover {
+  background: linear-gradient(135deg, #c0392b, #a93226) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+  animation: pulse-red 0.3s ease;
+}
+
+@keyframes pulse-red {
+  0% { transform: scale(1) translateY(-1px); }
+  50% { transform: scale(1.05) translateY(-1px); }
+  100% { transform: scale(1) translateY(-1px); }
 }
 
 .btn-outline-primary {
@@ -341,17 +398,21 @@ input[type="checkbox"] {
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: help;
+  font-size: 0.9rem !important;
 }
 
 .monto-destacado {
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 0.9rem !important;
+  color: #2ecc71;
 }
 
 .fecha-formato {
-  font-family: 'Courier New', monospace;
-  font-size: 0.9rem;
-  color: #6c757d;
+  font-family: inherit;
+  font-size: 0.9rem !important;
+  color: #000000;
+  font-weight: normal;
+  text-align: center;
 }
 
 /* ===== RESPONSIVE MEJORADO ===== */
@@ -689,6 +750,18 @@ input[type="checkbox"] {
   
   #tablaIngresos td {
     padding: 0.5rem 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  #tablaIngresos td .categoria-badge,
+  #tablaIngresos td .metodo-pago,
+  #tablaIngresos td .monto-destacado,
+  #tablaIngresos td .fecha-formato,
+  #tablaIngresos td .descripcion-texto,
+  #tablaIngresos td .status-badge,
+  #tablaIngresos td .frecuencia-texto,
+  #tablaIngresos td .cuenta-texto {
+    font-size: 0.85rem !important;
   }
 }
 
