@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pantalla Gastos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Gastos</title>
 
   <!-- Bootstrap y Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-  
-  <!-- Estilos -->
-  <link rel="stylesheet" href="Gastos.css" />
+
+  <!-- CSS personalizado -->
+  <link rel="stylesheet" href="Gastos.css">
 </head>
 <body>
 
@@ -42,12 +42,270 @@
         </ul>
       </div>
 
-      <!-- Contenido principal (solo mejorado, menú lateral intacto) -->
+      <!-- Contenido principal -->
       <div class="col-md-10 contenido-principal">
-        <div class="container-fluid py-4 px-3 px-lg-4">
-          <!-- Encabezado -->
-          <!-- ===================== BLOQUE: ENCABEZADO ===================== -->
-          <!-- Título y subtítulo centrados para mayor énfasis visual -->
+        <div class="container my-3">
+          <!-- Título Principal -->
+          <div class="row mb-4">
+            <div class="col text-center">
+              <h1 class="titulo-principal">
+                <i class="bi bi-cart-fill me-3"></i>GASTOS
+              </h1>
+              <p class="subtitulo-pagina">Gestiona y controla todos tus gastos</p>
+            </div>
+          </div>
+
+          <!-- Resumen Mejorado -->
+          <div class="row text-center mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card-resumen total-gastos">
+                <div class="card-icon">
+                  <i class="bi bi-currency-dollar"></i>
+                </div>
+                <div class="card-content">
+                  <h5>Total de Gastos</h5>
+                  <p class="display-6 text-danger total-amount" id="totalGastos">$0</p>
+                  <small class="text-muted">Este mes</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card-resumen categoria-principal">
+                <div class="card-icon">
+                  <i class="bi bi-cart-fill"></i>
+                </div>
+                <div class="card-content">
+                  <h5>Categoría Principal</h5>
+                  <p class="gasto-principal" id="categoriaPrincipal">Sin datos</p>
+                  <small class="text-muted">Mayor tipo de gasto</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card-resumen promedio-mensual">
+                <div class="card-icon">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+                <div class="card-content">
+                  <h5>Promedio Mensual</h5>
+                  <p class="promedio-amount" id="promedioGastos">$0</p>
+                  <small class="text-muted">Últimos 3 meses</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card-resumen total-registros">
+                <div class="card-icon">
+                  <i class="bi bi-list-check"></i>
+                </div>
+                <div class="card-content">
+                  <h5>Total Registros</h5>
+                  <p class="total-count" id="conteoGastos">0</p>
+                  <small class="text-muted">Gastos registrados</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtros y Búsqueda -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card-filtros">
+                <div class="row align-items-center">
+                  <div class="col-md-3 mb-2">
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-search"></i></span>
+                      <input type="text" class="form-control" id="buscarGasto" placeholder="Buscar gastos...">
+                    </div>
+                  </div>
+                  <div class="col-md-2 mb-2">
+                    <select class="form-select" id="filtroCategoria">
+                      <option value="">Todas las categorías</option>
+                      <option value="alimentacion">Alimentación</option>
+                      <option value="transporte">Transporte</option>
+                      <option value="entretenimiento">Entretenimiento</option>
+                      <option value="servicios">Servicios</option>
+                      <option value="compras">Compras</option>
+                      <option value="otro">Otro</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2 mb-2">
+                    <select class="form-select" id="filtroMes">
+                      <option value="">Todos los meses</option>
+                      <option value="2025-01">Enero 2025</option>
+                      <option value="2025-02">Febrero 2025</option>
+                      <option value="2025-03">Marzo 2025</option>
+                      <option value="2025-04">Abril 2025</option>
+                      <option value="2025-05">Mayo 2025</option>
+                      <option value="2025-06">Junio 2025</option>
+                      <option value="2025-07">Julio 2025</option>
+                      <option value="2025-08">Agosto 2025</option>
+                      <option value="2025-09">Septiembre 2025</option>
+                      <option value="2025-10">Octubre 2025</option>
+                      <option value="2025-11">Noviembre 2025</option>
+                      <option value="2025-12">Diciembre 2025</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2 mb-2">
+                    <button class="btn btn-outline-secondary w-100" onclick="limpiarFiltros()">
+                      <i class="bi bi-arrow-clockwise me-1"></i>Limpiar
+                    </button>
+                  </div>
+                  <div class="col-md-3 mb-2 text-end">
+                    <button class="btn btn-danger btn-lg" id="btnAgregarGasto">
+                      <i class="bi bi-plus-circle me-2"></i>Agregar Gasto
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabla de gastos mejorada -->
+          <div class="row">
+            <div class="col-12">
+              <div class="tabla-container">
+                <div class="table-actions-only">
+                  <div class="table-actions">
+                    <button class="btn btn-outline-primary btn-sm" id="btnExportar">
+                      <i class="bi bi-download me-1"></i>Exportar
+                    </button>
+                    <div class="dropdown d-inline-block ms-2">
+                      <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" id="seleccionarTodo"><i class="bi bi-check-all me-2"></i>Seleccionar todo</a></li>
+                        <li><a class="dropdown-item" href="#" id="eliminarSeleccionados"><i class="bi bi-trash me-2"></i>Eliminar seleccionados</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="table-responsive">
+                  <table class="table table-hover" id="tablaGastos">
+                    <thead class="table-header">
+                      <tr>
+                        <th width="40"><input type="checkbox" id="selectAll"></th>
+                        <th><i class="bi bi-tag me-2"></i>Categoría</th>
+                        <th><i class="bi bi-calendar me-2"></i>Fecha</th>
+                        <th><i class="bi bi-credit-card me-2"></i>Método</th>
+                        <th><i class="bi bi-currency-dollar me-2"></i>Monto</th>
+                        <th><i class="bi bi-file-text me-2"></i>Descripción</th>
+                        <th><i class="bi bi-repeat me-2"></i>Recurrente</th>
+                        <th><i class="bi bi-clock me-2"></i>Frecuencia</th>
+                        <th><i class="bi bi-bank me-2"></i>Cuenta</th>
+                        <th width="120"><i class="bi bi-gear me-2"></i><span>Acciones</span></th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbodyGastos">
+                      <!-- Aquí se insertarán los gastos -->
+                    </tbody>
+                  </table>
+                </div>
+                
+                <!-- Paginación -->
+                <div class="pagination-container">
+                  <div class="pagination-info">
+                    <span id="infoPaginacion">Mostrando 0 de 0 registros</span>
+                  </div>
+                  <nav aria-label="Paginación de gastos">
+                    <div id="paginacionGastos">
+                      <!-- Controles de paginación se generan dinámicamente -->
+                    </div>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario de gastos modal -->
+  <div id="modalAgregarGasto" class="modal-overlay d-none">
+    <div class="modal-form">
+      <form id="formAgregarGasto" autocomplete="off">
+        <h2>Agregar Gasto</h2>
+        <div class="form-step" id="step1">
+          <label for="addCategoriaGasto">Categoría</label>
+          <select id="addCategoriaGasto" required>
+            <option value="alimentacion">Alimentación</option>
+            <option value="transporte">Transporte</option>
+            <option value="entretenimiento">Entretenimiento</option>
+            <option value="servicios">Servicios</option>
+            <option value="compras">Compras</option>
+            <option value="otro">Otro</option>
+          </select>
+          <label for="metodoPago">Método de Pago</label>
+          <select id="metodoPago" required>
+            <option value="efectivo">Efectivo</option>
+            <option value="tarjeta_credito">Tarjeta de Crédito</option>
+            <option value="tarjeta_debito">Tarjeta de Débito</option>
+            <option value="transferencia">Transferencia</option>
+            <option value="nequidaviplata">Nequi/Daviplata</option>
+          </select>
+          <label for="addMontoGasto">Monto</label>
+          <input type="number" id="addMontoGasto" required min="0" step="0.01">
+          <label for="addFechaGasto">Fecha</label>
+          <input type="date" id="addFechaGasto" required>
+          <div class="siguiente-container">
+            <button type="button" class="nav-btn next-step-btn" aria-label="Siguiente">➡️</button>
+          </div>
+        </div>
+        <div class="form-step hidden" id="step2">
+          <label for="addDescripcionGasto">Descripción</label>
+          <textarea id="addDescripcionGasto" name="descripcion"></textarea>
+          <div class="checkbox-options">
+            <div class="checkbox-item">
+              <label class="checkbox-label" for="addCheckRecurrenteGasto">
+                Gasto Recurrente
+                <input type="checkbox" id="addCheckRecurrenteGasto">
+              </label>
+              <div class="frecuencia-options" id="addFrecuenciaOptionsGasto">
+                <select id="addFrecuenciaGasto">
+                  <option value="">Seleccionar frecuencia</option>
+                  <option value="diario">Diario</option>
+                  <option value="semanal">Semanal</option>
+                  <option value="mensual">Mensual</option>
+                </select>
+              </div>
+            </div>
+            <div class="checkbox-item">
+              <label class="checkbox-label" for="addCheckCuentaGasto">
+                Cuenta Asociada
+                <input type="checkbox" id="addCheckCuentaGasto">
+              </label>
+              <div class="frecuencia-options" id="addCuentaAsociadaOptionsGasto">
+                <select id="addCuentaAsociadaGasto">
+                  <option value="">Seleccionar cuenta</option>
+                  <option value="bancolombia">Bancolombia</option>
+                  <option value="davivienda">Davivienda</option>
+                  <option value="nequi">Nequi</option>
+                  <option value="efectivo">Efectivo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="botones">
+            <button type="submit" id="guardar">Guardar</button>
+            <button type="button" id="cancelarGasto">Cancelar</button>
+            <button type="reset">Limpiar</button>
+          </div>
+          <div class="flecha-container">
+            <button type="button" class="nav-btn prev-step-btn" aria-label="Anterior">⬅️</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="Gastos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
           <div class="mb-4 text-center">
             <h1 class="titulo-principal mb-2"><i class="bi bi-cart-fill me-2"></i>Gastos</h1>
             <p class="subtitulo-pagina mb-0">Controla, analiza y optimiza tu dinero</p>

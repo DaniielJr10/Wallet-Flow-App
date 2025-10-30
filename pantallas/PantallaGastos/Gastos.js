@@ -1,65 +1,544 @@
-/* =====================================================================
-  PANTALLA DE GASTOS - WALLET FLOW
-  Archivo: Gastos.js
-  Responsabilidad: Manejo de la lógica de la vista de gastos (CRUD local,
-  filtros simples, métricas y UI básica). Sin dependencias externas.
-  Persistencia: localStorage clave 'gastos'
-  ===================================================================== */
+// ===== GESTIÓN AVANZADA DE GASTOS =====
 
-// ===== INICIALIZACIÓN DE LA APLICACIÓN =====
-document.addEventListener('DOMContentLoaded', function () {
-  inicializarApp();
+// Variables globales
+let gastos = [];
+let gastosFiltrados = [];
+let paginaActual = 1;
+const gastosPorPagina = 10;
+let gastoEditando = null;
+
+// Inicialización
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Sistema de gastos iniciado');
+    cargarGastos();
+    inicializarEventListeners();
+    actualizarInterfaz();
+    configurarFiltros();
 });
 
-// Actualizar datos cuando la ventana recibe el foco (por si viene desde otra pantalla)
-window.addEventListener('focus', function() {
-  renderGastos();
-  calcularResumen();
-});
-
-// ===== FUNCIÓN PRINCIPAL DE INICIALIZACIÓN =====
-function inicializarApp() {
-  // Render inicial de datos y métricas
-  renderGastos();
-  calcularResumen();
-  // Configuración de listeners de UI
-  configurarEventos();
-  configurarFiltros();
-  // (Gráficos removidos según requerimiento)
-  inicializarTooltips();
+// ===== GESTIÓN DE DATOS =====
+function cargarGastos() {
+    const gastosGuardados = localStorage.getItem('gastos');
+    if (gastosGuardados) {
+        gastos = JSON.parse(gastosGuardados);
+    }
+    gastosFiltrados = [...gastos];
+    console.log(`Cargados ${gastos.length} gastos`);
 }
 
-// Inicializa tooltips Bootstrap (para botón +)
-function inicializarTooltips(){
-  if (typeof bootstrap === 'undefined') return; // Bootstrap no cargado
-  const triggers = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-  triggers.forEach(el => new bootstrap.Tooltip(el));
+function guardarGastos() {
+    localStorage.setItem('gastos', JSON.stringify(gastos));
+    console.log('Gastos guardados en localStorage');
 }
 
-// ===== CONFIGURACIÓN DE EVENTOS =====
-function configurarEventos() {
-  // ===== Botones de creación =====
-  const fab = document.getElementById('fabNuevoGasto');
-  if (fab) fab.addEventListener('click', mostrarFormularioAgregar);
-  // (Botones de encabezado removidos: exportar / nuevo gasto)
-  
-  // Evento para cerrar sesión
-  const cerrarSesionBtn = document.getElementById('cerrarSesionBtn');
-  if (cerrarSesionBtn) {
-    cerrarSesionBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      const confirmar = confirm('¿Estás seguro de que deseas cerrar sesión?');
-      if (confirmar) {
-        // Limpiar datos de sesión si es necesario
-        localStorage.removeItem('usuarioActual');
-        // Redirigir a la página de inicio de sesión
-  window.location.href = '../../login/inicio de sesion/inicio.html';
-      }
+// ===== EVENT LISTENERS =====
+function inicializarEventListeners() {
+    // Botón agregar gasto
+    const btnAgregar = document.getElementById('btnAgregarGasto');
+    if (btnAgregar) {
+        btnAgregar.addEventListener('click', mostrarFormularioAgregar);
+    }
+
+    // Botón exportar
+    const btnExportar = document.getElementById('btnExportar');
+    if (btnExportar) {
+        btnExportar.addEventListener('click', exportarGastos);
+    }
+
+    // Formulario
+    const formulario = document.getElementById('formGasto');
+    if (formulario) {
+        formulario.addEventListener('submit', guardarGasto);
+    }
+
+    // Botón cancelar
+    const btnCancelar = document.getElementById('btnCancelar');
+    if (btnCancelar) {
+        btnCancelar.addEventListener('click', cerrarFormulario);
+    }
+
+    // Filtros
+    const filtros = ['filtroCategoria', 'filtroMetodo', 'filtroRecurrente', 'filtroCuenta'];
+    filtros.forEach(filtro => {
+        const elemento = document.getElementById(filtro);
+        if (elemento) {
+            elemento.addEventListener('change', aplicarFiltros);
+        }
     });
-  }
+
+    // Búsqueda
+    const busqueda = document.getElementById('buscarGasto');
+    if (busqueda) {
+        busqueda.addEventListener('input', aplicarFiltros);
+    }
+
+    // Paginación
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('page-link')) {
+            e.preventDefault();
+            const pagina = parseInt(e.target.dataset.page);
+            if (!isNaN(pagina)) {
+                cambiarPagina(pagina);
+            }
+        }
+    });
 }
 
-// ===== CONFIGURACIÓN DE FILTROS =====
+// ===== FORMULARIO =====
+function mostrarFormularioAgregar() {
+    gastoEditando = null;
+    limpiarFormulario();
+    document.getElementById('tituloFormulario').textContent = 'Agregar Nuevo Gasto';
+    document.getElementById('overlayFormulario').style.display = 'flex';
+}
+
+function mostrarFormularioEditar(id) {
+    const gasto = gastos.find(g => g.id === id);
+    if (!gasto) return;
+
+    gastoEditando = gasto;
+    llenarFormulario(gasto);
+    document.getElementById('tituloFormulario').textContent = 'Editar Gasto';
+    document.getElementById('overlayFormulario').style.display = 'flex';
+}
+
+function llenarFormulario(gasto) {
+    document.getElementById('descripcion').value = gasto.descripcion || '';
+    document.getElementById('monto').value = gasto.monto || '';
+    document.getElementById('categoria').value = gasto.categoria || '';
+    document.getElementById('metodoPago').value = gasto.metodo || '';
+    document.getElementById('fecha').value = gasto.fecha || '';
+    document.getElementById('cuenta').value = gasto.cuenta || '';
+    document.getElementById('esRecurrente').checked = gasto.esRecurrente || false;
+    document.getElementById('frecuencia').value = gasto.frecuencia || '';
+    
+    // Mostrar/ocultar frecuencia
+    const contenedorFrecuencia = document.getElementById('contenedorFrecuencia');
+    if (contenedorFrecuencia) {
+        contenedorFrecuencia.style.display = gasto.esRecurrente ? 'block' : 'none';
+    }
+}
+
+function limpiarFormulario() {
+    const formulario = document.getElementById('formGasto');
+    if (formulario) {
+        formulario.reset();
+    }
+    const contenedorFrecuencia = document.getElementById('contenedorFrecuencia');
+    if (contenedorFrecuencia) {
+        contenedorFrecuencia.style.display = 'none';
+    }
+}
+
+function cerrarFormulario() {
+    document.getElementById('overlayFormulario').style.display = 'none';
+    gastoEditando = null;
+}
+
+function guardarGasto(e) {
+    e.preventDefault();
+    
+    const datos = {
+        descripcion: document.getElementById('descripcion').value.trim(),
+        monto: parseFloat(document.getElementById('monto').value),
+        categoria: document.getElementById('categoria').value,
+        metodo: document.getElementById('metodoPago').value,
+        fecha: document.getElementById('fecha').value,
+        cuenta: document.getElementById('cuenta').value,
+        esRecurrente: document.getElementById('esRecurrente').checked,
+        frecuencia: document.getElementById('frecuencia').value || ''
+    };
+
+    // Validación
+    if (!datos.descripcion || !datos.monto || !datos.categoria || !datos.fecha) {
+        alert('Por favor, completa todos los campos obligatorios');
+        return;
+    }
+
+    if (gastoEditando) {
+        // Editar gasto existente
+        const indice = gastos.findIndex(g => g.id === gastoEditando.id);
+        if (indice !== -1) {
+            gastos[indice] = { ...datos, id: gastoEditando.id };
+        }
+    } else {
+        // Agregar nuevo gasto
+        const nuevoGasto = {
+            ...datos,
+            id: Date.now().toString()
+        };
+        gastos.push(nuevoGasto);
+    }
+
+    guardarGastos();
+    actualizarInterfaz();
+    cerrarFormulario();
+    mostrarNotificacion(gastoEditando ? 'Gasto actualizado' : 'Gasto agregado');
+}
+
+// ===== TABLA Y VISUALIZACIÓN =====
+function actualizarInterfaz() {
+    aplicarFiltros();
+    actualizarEstadisticas();
+    actualizarTabla();
+    actualizarPaginacion();
+}
+
+function actualizarTabla() {
+    const tbody = document.getElementById('tbodyGastos');
+    if (!tbody) return;
+
+    const inicio = (paginaActual - 1) * gastosPorPagina;
+    const fin = inicio + gastosPorPagina;
+    const gastosPagina = gastosFiltrados.slice(inicio, fin);
+
+    if (gastosPagina.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="10" class="text-center py-5">
+                    <div class="estado-vacio">
+                        <i class="bi bi-receipt icono-vacio" style="font-size: 3rem; color: #e74c3c; margin-bottom: 1rem;"></i>
+                        <h5>No hay gastos registrados</h5>
+                        <p class="text-muted">Comienza agregando tu primer gasto</p>
+                        <button class="btn btn-danger btn-agregar-primero" onclick="mostrarFormularioAgregar()">
+                            <i class="bi bi-plus-circle me-2"></i>Agregar Primer Gasto
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = gastosPagina.map(gasto => `
+        <tr>
+            <td>
+                <input type="checkbox" class="form-check-input" value="${gasto.id}">
+            </td>
+            <td>
+                <span class="categoria-badge">
+                    ${gasto.categoria}
+                </span>
+            </td>
+            <td>
+                <span class="fecha-formato">
+                    ${formatearFecha(gasto.fecha)}
+                </span>
+            </td>
+            <td>
+                <span class="metodo-pago">
+                    ${gasto.metodo}
+                </span>
+            </td>
+            <td>
+                <span class="monto-destacado">
+                    $${Number(gasto.monto).toLocaleString('es-CO')}
+                </span>
+            </td>
+            <td>
+                <div class="descripcion-texto" title="${gasto.descripcion}">
+                    ${gasto.descripcion}
+                </div>
+            </td>
+            <td>
+                <span class="status-badge ${gasto.esRecurrente ? 'badge-recurrente' : 'badge-no-recurrente'}">
+                    ${gasto.esRecurrente ? 'Sí' : 'No'}
+                </span>
+            </td>
+            <td>
+                ${gasto.esRecurrente && gasto.frecuencia ? `
+                    <small class="frecuencia-texto">${gasto.frecuencia}</small>
+                ` : '<span class="text-muted">-</span>'}
+            </td>
+            <td>
+                <span class="cuenta-texto">
+                    ${gasto.cuenta}
+                </span>
+            </td>
+            <td>
+                <div class="botones-accion">
+                    <button class="btn btn-sm btn-warning btn-editar me-1" onclick="mostrarFormularioEditar('${gasto.id}')" title="Editar">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger btn-eliminar" onclick="eliminarGasto('${gasto.id}')" title="Eliminar">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// ===== ESTADÍSTICAS =====
+function actualizarEstadisticas() {
+    const totalGastos = gastosFiltrados.reduce((sum, gasto) => sum + Number(gasto.monto), 0);
+    const promedioGastos = gastosFiltrados.length > 0 ? totalGastos / gastosFiltrados.length : 0;
+    const totalRegistros = gastosFiltrados.length;
+
+    // Actualizar cards de estadísticas
+    const elementoTotal = document.getElementById('totalGastos');
+    if (elementoTotal) {
+        elementoTotal.textContent = `$${totalGastos.toLocaleString('es-CO')}`;
+    }
+
+    const elementoPromedio = document.getElementById('promedioGastos');
+    if (elementoPromedio) {
+        elementoPromedio.textContent = `$${Math.round(promedioGastos).toLocaleString('es-CO')}`;
+    }
+
+    // Actualizar categoría principal
+    const categorias = {};
+    gastosFiltrados.forEach(gasto => {
+        categorias[gasto.categoria] = (categorias[gasto.categoria] || 0) + Number(gasto.monto);
+    });
+    
+    const categoriaPrincipal = Object.keys(categorias).reduce((a, b) => 
+        categorias[a] > categorias[b] ? a : b, 'Sin datos'
+    );
+    
+    const elementoCategoria = document.getElementById('categoriaPrincipal');
+    if (elementoCategoria) {
+        elementoCategoria.textContent = categoriaPrincipal;
+    }
+
+    const elementoConteo = document.getElementById('conteoGastos');
+    if (elementoConteo) {
+        elementoConteo.textContent = totalRegistros;
+    }
+}
+
+// ===== FILTROS =====
+function configurarFiltros() {
+    actualizarOpcionesFiltros();
+    
+    // Configurar checkbox de recurrente
+    const checkRecurrente = document.getElementById('esRecurrente');
+    const contenedorFrecuencia = document.getElementById('contenedorFrecuencia');
+    
+    if (checkRecurrente && contenedorFrecuencia) {
+        checkRecurrente.addEventListener('change', function() {
+            contenedorFrecuencia.style.display = this.checked ? 'block' : 'none';
+        });
+    }
+}
+
+function actualizarOpcionesFiltros() {
+    const categorias = [...new Set(gastos.map(g => g.categoria))].filter(Boolean);
+    const metodos = [...new Set(gastos.map(g => g.metodo))].filter(Boolean);
+    const cuentas = [...new Set(gastos.map(g => g.cuenta))].filter(Boolean);
+
+    actualizarSelectFiltro('filtroCategoria', categorias);
+    actualizarSelectFiltro('filtroMetodo', metodos);
+    actualizarSelectFiltro('filtroCuenta', cuentas);
+}
+
+function actualizarSelectFiltro(id, opciones) {
+    const select = document.getElementById(id);
+    if (!select) return;
+
+    const valorActual = select.value;
+    const opcionesTodas = select.querySelector('option[value=""]');
+    
+    select.innerHTML = '';
+    if (opcionesTodas) {
+        select.appendChild(opcionesTodas);
+    }
+
+    opciones.forEach(opcion => {
+        const option = document.createElement('option');
+        option.value = opcion;
+        option.textContent = opcion;
+        select.appendChild(option);
+    });
+
+    select.value = valorActual;
+}
+
+function aplicarFiltros() {
+    const filtroCategoria = document.getElementById('filtroCategoria')?.value || '';
+    const filtroMetodo = document.getElementById('filtroMetodo')?.value || '';
+    const filtroRecurrente = document.getElementById('filtroRecurrente')?.value || '';
+    const filtroCuenta = document.getElementById('filtroCuenta')?.value || '';
+    const busqueda = document.getElementById('buscarGasto')?.value.toLowerCase() || '';
+
+    gastosFiltrados = gastos.filter(gasto => {
+        const cumpleCategoria = !filtroCategoria || gasto.categoria === filtroCategoria;
+        const cumpleMetodo = !filtroMetodo || gasto.metodo === filtroMetodo;
+        const cumpleCuenta = !filtroCuenta || gasto.cuenta === filtroCuenta;
+        
+        let cumpleRecurrente = true;
+        if (filtroRecurrente === 'si') {
+            cumpleRecurrente = gasto.esRecurrente === true;
+        } else if (filtroRecurrente === 'no') {
+            cumpleRecurrente = gasto.esRecurrente === false;
+        }
+
+        const cumpleBusqueda = !busqueda || 
+            gasto.descripcion.toLowerCase().includes(busqueda) ||
+            gasto.categoria.toLowerCase().includes(busqueda) ||
+            gasto.metodo.toLowerCase().includes(busqueda) ||
+            gasto.cuenta.toLowerCase().includes(busqueda);
+
+        return cumpleCategoria && cumpleMetodo && cumpleCuenta && cumpleRecurrente && cumpleBusqueda;
+    });
+
+    paginaActual = 1;
+    actualizarEstadisticas();
+    actualizarTabla();
+    actualizarPaginacion();
+}
+
+function limpiarFiltros() {
+    document.getElementById('filtroCategoria').value = '';
+    document.getElementById('filtroMetodo').value = '';
+    document.getElementById('filtroRecurrente').value = '';
+    document.getElementById('filtroCuenta').value = '';
+    document.getElementById('buscarGasto').value = '';
+    aplicarFiltros();
+}
+
+// ===== PAGINACIÓN =====
+function actualizarPaginacion() {
+    const totalPaginas = Math.ceil(gastosFiltrados.length / gastosPorPagina);
+    const contenedorPaginacion = document.getElementById('paginacionGastos');
+    
+    if (!contenedorPaginacion) return;
+
+    if (totalPaginas <= 1) {
+        contenedorPaginacion.innerHTML = '';
+        return;
+    }
+
+    let html = '<nav><ul class="pagination pagination-sm">';
+    
+    // Botón anterior
+    html += `<li class="page-item ${paginaActual === 1 ? 'disabled' : ''}">
+        <a class="page-link" href="#" data-page="${paginaActual - 1}">Anterior</a>
+    </li>`;
+    
+    // Números de página
+    for (let i = 1; i <= totalPaginas; i++) {
+        html += `<li class="page-item ${i === paginaActual ? 'active' : ''}">
+            <a class="page-link" href="#" data-page="${i}">${i}</a>
+        </li>`;
+    }
+    
+    // Botón siguiente
+    html += `<li class="page-item ${paginaActual === totalPaginas ? 'disabled' : ''}">
+        <a class="page-link" href="#" data-page="${paginaActual + 1}">Siguiente</a>
+    </li>`;
+    
+    html += '</ul></nav>';
+    contenedorPaginacion.innerHTML = html;
+
+    // Actualizar información de paginación
+    const infoPaginacion = document.getElementById('infoPaginacion');
+    if (infoPaginacion) {
+        const inicio = (paginaActual - 1) * gastosPorPagina + 1;
+        const fin = Math.min(paginaActual * gastosPorPagina, gastosFiltrados.length);
+        infoPaginacion.textContent = `Mostrando ${inicio}-${fin} de ${gastosFiltrados.length} gastos`;
+    }
+}
+
+function cambiarPagina(nuevaPagina) {
+    const totalPaginas = Math.ceil(gastosFiltrados.length / gastosPorPagina);
+    if (nuevaPagina >= 1 && nuevaPagina <= totalPaginas) {
+        paginaActual = nuevaPagina;
+        actualizarTabla();
+        actualizarPaginacion();
+    }
+}
+
+// ===== ELIMINAR GASTO =====
+function eliminarGasto(id) {
+    const gasto = gastos.find(g => g.id === id);
+    if (!gasto) return;
+
+    if (confirm(`¿Estás seguro de eliminar el gasto "${gasto.descripcion}"?`)) {
+        gastos = gastos.filter(g => g.id !== id);
+        guardarGastos();
+        actualizarInterfaz();
+        mostrarNotificacion('Gasto eliminado');
+    }
+}
+
+// ===== EXPORTAR =====
+function exportarGastos() {
+    if (gastosFiltrados.length === 0) {
+        alert('No hay gastos para exportar');
+        return;
+    }
+
+    const datos = gastosFiltrados.map(gasto => ({
+        'Descripción': gasto.descripcion,
+        'Monto': gasto.monto,
+        'Categoría': gasto.categoria,
+        'Método de Pago': gasto.metodo,
+        'Fecha': gasto.fecha,
+        'Cuenta': gasto.cuenta,
+        'Es Recurrente': gasto.esRecurrente ? 'Sí' : 'No',
+        'Frecuencia': gasto.frecuencia || ''
+    }));
+
+    const csv = convertirACSV(datos);
+    descargarCSV(csv, 'gastos_export.csv');
+    mostrarNotificacion('Gastos exportados exitosamente');
+}
+
+// ===== UTILIDADES =====
+function formatearFecha(fecha) {
+    if (!fecha) return '';
+    const date = new Date(fecha);
+    return date.toLocaleDateString('es-CO');
+}
+
+function convertirACSV(datos) {
+    if (datos.length === 0) return '';
+    
+    const headers = Object.keys(datos[0]);
+    const csv = [
+        headers.join(','),
+        ...datos.map(fila => headers.map(header => `"${fila[header]}"`).join(','))
+    ].join('\n');
+    
+    return csv;
+}
+
+function descargarCSV(csv, nombreArchivo) {
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', nombreArchivo);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function mostrarNotificacion(mensaje) {
+    // Crear notificación temporal
+    const notificacion = document.createElement('div');
+    notificacion.className = 'alert alert-success position-fixed';
+    notificacion.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    notificacion.innerHTML = `
+        <i class="bi bi-check-circle me-2"></i>
+        ${mensaje}
+    `;
+    
+    document.body.appendChild(notificacion);
+    
+    setTimeout(() => {
+        notificacion.remove();
+    }, 3000);
+}
+
+// ===== FUNCIONES GLOBALES PARA EVENTOS =====
+window.mostrarFormularioAgregar = mostrarFormularioAgregar;
+window.mostrarFormularioEditar = mostrarFormularioEditar;
+window.eliminarGasto = eliminarGasto;
+
+
 function configurarFiltros() {
   // Obtiene referencias a controles simplificados
   const filtroCategoria = document.getElementById('filtroCategoria');
