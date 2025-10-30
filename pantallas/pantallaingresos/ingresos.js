@@ -1,14 +1,228 @@
 document.addEventListener('DOMContentLoaded', function () {
+  // Variables globales
+  let ingresosOriginales = [];
+  let ingresosFiltrados = [];
+  let paginaActual = 1;
+  const registrosPorPagina = 10;
+
+  // Inicializar funcionalidades
   renderIngresos();
+  initFormularioIngreso();
+  initFiltros();
+  initAccionesTabla();
+  
+  // Configurar botón para abrir modal
+  const btnAgregarIngreso = document.getElementById('btnAgregarIngreso');
+  if (btnAgregarIngreso) {
+    btnAgregarIngreso.addEventListener('click', function() {
+      abrirModalIngreso();
+    });
+  }
+
+  function abrirModalIngreso() {
+    const modal = document.getElementById('modalAgregarIngreso');
+    if (modal) {
+      modal.classList.remove('d-none');
+      // Establecer fecha actual por defecto
+      const fechaHoy = new Date().toISOString().split('T')[0];
+      document.getElementById('addFechaIngreso').value = fechaHoy;
+    }
+  }
+
+  // Función de filtros
+  function initFiltros() {
+    const buscarInput = document.getElementById('buscarIngreso');
+    const filtroCategoria = document.getElementById('filtroCategoria');
+    const filtroMes = document.getElementById('filtroMes');
+    const limpiarFiltros = document.getElementById('limpiarFiltros');
+
+    // Búsqueda en tiempo real
+    if (buscarInput) {
+      buscarInput.addEventListener('input', aplicarFiltros);
+    }
+
+    // Filtro por categoría
+    if (filtroCategoria) {
+      filtroCategoria.addEventListener('change', aplicarFiltros);
+    }
+
+    // Filtro por mes
+    if (filtroMes) {
+      filtroMes.addEventListener('change', aplicarFiltros);
+    }
+
+    // Limpiar filtros
+    if (limpiarFiltros) {
+      limpiarFiltros.addEventListener('click', function() {
+        buscarInput.value = '';
+        filtroCategoria.value = '';
+        filtroMes.value = '';
+        aplicarFiltros();
+      });
+    }
+  }
+
+  function aplicarFiltros() {
+    const textoBusqueda = document.getElementById('buscarIngreso').value.toLowerCase();
+    const categoriaFiltro = document.getElementById('filtroCategoria').value;
+    const mesFiltro = document.getElementById('filtroMes').value;
+
+    ingresosFiltrados = ingresosOriginales.filter(ingreso => {
+      const coincideTexto = !textoBusqueda || 
+        ingreso.descripcion.toLowerCase().includes(textoBusqueda) ||
+        ingreso.categoria.toLowerCase().includes(textoBusqueda) ||
+        ingreso.metodo.toLowerCase().includes(textoBusqueda);
+
+      const coincideCategoria = !categoriaFiltro || ingreso.categoria === categoriaFiltro;
+
+      const coincideMes = !mesFiltro || ingreso.fecha.startsWith(mesFiltro);
+
+      return coincideTexto && coincideCategoria && coincideMes;
+    });
+
+    paginaActual = 1;
+    renderTablaConPaginacion();
+  }
+
+  // Acciones de tabla
+  function initAccionesTabla() {
+    const exportarBtn = document.getElementById('exportarDatos');
+    const selectAllBtn = document.getElementById('selectAll');
+    const seleccionarTodoBtn = document.getElementById('seleccionarTodo');
+    const eliminarSeleccionadosBtn = document.getElementById('eliminarSeleccionados');
+
+    if (exportarBtn) {
+      exportarBtn.addEventListener('click', exportarDatos);
+    }
+
+    if (selectAllBtn) {
+      selectAllBtn.addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+        checkboxes.forEach(cb => cb.checked = this.checked);
+      });
+    }
+
+    if (seleccionarTodoBtn) {
+      seleccionarTodoBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const selectAll = document.getElementById('selectAll');
+        selectAll.checked = true;
+        selectAll.dispatchEvent(new Event('change'));
+      });
+    }
+
+    if (eliminarSeleccionadosBtn) {
+      eliminarSeleccionadosBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        eliminarSeleccionados();
+      });
+    }
+  }
+
+  function exportarDatos() {
+    const datos = ingresosFiltrados.map(ingreso => ({
+      Categoría: ingreso.categoria,
+      Método: ingreso.metodo,
+      Monto: ingreso.monto,
+      Fecha: ingreso.fecha,
+      Descripción: ingreso.descripcion,
+      Recurrente: ingreso.esRecurrente ? 'Sí' : 'No',
+      Frecuencia: ingreso.frecuencia || '-',
+      Cuenta: ingreso.cuenta || '-'
+    }));
+
+    const csv = convertirACSV(datos);
+    descargarCSV(csv, 'ingresos.csv');
+  }
+
+  function convertirACSV(datos) {
+    if (datos.length === 0) return '';
+    
+    const headers = Object.keys(datos[0]);
+    const csvContent = [
+      headers.join(','),
+      ...datos.map(row => headers.map(header => `"${row[header]}"`).join(','))
+    ].join('\n');
+    
+    return csvContent;
+  }
+
+  function descargarCSV(csvContent, filename) {
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function eliminarSeleccionados() {
+    const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]:checked');
+    const indices = Array.from(checkboxes).map(cb => parseInt(cb.dataset.index));
+    
+    if (indices.length === 0) {
+      mostrarMensaje('No hay elementos seleccionados', 'warning');
+      return;
+    }
+
+    const confirmacion = confirm(`¿Estás seguro de eliminar ${indices.length} ingreso(s)?`);
+    if (confirmacion) {
+      // Eliminar en orden inverso para mantener índices
+      indices.sort((a, b) => b - a).forEach(index => {
+        ingresosOriginales.splice(index, 1);
+      });
+      
+      localStorage.setItem('ingresos', JSON.stringify(ingresosOriginales));
+      renderIngresos();
+      mostrarMensaje(`${indices.length} ingreso(s) eliminado(s) exitosamente`, 'success');
+    }
+  }
 
   function renderIngresos() {
+    ingresosOriginales = JSON.parse(localStorage.getItem('ingresos')) || [];
+    ingresosFiltrados = [...ingresosOriginales];
+    
+    // Actualizar resúmenes
+    actualizarResumenes(ingresosOriginales);
+    
+    // Renderizar tabla con paginación
+    renderTablaConPaginacion();
+  }
+
+  function renderTablaConPaginacion() {
     const tabla = document.getElementById('tablaIngresos').querySelector('tbody');
-    let ingresos = JSON.parse(localStorage.getItem('ingresos')) || [];
     tabla.innerHTML = '';
     
-    ingresos.forEach((ingreso, index) => {
+    // Verificar si hay datos
+    if (ingresosFiltrados.length === 0) {
+      mostrarEstadoVacio(tabla);
+      actualizarPaginacion(0, 0);
+      return;
+    }
+    
+    // Calcular paginación
+    const totalRegistros = ingresosFiltrados.length;
+    const totalPaginas = Math.ceil(totalRegistros / registrosPorPagina);
+    const inicio = (paginaActual - 1) * registrosPorPagina;
+    const fin = inicio + registrosPorPagina;
+    const ingresosPagina = ingresosFiltrados.slice(inicio, fin);
+    
+    // Renderizar filas
+    ingresosPagina.forEach((ingreso, indexLocal) => {
+      const indexGlobal = ingresosOriginales.findIndex(item => 
+        item.fecha === ingreso.fecha && 
+        item.monto === ingreso.monto && 
+        item.categoria === ingreso.categoria
+      );
+      
       const fila = document.createElement('tr');
       fila.innerHTML = `
+        <td>
+          <input type="checkbox" data-index="${indexGlobal}">
+        </td>
         <td>
           <span class="categoria-badge">${ingreso.categoria}</span>
         </td>
@@ -22,10 +236,12 @@ document.addEventListener('DOMContentLoaded', function () {
           <span class="fecha-formato">${formatearFecha(ingreso.fecha)}</span>
         </td>
         <td>
-          <span class="descripcion-texto">${ingreso.descripcion || 'Sin descripción'}</span>
+          <span class="descripcion-texto" title="${ingreso.descripcion || 'Sin descripción'}">
+            ${truncarTexto(ingreso.descripcion || 'Sin descripción', 30)}
+          </span>
         </td>
         <td>
-          <span class="badge ${ingreso.esRecurrente ? 'badge-si' : 'badge-no'}">
+          <span class="status-badge ${ingreso.esRecurrente ? 'badge-recurrente' : 'badge-no-recurrente'}">
             ${ingreso.esRecurrente ? 'Sí' : 'No'}
           </span>
         </td>
@@ -37,10 +253,10 @@ document.addEventListener('DOMContentLoaded', function () {
         </td>
         <td>
           <div class="botones-accion">
-            <button class="btn btn-sm btn-warning btn-editar me-1" data-index="${index}" title="Editar ingreso">
+            <button class="btn btn-sm btn-warning btn-editar me-1" data-index="${indexGlobal}" title="Editar ingreso">
               <i class="bi bi-pencil"></i>
             </button>
-            <button class="btn btn-sm btn-danger btn-eliminar" data-index="${index}" title="Eliminar ingreso">
+            <button class="btn btn-sm btn-danger btn-eliminar" data-index="${indexGlobal}" title="Eliminar ingreso">
               <i class="bi bi-trash"></i>
             </button>
           </div>
@@ -49,6 +265,58 @@ document.addEventListener('DOMContentLoaded', function () {
       tabla.appendChild(fila);
     });
 
+    // Actualizar información de paginación
+    actualizarPaginacion(totalRegistros, totalPaginas);
+    
+    // Configurar eventos
+    configurarEventosTabla();
+  }
+
+  function actualizarPaginacion(totalRegistros, totalPaginas) {
+    const paginationInfo = document.getElementById('paginationInfo');
+    const paginationControls = document.getElementById('paginationControls');
+    
+    // Información
+    const inicio = (paginaActual - 1) * registrosPorPagina + 1;
+    const fin = Math.min(paginaActual * registrosPorPagina, totalRegistros);
+    paginationInfo.textContent = `Mostrando ${inicio}-${fin} de ${totalRegistros} registros`;
+    
+    // Controles
+    paginationControls.innerHTML = '';
+    
+    if (totalPaginas <= 1) return;
+    
+    // Botón anterior
+    const prevBtn = document.createElement('li');
+    prevBtn.className = `page-item ${paginaActual === 1 ? 'disabled' : ''}`;
+    prevBtn.innerHTML = `<a class="page-link" href="#" data-page="${paginaActual - 1}">‹</a>`;
+    paginationControls.appendChild(prevBtn);
+    
+    // Páginas
+    for (let i = Math.max(1, paginaActual - 2); i <= Math.min(totalPaginas, paginaActual + 2); i++) {
+      const pageBtn = document.createElement('li');
+      pageBtn.className = `page-item ${i === paginaActual ? 'active' : ''}`;
+      pageBtn.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
+      paginationControls.appendChild(pageBtn);
+    }
+    
+    // Botón siguiente
+    const nextBtn = document.createElement('li');
+    nextBtn.className = `page-item ${paginaActual === totalPaginas ? 'disabled' : ''}`;
+    nextBtn.innerHTML = `<a class="page-link" href="#" data-page="${paginaActual + 1}">›</a>`;
+    paginationControls.appendChild(nextBtn);
+    
+    // Eventos de paginación
+    paginationControls.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (e.target.matches('.page-link') && !e.target.closest('.disabled')) {
+        paginaActual = parseInt(e.target.dataset.page);
+        renderTablaConPaginacion();
+      }
+    });
+  }
+
+  function configurarEventosTabla() {
     // Configurar eventos con mejor feedback
     document.querySelectorAll('.btn-eliminar').forEach(btn => {
       btn.addEventListener('click', function () {
@@ -62,8 +330,8 @@ document.addEventListener('DOMContentLoaded', function () {
           fila.style.transform = 'translateX(-100px)';
           
           setTimeout(() => {
-            ingresos.splice(idx, 1);
-            localStorage.setItem('ingresos', JSON.stringify(ingresos));
+            ingresosOriginales.splice(idx, 1);
+            localStorage.setItem('ingresos', JSON.stringify(ingresosOriginales));
             renderIngresos();
             mostrarMensaje('¡Ingreso eliminado exitosamente!', 'success');
           }, 300);
@@ -77,6 +345,103 @@ document.addEventListener('DOMContentLoaded', function () {
         editarIngreso(idx);
       });
     });
+
+    // Actualizar estado del checkbox principal
+    const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+    const selectAll = document.getElementById('selectAll');
+    
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', function() {
+        const checkedBoxes = document.querySelectorAll('tbody input[type="checkbox"]:checked');
+        selectAll.checked = checkedBoxes.length === checkboxes.length;
+        selectAll.indeterminate = checkedBoxes.length > 0 && checkedBoxes.length < checkboxes.length;
+      });
+    });
+  }
+
+  // Función para truncar texto
+  function truncarTexto(texto, limite) {
+    if (texto.length <= limite) return texto;
+    return texto.substring(0, limite) + '...';
+  }
+
+  // Función para mostrar estado vacío
+  function mostrarEstadoVacio(tabla) {
+    const fila = document.createElement('tr');
+    fila.innerHTML = `
+      <td colspan="10" class="text-center estado-vacio">
+        <div class="py-5">
+          <div class="icono-vacio mb-3">
+            <i class="bi bi-inbox" style="font-size: 4rem; color: #bdc3c7;"></i>
+          </div>
+          <h5 class="text-muted mb-2">No hay ingresos registrados</h5>
+          <p class="text-muted mb-4">Comienza agregando tu primer ingreso para llevar el control de tus finanzas</p>
+          <button class="btn btn-success btn-agregar-primero">
+            <i class="bi bi-plus-circle me-2"></i>Agregar Mi Primer Ingreso
+          </button>
+        </div>
+      </td>
+    `;
+    tabla.appendChild(fila);
+
+    // Agregar evento al botón
+    fila.querySelector('.btn-agregar-primero').addEventListener('click', abrirModalIngreso);
+  }
+
+  // Función para actualizar resúmenes
+  function actualizarResumenes(ingresos) {
+    // Calcular total de ingresos
+    const totalIngresos = ingresos.reduce((total, ingreso) => {
+      return total + parseFloat(ingreso.monto || 0);
+    }, 0);
+
+    // Encontrar categoría principal
+    const categorias = {};
+    ingresos.forEach(ingreso => {
+      const categoria = ingreso.categoria || 'Sin categoría';
+      categorias[categoria] = (categorias[categoria] || 0) + parseFloat(ingreso.monto || 0);
+    });
+
+    const categoriaPrincipal = Object.keys(categorias).reduce((a, b) => 
+      categorias[a] > categorias[b] ? a : b, 'Sin datos'
+    );
+
+    // Calcular promedio mensual (últimos 3 meses)
+    const hoy = new Date();
+    const hace3Meses = new Date(hoy.getFullYear(), hoy.getMonth() - 3, 1);
+    
+    const ingresosRecientes = ingresos.filter(ingreso => {
+      const fechaIngreso = new Date(ingreso.fecha);
+      return fechaIngreso >= hace3Meses;
+    });
+
+    const totalRecientes = ingresosRecientes.reduce((total, ingreso) => {
+      return total + parseFloat(ingreso.monto || 0);
+    }, 0);
+
+    const promedioMensual = totalRecientes / 3;
+
+    // Actualizar los elementos en el DOM
+    const totalElement = document.querySelector('.total-amount');
+    const categoriaElement = document.querySelector('.ingreso-principal');
+    const promedioElement = document.querySelector('.promedio-amount');
+    const conteoElement = document.querySelector('.total-count');
+    
+    if (totalElement) {
+      totalElement.textContent = `$${formatearMonto(totalIngresos)}`;
+    }
+    
+    if (categoriaElement) {
+      categoriaElement.textContent = categoriaPrincipal;
+    }
+
+    if (promedioElement) {
+      promedioElement.textContent = `$${formatearMonto(promedioMensual)}`;
+    }
+
+    if (conteoElement) {
+      conteoElement.textContent = ingresos.length;
+    }
   }
 
   function editarIngreso(idx) {
@@ -305,6 +670,119 @@ document.addEventListener('DOMContentLoaded', function () {
   `;
   document.head.appendChild(estilosAnimacion);
 });
+
+// Lógica del formulario de ingreso
+function initFormularioIngreso() {
+  // Elementos del formulario
+  const modal = document.getElementById('modalAgregarIngreso');
+  const form = document.getElementById('formAgregarIngreso');
+  const step1 = document.getElementById('step1');
+  const step2 = document.getElementById('step2');
+  const nextStepBtn = document.querySelector('.next-step-btn');
+  const prevStepBtn = document.querySelector('.prev-step-btn');
+  const checkRecurrente = document.getElementById('addCheckRecurrenteIngreso');
+  const frecuenciaOptions = document.getElementById('addFrecuenciaOptionsIngreso');
+  const checkCuenta = document.getElementById('addCheckCuentaIngreso');
+  const cuentaOptions = document.getElementById('addCuentaAsociadaOptionsIngreso');
+  const cancelarBtn = document.getElementById('cancelarIngreso');
+
+  // Paso siguiente
+  if (nextStepBtn) {
+    nextStepBtn.addEventListener('click', function () {
+      step1.classList.add('hidden');
+      step2.classList.remove('hidden');
+    });
+  }
+  
+  // Paso anterior
+  if (prevStepBtn) {
+    prevStepBtn.addEventListener('click', function () {
+      step2.classList.add('hidden');
+      step1.classList.remove('hidden');
+    });
+  }
+  
+  // Mostrar/ocultar frecuencia
+  if (checkRecurrente) {
+    checkRecurrente.addEventListener('change', function () {
+      frecuenciaOptions.classList.toggle('visible', checkRecurrente.checked);
+    });
+  }
+  
+  // Mostrar/ocultar cuenta asociada
+  if (checkCuenta) {
+    checkCuenta.addEventListener('change', function () {
+      cuentaOptions.classList.toggle('visible', checkCuenta.checked);
+    });
+  }
+  
+  // Cancelar y cerrar modal
+  if (cancelarBtn) {
+    cancelarBtn.addEventListener('click', function () {
+      cerrarModalIngreso();
+    });
+  }
+  
+  // Cerrar modal con Escape
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && modal && !modal.classList.contains('d-none')) {
+      cerrarModalIngreso();
+    }
+  });
+  
+  // Cerrar modal al hacer clic fuera del contenido
+  if (modal) {
+    modal.addEventListener('click', function (event) {
+      if (event.target === modal) {
+        cerrarModalIngreso();
+      }
+    });
+  }
+  
+  // Envío del formulario
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const datos = {
+        categoria: document.getElementById('addCategoriaIngreso').value,
+        metodo: document.getElementById('addMetodoIngreso').value,
+        monto: document.getElementById('addMontoIngreso').value,
+        fecha: document.getElementById('addFechaIngreso').value,
+        descripcion: document.getElementById('addDescripcionIngreso').value,
+        esRecurrente: checkRecurrente.checked,
+        frecuencia: document.getElementById('addFrecuenciaIngreso').value,
+        tieneCuenta: checkCuenta.checked,
+        cuenta: document.getElementById('addCuentaAsociadaIngreso').value
+      };
+      
+      // Guardar en localStorage
+      let ingresos = JSON.parse(localStorage.getItem('ingresos')) || [];
+      ingresos.push(datos);
+      localStorage.setItem('ingresos', JSON.stringify(ingresos));
+      
+      // Mostrar mensaje de éxito
+      mostrarMensaje('¡Ingreso guardado exitosamente!', 'success');
+      
+      // Actualizar la tabla
+      renderIngresos();
+      
+      // Cerrar modal
+      cerrarModalIngreso();
+    });
+  }
+  
+  // Función para cerrar y limpiar el modal
+  function cerrarModalIngreso() {
+    modal.classList.add('d-none');
+    if (form) {
+      form.reset();
+      step2.classList.add('hidden');
+      step1.classList.remove('hidden');
+      frecuenciaOptions.classList.remove('visible');
+      cuentaOptions.classList.remove('visible');
+    }
+  }
+}
 
 // Funcionalidad para cerrar sesión con confirmación
 document.addEventListener('DOMContentLoaded', function () {

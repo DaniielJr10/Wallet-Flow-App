@@ -55,24 +55,106 @@
             </div>
           </div>
 
-          <!-- Resumen -->
+          <!-- Resumen Mejorado -->
           <div class="row text-center mb-5">
-            <div class="col-md-4 mb-3">
-              <div class="card-resumen">
-                <h5><i class="bi bi-currency-dollar me-2"></i>Total de Ingresos</h5>
-                <p class="display-6 text-success">$3,200.00</p>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card-resumen total-ingresos">
+                <div class="card-icon">
+                  <i class="bi bi-currency-dollar"></i>
+                </div>
+                <div class="card-content">
+                  <h5>Total de Ingresos</h5>
+                  <p class="display-6 text-success total-amount">$0.00</p>
+                  <small class="text-muted">Este mes</small>
+                </div>
               </div>
             </div>
-            <div class="col-md-4 mb-3">
-              <div class="card-resumen">
-                <h5><i class="bi bi-briefcase-fill me-2"></i>Ingreso Principal</h5>
-                <p class="ingreso-principal">Trabajo</p>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card-resumen categoria-principal">
+                <div class="card-icon">
+                  <i class="bi bi-briefcase-fill"></i>
+                </div>
+                <div class="card-content">
+                  <h5>Categoría Principal</h5>
+                  <p class="ingreso-principal">Sin datos</p>
+                  <small class="text-muted">Mayor fuente de ingreso</small>
+                </div>
               </div>
             </div>
-            <div class="col-md-4 mb-3">
-              <div class="card-resumen">
-                <h5><i class="bi bi-graph-up me-2"></i>Comparación</h5>
-                <p class="text-success">+ $200.00 vs mes anterior</p>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card-resumen promedio-mensual">
+                <div class="card-icon">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+                <div class="card-content">
+                  <h5>Promedio Mensual</h5>
+                  <p class="promedio-amount">$0.00</p>
+                  <small class="text-muted">Últimos 3 meses</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card-resumen total-registros">
+                <div class="card-icon">
+                  <i class="bi bi-list-check"></i>
+                </div>
+                <div class="card-content">
+                  <h5>Total Registros</h5>
+                  <p class="total-count">0</p>
+                  <small class="text-muted">Ingresos registrados</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtros y Búsqueda -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card-filtros">
+                <div class="row align-items-center">
+                  <div class="col-md-3 mb-2">
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-search"></i></span>
+                      <input type="text" class="form-control" id="buscarIngreso" placeholder="Buscar ingresos...">
+                    </div>
+                  </div>
+                  <div class="col-md-2 mb-2">
+                    <select class="form-select" id="filtroCategoria">
+                      <option value="">Todas las categorías</option>
+                      <option value="salario">Salario</option>
+                      <option value="venta">Ventas</option>
+                      <option value="freelance">Freelance</option>
+                      <option value="otro">Otro</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2 mb-2">
+                    <select class="form-select" id="filtroMes">
+                      <option value="">Todos los meses</option>
+                      <option value="2025-01">Enero 2025</option>
+                      <option value="2025-02">Febrero 2025</option>
+                      <option value="2025-03">Marzo 2025</option>
+                      <option value="2025-04">Abril 2025</option>
+                      <option value="2025-05">Mayo 2025</option>
+                      <option value="2025-06">Junio 2025</option>
+                      <option value="2025-07">Julio 2025</option>
+                      <option value="2025-08">Agosto 2025</option>
+                      <option value="2025-09">Septiembre 2025</option>
+                      <option value="2025-10">Octubre 2025</option>
+                      <option value="2025-11">Noviembre 2025</option>
+                      <option value="2025-12">Diciembre 2025</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2 mb-2">
+                    <button class="btn btn-outline-secondary w-100" id="limpiarFiltros">
+                      <i class="bi bi-arrow-clockwise me-1"></i>Limpiar
+                    </button>
+                  </div>
+                  <div class="col-md-3 mb-2 text-end">
+                    <button class="btn btn-success btn-lg" id="btnAgregarIngreso">
+                      <i class="bi bi-plus-circle me-2"></i>Agregar Ingreso
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -81,29 +163,138 @@
           <div class="row">
             <div class="col-12">
               <div class="tabla-container">
-                <table class="table table-hover" id="tablaIngresos">
-                  <thead class="table-header">
-                    <tr>
-                      <th><i class="bi bi-tag me-2"></i>Categoría</th>
-                      <th><i class="bi bi-credit-card me-2"></i>Método</th>
-                      <th><i class="bi bi-currency-dollar me-2"></i>Monto</th>
-                      <th><i class="bi bi-calendar me-2"></i>Fecha</th>
-                      <th><i class="bi bi-file-text me-2"></i>Descripción</th>
-                      <th><i class="bi bi-repeat me-2"></i>Recurrente</th>
-                      <th><i class="bi bi-clock me-2"></i>Frecuencia</th>
-                      <th><i class="bi bi-bank me-2"></i>Cuenta</th>
-                      <th><i class="bi bi-gear me-2"></i>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <!-- Aquí se insertarán los ingresos -->
-                  </tbody>
-                </table>
+                <div class="table-header-actions">
+                  <h4><i class="bi bi-table me-2"></i>Lista de Ingresos</h4>
+                  <div class="table-actions">
+                    <button class="btn btn-outline-primary btn-sm" id="exportarDatos">
+                      <i class="bi bi-download me-1"></i>Exportar
+                    </button>
+                    <div class="dropdown d-inline-block ms-2">
+                      <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" id="seleccionarTodo"><i class="bi bi-check-all me-2"></i>Seleccionar todo</a></li>
+                        <li><a class="dropdown-item" href="#" id="eliminarSeleccionados"><i class="bi bi-trash me-2"></i>Eliminar seleccionados</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="table-responsive">
+                  <table class="table table-hover" id="tablaIngresos">
+                    <thead class="table-header">
+                      <tr>
+                        <th width="40"><input type="checkbox" id="selectAll"></th>
+                        <th><i class="bi bi-tag me-2"></i>Categoría</th>
+                        <th><i class="bi bi-credit-card me-2"></i>Método</th>
+                        <th><i class="bi bi-currency-dollar me-2"></i>Monto</th>
+                        <th><i class="bi bi-calendar me-2"></i>Fecha</th>
+                        <th><i class="bi bi-file-text me-2"></i>Descripción</th>
+                        <th><i class="bi bi-repeat me-2"></i>Recurrente</th>
+                        <th><i class="bi bi-clock me-2"></i>Frecuencia</th>
+                        <th><i class="bi bi-bank me-2"></i>Cuenta</th>
+                        <th width="120"><i class="bi bi-gear me-2"></i>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Aquí se insertarán los ingresos -->
+                    </tbody>
+                  </table>
+                </div>
+                
+                <!-- Paginación -->
+                <div class="pagination-container">
+                  <div class="pagination-info">
+                    <span id="paginationInfo">Mostrando 0 de 0 registros</span>
+                  </div>
+                  <nav aria-label="Paginación de ingresos">
+                    <ul class="pagination pagination-sm" id="paginationControls">
+                      <!-- Controles de paginación se generan dinámicamente -->
+                    </ul>
+                  </nav>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Formulario de ingresos modal -->
+  <div id="modalAgregarIngreso" class="modal-overlay d-none">
+    <div class="modal-form">
+      <form id="formAgregarIngreso" autocomplete="off">
+        <h2>Agregar Ingreso</h2>
+        <div class="form-step" id="step1">
+          <label for="addCategoriaIngreso">Categoría</label>
+          <select id="addCategoriaIngreso" required>
+            <option value="salario">Salario</option>
+            <option value="venta">Ventas</option>
+            <option value="freelance">Freelance</option>
+            <option value="otro">Otro</option>
+          </select>
+          <label for="addMetodoIngreso">Método de Ingreso</label>
+          <select id="addMetodoIngreso" required>
+            <option value="efectivo">Efectivo</option>
+            <option value="tarjeta_credito">Tarjeta de Crédito</option>
+            <option value="tarjeta_debito">Tarjeta de Débito</option>
+            <option value="transferencia">Transferencia</option>
+            <option value="nequidaviplata">Nequi/Daviplata</option>
+          </select>
+          <label for="addMontoIngreso">Monto</label>
+          <input type="number" id="addMontoIngreso" required min="0" step="0.01">
+          <label for="addFechaIngreso">Fecha</label>
+          <input type="date" id="addFechaIngreso" required>
+          <div class="siguiente-container">
+            <button type="button" class="nav-btn next-step-btn" aria-label="Siguiente">➡️</button>
+          </div>
+        </div>
+        <div class="form-step hidden" id="step2">
+          <label for="addDescripcionIngreso">Descripción</label>
+          <textarea id="addDescripcionIngreso" name="descripcion"></textarea>
+          <div class="checkbox-options">
+            <div class="checkbox-item">
+              <label class="checkbox-label" for="addCheckRecurrenteIngreso">
+                Ingreso Recurrente
+                <input type="checkbox" id="addCheckRecurrenteIngreso">
+              </label>
+              <div class="frecuencia-options" id="addFrecuenciaOptionsIngreso">
+                <select id="addFrecuenciaIngreso">
+                  <option value="">Seleccionar frecuencia</option>
+                  <option value="diario">Diario</option>
+                  <option value="semanal">Semanal</option>
+                  <option value="mensual">Mensual</option>
+                </select>
+              </div>
+            </div>
+            <div class="checkbox-item">
+              <label class="checkbox-label" for="addCheckCuentaIngreso">
+                Cuenta Asociada
+                <input type="checkbox" id="addCheckCuentaIngreso">
+              </label>
+              <div class="frecuencia-options" id="addCuentaAsociadaOptionsIngreso">
+                <select id="addCuentaAsociadaIngreso">
+                  <option value="">Seleccionar cuenta</option>
+                  <option value="bancolombia">Bancolombia</option>
+                  <option value="davivienda">Davivienda</option>
+                  <option value="nequi">Nequi</option>
+                  <option value="efectivo">Efectivo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="botones">
+            <button type="submit" id="guardar">Guardar</button>
+            <button type="button" id="cancelarIngreso">Cancelar</button>
+            <button type="reset">Limpiar</button>
+          </div>
+          <div class="flecha-container">
+            <button type="button" class="nav-btn prev-step-btn" aria-label="Anterior">⬅️</button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 
