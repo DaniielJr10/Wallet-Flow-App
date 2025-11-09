@@ -787,6 +787,8 @@ input:checked + .slider:before {
     cursor: pointer;
     border: 3px solid transparent;
     position: relative;
+    /* Al navegar con #hash, evitar que quede pegado al borde superior */
+    scroll-margin-top: 90px;
 }
 
 .tool-card::before {

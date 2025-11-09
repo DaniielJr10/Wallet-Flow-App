@@ -731,6 +731,17 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
+
+    // Deep-link: si viene con hash (#perfil, #notificaciones, #privacidad, #acerca)
+    // abrir directamente el modal correspondiente para entrar "de una" a esa opción.
+    const hash = window.location.hash.replace('#','');
+    if (hash) {
+        const validTools = ['perfil','notificaciones','privacidad','acerca'];
+        if (validTools.includes(hash)) {
+            // Abrimos el modal tras un pequeño delay para asegurar que el DOM esté listo
+            setTimeout(() => openToolModal(hash), 100);
+        }
+    }
 });
 
 const configManager = new ConfigurationManager();
@@ -752,5 +763,5 @@ window.onclick = function(event) {
 };
 
 const style = document.createElement("style");
-style.textContent = "@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes slideOut{from{transform:translateX(0);opacity:1}to{transform:translateX(100%);opacity:0}}";
+style.textContent = "@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes slideOut{from{transform:translateX(0);opacity:1}to{transform:translateX(100%);opacity:0}}.highlight-card{outline:3px solid #28a745;border-radius:18px;box-shadow:0 0 0 4px rgba(40,167,69,.3);}";
 document.head.appendChild(style);
