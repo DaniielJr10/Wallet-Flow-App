@@ -33,307 +33,350 @@
         <!-- Contenido Principal -->
         <div class="container main-content">
         <header class="header">
-            <button class="back-btn" onclick="goBack()">
-                <span class="icon">←</span>
-            </button>
-            <h1 style="flex: 1; text-align: center; margin: 0;">Configuración</h1>
+            <h1><i class="bi bi-gear-fill me-3"></i>Configuración</h1>
         </header>
 
-        <main class="main-content">
-            <!-- Sección de Notificaciones -->
-            <section class="config-section">
-                <h2 class="section-title">
-                    <span class="icon">🔔</span>
-                    Notificaciones
-                </h2>
-                
-                <div class="option-group">
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Notificaciones Push</h3>
-                            <p>Recibe alertas en tu dispositivo</p>
+        <main class="main-content-inner">
+            <!-- Grid de Tarjetas Estilo Herramientas -->
+            <div class="tools-grid">
+                <!-- Tarjeta Mi Perfil -->
+                <div class="tool-card" data-tool="perfil">
+                    <div class="tool-card-header">
+                        <div class="tool-icon-wrapper perfil-bg">
+                            <i class="bi bi-person-circle"></i>
                         </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="pushNotifications" checked>
-                            <span class="slider"></span>
-                        </label>
+                        <span class="tool-badge">PERSONAL</span>
                     </div>
-
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Notificaciones en la App</h3>
-                            <p>Alertas dentro de la aplicación</p>
+                    <div class="tool-card-body">
+                        <h3 class="tool-title">Mi Perfil</h3>
+                        <p class="tool-description">Actualiza tu información personal y foto de perfil</p>
+                        <div class="tool-features">
+                            <span class="feature-tag"><i class="bi bi-image"></i> Foto de perfil</span>
+                            <span class="feature-tag"><i class="bi bi-pencil"></i> Edición rápida</span>
                         </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="inAppNotifications" checked>
-                            <span class="slider"></span>
-                        </label>
                     </div>
-
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Recordatorios de Pagos</h3>
-                            <p>Alertas sobre deudas y gastos</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="paymentReminders" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Consejos Financieros</h3>
-                            <p>Recomendaciones personalizadas</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="financialTips" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Frecuencia de Notificaciones</h3>
-                            <p>Con qué frecuencia recibir alertas</p>
-                        </div>
-                        <select id="notificationFrequency" class="select-input">
-                            <option value="daily">Diarias</option>
-                            <option value="weekly">Semanales</option>
-                            <option value="important">Solo eventos importantes</option>
-                        </select>
-                    </div>
-
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Correo Electrónico</h3>
-                            <p>Recibir notificaciones por email</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="emailNotifications">
-                            <span class="slider"></span>
-                        </label>
+                    <div class="tool-card-footer">
+                        <button class="btn-open-tool" onclick="openToolModal('perfil')">
+                            Abrir herramienta
+                            <i class="bi bi-arrow-right-circle"></i>
+                        </button>
                     </div>
                 </div>
 
-                <button class="action-btn" onclick="showNotificationHistory()">
-                    Ver Historial de Notificaciones
-                </button>
-            </section>
-
-            <!-- Sección de Personalización -->
-            <section class="config-section">
-                <h2 class="section-title">
-                    <span class="icon">🎨</span>
-                    Personalización
-                </h2>
-
-                <div class="option-group">
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Tema</h3>
-                            <p>Apariencia de la aplicación</p>
+                <!-- Tarjeta Notificaciones -->
+                <div class="tool-card" data-tool="notificaciones">
+                    <div class="tool-card-header">
+                        <div class="tool-icon-wrapper notif-bg">
+                            <i class="bi bi-bell-fill"></i>
                         </div>
-                        <select id="themeSelect" class="select-input">
-                            <option value="light">Claro</option>
-                            <option value="dark">Oscuro</option>
-                            <option value="auto">Automático</option>
+                        <span class="tool-badge">ORGANIZACIÓN</span>
+                    </div>
+                    <div class="tool-card-body">
+                        <h3 class="tool-title">Notificaciones</h3>
+                        <p class="tool-description">Configura alertas, recordatorios y frecuencia de notificaciones</p>
+                        <div class="tool-features">
+                            <span class="feature-tag"><i class="bi bi-envelope"></i> Alertas por email</span>
+                            <span class="feature-tag"><i class="bi bi-clock"></i> Frecuencia</span>
+                        </div>
+                    </div>
+                    <div class="tool-card-footer">
+                        <button class="btn-open-tool" onclick="openToolModal('notificaciones')">
+                            Abrir herramienta
+                            <i class="bi bi-arrow-right-circle"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Privacidad -->
+                <div class="tool-card" data-tool="privacidad">
+                    <div class="tool-card-header">
+                        <div class="tool-icon-wrapper privacy-bg">
+                            <i class="bi bi-shield-lock-fill"></i>
+                        </div>
+                        <span class="tool-badge danger-badge">SEGURIDAD</span>
+                    </div>
+                    <div class="tool-card-body">
+                        <h3 class="tool-title">Privacidad</h3>
+                        <p class="tool-description">Cambia tu contraseña y gestiona la seguridad de tu cuenta</p>
+                        <div class="tool-features">
+                            <span class="feature-tag"><i class="bi bi-key"></i> Cambiar contraseña</span>
+                            <span class="feature-tag"><i class="bi bi-trash"></i> Eliminar cuenta</span>
+                        </div>
+                    </div>
+                    <div class="tool-card-footer">
+                        <button class="btn-open-tool" onclick="openToolModal('privacidad')">
+                            Abrir herramienta
+                            <i class="bi bi-arrow-right-circle"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Acerca de -->
+                <div class="tool-card" data-tool="acerca">
+                    <div class="tool-card-header">
+                        <div class="tool-icon-wrapper info-bg">
+                            <i class="bi bi-info-circle-fill"></i>
+                        </div>
+                        <span class="tool-badge info-badge">INFO</span>
+                    </div>
+                    <div class="tool-card-body">
+                        <h3 class="tool-title">Acerca de</h3>
+                        <p class="tool-description">Información de la aplicación, versión y contacto</p>
+                        <div class="tool-features">
+                            <span class="feature-tag"><i class="bi bi-code-square"></i> Versión 1.0.0</span>
+                            <span class="feature-tag"><i class="bi bi-github"></i> Open Source</span>
+                        </div>
+                    </div>
+                    <div class="tool-card-footer">
+                        <button class="btn-open-tool" onclick="openToolModal('acerca')">
+                            Abrir herramienta
+                            <i class="bi bi-arrow-right-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal Mi Perfil -->
+        <div class="tool-modal" id="modal-perfil">
+            <div class="tool-modal-content">
+                <div class="tool-modal-header perfil-bg">
+                    <h2><i class="bi bi-person-circle"></i> Mi Perfil</h2>
+                    <button class="close-modal-btn" onclick="closeToolModal('perfil')">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="tool-modal-body">
+                    <div class="profile-section">
+                        <div class="profile-photo-display" id="profilePhotoDisplay">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <button class="btn-change-photo" onclick="changeProfilePhoto()">
+                            <i class="bi bi-camera-fill"></i> Cambiar Foto
+                        </button>
+                        <input type="file" id="photoInput" accept="image/*" style="display: none;" onchange="handlePhotoChange(event)">
+                    </div>
+                    <div class="form-row">
+                        <label><i class="bi bi-person"></i> Nombre Completo</label>
+                        <input type="text" id="profileName" class="input-field" placeholder="Tu nombre completo">
+                    </div>
+                    <div class="form-row">
+                        <label><i class="bi bi-envelope"></i> Correo Electrónico</label>
+                        <input type="email" id="profileEmail" class="input-field" placeholder="tu@email.com" readonly>
+                        <small class="input-hint">El correo no se puede modificar</small>
+                    </div>
+                    <div class="form-row">
+                        <label><i class="bi bi-phone"></i> Teléfono</label>
+                        <input type="tel" id="profilePhone" class="input-field" placeholder="+57 300 123 4567">
+                    </div>
+                </div>
+                <div class="tool-modal-footer">
+                    <button class="btn-secondary" onclick="closeToolModal('perfil')">Cancelar</button>
+                    <button class="btn-save" onclick="saveProfile()">
+                        <i class="bi bi-check-circle"></i> Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Notificaciones -->
+        <div class="tool-modal" id="modal-notificaciones">
+            <div class="tool-modal-content">
+                <div class="tool-modal-header notif-bg">
+                    <h2><i class="bi bi-bell-fill"></i> Notificaciones</h2>
+                    <button class="close-modal-btn" onclick="closeToolModal('notificaciones')">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="tool-modal-body">
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <i class="bi bi-envelope-fill text-primary"></i>
+                            <div>
+                                <strong>Notificaciones por Email</strong>
+                                <p>Recibir alertas importantes en tu correo</p>
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="emailNotifications">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <i class="bi bi-cash-coin text-success"></i>
+                            <div>
+                                <strong>Recordatorios de Pagos</strong>
+                                <p>Alertas de próximos vencimientos</p>
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="paymentReminders" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <i class="bi bi-lightbulb-fill text-warning"></i>
+                            <div>
+                                <strong>Consejos Financieros</strong>
+                                <p>Tips para mejorar tus finanzas</p>
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="financialTips" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="form-row">
+                        <label><i class="bi bi-clock-history"></i> Frecuencia de Notificaciones</label>
+                        <select id="notificationFrequency" class="input-field">
+                            <option value="daily">Diarias</option>
+                            <option value="weekly">Semanales</option>
+                            <option value="important">Solo importantes</option>
                         </select>
                     </div>
+                </div>
+                <div class="tool-modal-footer">
+                    <button class="btn-secondary" onclick="closeToolModal('notificaciones')">Cancelar</button>
+                    <button class="btn-save" onclick="saveNotifications()">
+                        <i class="bi bi-check-circle"></i> Guardar Preferencias
+                    </button>
+                </div>
+            </div>
+        </div>
 
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Fuente</h3>
-                            <p>Estilo de letra</p>
+        <!-- Modal Privacidad -->
+        <div class="tool-modal" id="modal-privacidad">
+            <div class="tool-modal-content">
+                <div class="tool-modal-header privacy-bg">
+                    <h2><i class="bi bi-shield-lock-fill"></i> Privacidad y Seguridad</h2>
+                    <button class="close-modal-btn" onclick="closeToolModal('privacidad')">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="tool-modal-body">
+                    <div class="privacy-section">
+                        <h4><i class="bi bi-key-fill"></i> Cambiar Contraseña</h4>
+                        <div class="form-row">
+                            <label>Contraseña Actual</label>
+                            <input type="password" id="currentPassword" class="input-field" placeholder="••••••••">
                         </div>
-                        <select id="fontSelect" class="select-input">
-                            <option value="default">Predeterminada</option>
-                            <option value="serif">Serif</option>
-                            <option value="sans-serif">Sans-Serif</option>
-                            <option value="monospace">Monoespaciada</option>
-                        </select>
+                        <div class="form-row">
+                            <label>Nueva Contraseña</label>
+                            <input type="password" id="newPassword" class="input-field" placeholder="••••••••">
+                        </div>
+                        <div class="form-row">
+                            <label>Confirmar Nueva Contraseña</label>
+                            <input type="password" id="confirmPassword" class="input-field" placeholder="••••••••">
+                        </div>
+                        <button class="btn-save" onclick="changePassword()">
+                            <i class="bi bi-check-circle"></i> Cambiar Contraseña
+                        </button>
                     </div>
 
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Tamaño de Letra</h3>
-                            <p>Tamaño del texto</p>
-                        </div>
-                        <div class="font-size-controls">
-                            <select id="fontSizeSelect" class="select-input">
-                                <option value="small">Pequeño</option>
-                                <option value="medium">Mediano</option>
-                                <option value="large">Grande</option>
-                                <option value="custom">Personalizado</option>
-                            </select>
-                            <input type="range" id="fontSizeSlider" min="12" max="20" value="16" class="slider-input" style="display: none;">
-                        </div>
-                    </div>
+                    <hr class="divider-danger">
 
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Color de Acento</h3>
-                            <p>Color principal de la interfaz</p>
+                    <div class="danger-zone">
+                        <h4><i class="bi bi-exclamation-triangle-fill"></i> Zona Peligrosa</h4>
+                        <div class="warning-box">
+                            <p><strong>⚠️ Eliminar Cuenta</strong></p>
+                            <p>Esta acción es permanente e irreversible. Se perderán todos tus datos.</p>
                         </div>
-                        <div class="color-picker">
-                            <input type="color" id="accentColor" value="#28a745" class="color-input">
-                            <div class="color-presets">
-                                <button class="color-preset" data-color="#28a745" style="background: #28a745;"></button>
-                                <button class="color-preset" data-color="#20c997" style="background: #20c997;"></button>
-                                <button class="color-preset" data-color="#007bff" style="background: #007bff;"></button>
-                                <button class="color-preset" data-color="#dc3545" style="background: #dc3545;"></button>
+                        <div class="form-row">
+                            <label>Escribe "ELIMINAR" para confirmar</label>
+                            <input type="text" id="confirmDeleteInput" class="input-field" placeholder="ELIMINAR" oninput="validateDeleteInput()">
+                        </div>
+                        <button class="btn-danger" id="btnDeleteAccount" onclick="deleteAccount()" disabled>
+                            <i class="bi bi-trash-fill"></i> Eliminar Mi Cuenta
+                        </button>
+                    </div>
+                </div>
+                <div class="tool-modal-footer">
+                    <button class="btn-secondary" onclick="closeToolModal('privacidad')">Cerrar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Acerca de -->
+        <div class="tool-modal" id="modal-acerca">
+            <div class="tool-modal-content">
+                <div class="tool-modal-header info-bg">
+                    <h2><i class="bi bi-info-circle-fill"></i> Acerca de Wallet Flow</h2>
+                    <button class="close-modal-btn" onclick="closeToolModal('acerca')">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="tool-modal-body">
+                    <div class="about-section">
+                        <div class="app-logo">
+                            <i class="bi bi-wallet2"></i>
+                        </div>
+                        <h2>Wallet Flow</h2>
+                        <p class="version">Versión 1.0.0</p>
+                        <p class="description">
+                            Tu aplicación de gestión financiera personal. Controla ingresos, gastos, 
+                            ahorros y alcanza tus objetivos financieros.
+                        </p>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <i class="bi bi-calendar-check"></i>
+                                <div>
+                                    <strong>Fecha de Lanzamiento</strong>
+                                    <p>Enero 2025</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="bi bi-envelope-at"></i>
+                                <div>
+                                    <strong>Contacto</strong>
+                                    <p>soporte@walletflow.com</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="bi bi-github"></i>
+                                <div>
+                                    <strong>GitHub</strong>
+                                    <p><a href="https://github.com/DaniielJr10/Wallet-Flow-App" target="_blank">Ver repositorio</a></p>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Alto Contraste</h3>
-                            <p>Mejora la visibilidad</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="highContrast">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Texto en Negrita</h3>
-                            <p>Mejora la legibilidad</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" id="boldText">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
                 </div>
-
-                <button class="action-btn secondary" onclick="resetPersonalization()">
-                    Restablecer Configuración
-                </button>
-            </section>
-
-            <!-- Sección de Eliminar Cuenta -->
-            <section class="config-section danger-section">
-                <h2 class="section-title danger-title">
-                    <span class="icon">⚠️</span>
-                    Zona Peligrosa
-                </h2>
-
-                <div class="delete-account-warning">
-                    <h4>⚠️ Eliminar Cuenta Permanentemente</h4>
-                    <p>Esta acción es <strong>irreversible</strong> y eliminará:</p>
-                    <ul>
-                        <li>Todos tus datos financieros</li>
-                        <li>Historial de transacciones</li>
-                        <li>Metas de ahorro e inversiones</li>
-                        <li>Configuraciones personalizadas</li>
-                        <li>Historial de notificaciones</li>
-                    </ul>
-                    <p><strong>No podrás recuperar esta información una vez eliminada.</strong></p>
-                </div>
-
-                <div class="option-group">
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Confirmar Eliminación</h3>
-                            <p>Escribe "ELIMINAR CUENTA" para confirmar</p>
-                            <input 
-                                type="text" 
-                                id="deleteConfirmation" 
-                                class="delete-account-input" 
-                                placeholder="Escribe: ELIMINAR CUENTA"
-                                autocomplete="off"
-                            >
-                        </div>
-                    </div>
-
-                    <div class="option-item">
-                        <div class="option-info">
-                            <h3>Motivo de Eliminación (Opcional)</h3>
-                            <p>Ayúdanos a mejorar contándonos por qué eliminas tu cuenta</p>
-                            <select id="deleteReason" class="select-input">
-                                <option value="">Selecciona un motivo</option>
-                                <option value="not-useful">La app no me es útil</option>
-                                <option value="privacy">Preocupaciones de privacidad</option>
-                                <option value="complexity">Muy complicada de usar</option>
-                                <option value="alternative">Encontré una alternativa mejor</option>
-                                <option value="temporary">Solo necesito una pausa temporal</option>
-                                <option value="other">Otro motivo</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="action-btn danger" id="deleteAccountBtn" onclick="deleteAccount()" disabled>
-                    🗑️ Eliminar Cuenta Permanentemente
-                </button>
-            </section>
-        </main>
-
-        <!-- Vista previa -->
-        <div class="preview-text">
-            <p>Vista previa del texto con la configuración actual</p>
-        </div>
-    </div>
-
-    <!-- Modal para historial de notificaciones -->
-    <div id="notificationModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Historial de Notificaciones</h2>
-                <button class="close-btn" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="notificationHistory"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de confirmación -->
-    <div id="confirmModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Confirmar Acción</h2>
-            </div>
-            <div class="modal-body">
-                <p id="confirmMessage"></p>
-                <div class="modal-actions">
-                    <button class="btn-confirm" onclick="confirmAction()">Confirmar</button>
-                    <button class="btn-cancel" onclick="closeConfirmModal()">Cancelar</button>
+                <div class="tool-modal-footer">
+                    <button class="btn-secondary" onclick="closeToolModal('acerca')">Cerrar</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Modal de eliminación de cuenta -->
-    <div id="deleteAccountModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header danger-header">
-                <h2>⚠️ Confirmar Eliminación de Cuenta</h2>
-            </div>
-            <div class="modal-body">
-                <div class="delete-account-warning">
-                    <h4>Última Oportunidad</h4>
-                    <p>Estás a punto de eliminar permanentemente tu cuenta. Esta acción:</p>
-                    <ul>
-                        <li><strong>NO SE PUEDE DESHACER</strong></li>
-                        <li>Eliminará todos tus datos inmediatamente</li>
-                        <li>Cerrará tu sesión en todos los dispositivos</li>
-                        <li>No podrás crear una nueva cuenta con el mismo email</li>
-                    </ul>
+        <!-- Modal Confirmar Eliminación de Cuenta -->
+        <div class="modal-overlay" id="deleteAccountModal">
+            <div class="modal-container">
+                <div class="modal-header-danger">
+                    <h2><i class="bi bi-exclamation-triangle-fill"></i> ¿Eliminar Cuenta?</h2>
                 </div>
-                <div class="modal-actions">
-                    <button class="btn-confirm danger" onclick="confirmDeleteAccount()">
-                        SÍ, ELIMINAR MI CUENTA
-                    </button>
-                    <button class="btn-cancel" onclick="closeDeleteModal()">
-                        Cancelar
-                    </button>
+                <div class="modal-body-content">
+                    <div class="warning-box-modal">
+                        <h4>⚠️ ADVERTENCIA CRÍTICA</h4>
+                        <p>Esta acción eliminará permanentemente:</p>
+                        <ul>
+                            <li>Todos tus datos financieros</li>
+                            <li>Historial de transacciones</li>
+                            <li>Objetivos y metas guardadas</li>
+                            <li>Configuraciones personalizadas</li>
+                        </ul>
+                        <p><strong>Esta acción NO se puede deshacer.</strong></p>
+                    </div>
+                    <div class="modal-actions-center">
+                        <button class="btn-danger-modal" onclick="confirmDeleteAccount()">
+                            <i class="bi bi-trash-fill"></i> Sí, Eliminar Permanentemente
+                        </button>
+                        <button class="btn-cancel-modal" onclick="cancelDeleteAccount()">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
 

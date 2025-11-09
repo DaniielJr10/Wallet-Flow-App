@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
   let paginaActual = 1;
   const registrosPorPagina = 10;
 
+  // Hacer renderIngresos accesible globalmente
+  window.renderIngresos = renderIngresos;
+
   // Inicializar funcionalidades
   renderIngresos();
   initFormularioIngreso();
@@ -227,9 +230,6 @@ document.addEventListener('DOMContentLoaded', function () {
           <span class="categoria-badge">${ingreso.categoria}</span>
         </td>
         <td>
-          <span class="fecha-formato">${formatearFecha(ingreso.fecha)}</span>
-        </td>
-        <td>
           <span class="metodo-pago">${ingreso.metodo}</span>
         </td>
         <td>
@@ -239,6 +239,9 @@ document.addEventListener('DOMContentLoaded', function () {
           <span class="descripcion-texto" title="${ingreso.descripcion || 'Sin descripción'}">
             ${truncarTexto(ingreso.descripcion || 'Sin descripción', 30)}
           </span>
+        </td>
+        <td>
+          <span class="fecha-formato">${formatearFecha(ingreso.fecha)}</span>
         </td>
         <td>
           <span class="status-badge ${ingreso.esRecurrente ? 'badge-recurrente' : 'badge-no-recurrente'}">
@@ -458,14 +461,25 @@ document.addEventListener('DOMContentLoaded', function () {
           <label class="form-label">
             <i class="bi bi-tag me-2"></i>Categoría
           </label>
-          <input class="form-control" name="categoria" value="${ingreso.categoria}" required>
+          <select class="form-select" name="categoria" required>
+            <option value="salario" ${ingreso.categoria === 'salario' ? 'selected' : ''}>Salario</option>
+            <option value="venta" ${ingreso.categoria === 'venta' ? 'selected' : ''}>Ventas</option>
+            <option value="freelance" ${ingreso.categoria === 'freelance' ? 'selected' : ''}>Freelance</option>
+            <option value="otro" ${ingreso.categoria === 'otro' ? 'selected' : ''}>Otro</option>
+          </select>
         </div>
         
         <div class="mb-3">
           <label class="form-label">
             <i class="bi bi-credit-card me-2"></i>Método
           </label>
-          <input class="form-control" name="metodo" value="${ingreso.metodo}" required>
+          <select class="form-select" name="metodo" required>
+            <option value="efectivo" ${ingreso.metodo === 'efectivo' ? 'selected' : ''}>Efectivo</option>
+            <option value="tarjeta_credito" ${ingreso.metodo === 'tarjeta_credito' ? 'selected' : ''}>Tarjeta de Crédito</option>
+            <option value="tarjeta_debito" ${ingreso.metodo === 'tarjeta_debito' ? 'selected' : ''}>Tarjeta de Débito</option>
+            <option value="transferencia" ${ingreso.metodo === 'transferencia' ? 'selected' : ''}>Transferencia</option>
+            <option value="nequidaviplata" ${ingreso.metodo === 'nequidaviplata' ? 'selected' : ''}>Nequi/Daviplata</option>
+          </select>
         </div>
         
         <div class="row">
@@ -506,10 +520,9 @@ document.addEventListener('DOMContentLoaded', function () {
             </label>
             <select class="form-select" name="frecuencia">
               <option value="">Seleccionar...</option>
-              <option value="Semanal" ${ingreso.frecuencia === 'Semanal' ? 'selected' : ''}>Semanal</option>
-              <option value="Quincenal" ${ingreso.frecuencia === 'Quincenal' ? 'selected' : ''}>Quincenal</option>
-              <option value="Mensual" ${ingreso.frecuencia === 'Mensual' ? 'selected' : ''}>Mensual</option>
-              <option value="Anual" ${ingreso.frecuencia === 'Anual' ? 'selected' : ''}>Anual</option>
+              <option value="diario" ${ingreso.frecuencia === 'diario' ? 'selected' : ''}>Diario</option>
+              <option value="semanal" ${ingreso.frecuencia === 'semanal' ? 'selected' : ''}>Semanal</option>
+              <option value="mensual" ${ingreso.frecuencia === 'mensual' ? 'selected' : ''}>Mensual</option>
             </select>
           </div>
         </div>
@@ -518,7 +531,13 @@ document.addEventListener('DOMContentLoaded', function () {
           <label class="form-label">
             <i class="bi bi-bank me-2"></i>Cuenta
           </label>
-          <input class="form-control" name="cuenta" value="${ingreso.cuenta || ''}" placeholder="Cuenta asociada">
+          <select class="form-select" name="cuenta">
+            <option value="">Seleccionar cuenta</option>
+            <option value="bancolombia" ${ingreso.cuenta === 'bancolombia' ? 'selected' : ''}>Bancolombia</option>
+            <option value="davivienda" ${ingreso.cuenta === 'davivienda' ? 'selected' : ''}>Davivienda</option>
+            <option value="nequi" ${ingreso.cuenta === 'nequi' ? 'selected' : ''}>Nequi</option>
+            <option value="efectivo" ${ingreso.cuenta === 'efectivo' ? 'selected' : ''}>Efectivo</option>
+          </select>
         </div>
         
         <div class="form-buttons">
@@ -686,6 +705,16 @@ function initFormularioIngreso() {
   const cuentaOptions = document.getElementById('addCuentaAsociadaOptionsIngreso');
   const cancelarBtn = document.getElementById('cancelarIngreso');
 
+  if (!modal || !form) {
+    return;
+  }
+
+  // Evita re-registrar eventos y disparos múltiples del submit
+  if (modal.dataset.initialized === 'true') {
+    return;
+  }
+  modal.dataset.initialized = 'true';
+
   // Paso siguiente
   if (nextStepBtn) {
     nextStepBtn.addEventListener('click', function () {
@@ -722,65 +751,157 @@ function initFormularioIngreso() {
       cerrarModalIngreso();
     });
   }
-  
-  // Cerrar modal con Escape
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape' && modal && !modal.classList.contains('d-none')) {
+
+  const handleEscape = function (event) {
+    if (event.key === 'Escape' && !modal.classList.contains('d-none')) {
+      cerrarModalIngreso();
+    }
+  };
+  document.addEventListener('keydown', handleEscape);
+
+  // Cerrar modal al hacer clic fuera del contenido
+  modal.addEventListener('click', function (event) {
+    if (event.target === modal) {
       cerrarModalIngreso();
     }
   });
-  
-  // Cerrar modal al hacer clic fuera del contenido
-  if (modal) {
-    modal.addEventListener('click', function (event) {
-      if (event.target === modal) {
-        cerrarModalIngreso();
+
+  const handleSubmit = function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const datos = {
+      categoria: document.getElementById('addCategoriaIngreso').value,
+      metodo: document.getElementById('addMetodoIngreso').value,
+      monto: document.getElementById('addMontoIngreso').value,
+      fecha: document.getElementById('addFechaIngreso').value,
+      descripcion: document.getElementById('addDescripcionIngreso').value,
+      esRecurrente: checkRecurrente.checked,
+      frecuencia: document.getElementById('addFrecuenciaIngreso').value,
+      tieneCuenta: checkCuenta.checked,
+      cuenta: document.getElementById('addCuentaAsociadaIngreso').value
+    };
+    
+    console.log('Guardando ingreso:', datos); // Debug
+    
+    // Guardar en localStorage
+    let ingresos = JSON.parse(localStorage.getItem('ingresos')) || [];
+    ingresos.push(datos);
+    localStorage.setItem('ingresos', JSON.stringify(ingresos));
+    
+    console.log('Ingresos en localStorage:', ingresos); // Debug
+    
+    // Cerrar modal
+    cerrarModalIngreso();
+    
+    // Actualizar la tabla usando la función global
+    if (typeof window.renderIngresos === 'function') {
+      console.log('Actualizando tabla...'); // Debug
+      window.renderIngresos();
+    } else {
+      console.error('renderIngresos no está definida'); // Debug
+      // Recargar la página como fallback
+      setTimeout(() => location.reload(), 1000);
+    }
+    
+    // Mostrar mensaje de éxito mejorado
+    mostrarMensajeExitoInterno();
+  };
+
+  form.addEventListener('submit', handleSubmit);
+
+  // Función para mostrar mensaje de éxito
+  function mostrarMensajeExitoInterno() {
+    const mensaje = document.createElement('div');
+    mensaje.className = 'mensaje-exito-ingreso';
+    mensaje.innerHTML = `
+      <div class="mensaje-icono">
+        <svg width="50" height="50" viewBox="0 0 50 50">
+          <circle cx="25" cy="25" r="23" fill="#27ae60" stroke="#fff" stroke-width="2"/>
+          <path d="M15 25 L22 32 L35 18" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h3>¡Ingreso Guardado!</h3>
+      <p>Tu ingreso se ha registrado exitosamente</p>
+    `;
+    
+    // Estilos inline para el mensaje
+    mensaje.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      z-index: 9999;
+      text-align: center;
+      animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    `;
+    
+    // Agregar animación
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes popIn {
+        0% {
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
       }
-    });
+      .mensaje-exito-ingreso h3 {
+        color: #27ae60;
+        margin: 15px 0 10px 0;
+        font-size: 24px;
+      }
+      .mensaje-exito-ingreso p {
+        color: #7f8c8d;
+        margin: 0;
+        font-size: 16px;
+      }
+      .mensaje-icono {
+        display: inline-block;
+        animation: checkmark 0.5s ease 0.2s;
+      }
+      @keyframes checkmark {
+        0% {
+          transform: scale(0) rotate(0deg);
+        }
+        50% {
+          transform: scale(1.2) rotate(10deg);
+        }
+        100% {
+          transform: scale(1) rotate(0deg);
+        }
+      }
+    `;
+    
+    document.head.appendChild(style);
+    document.body.appendChild(mensaje);
+    
+    setTimeout(() => {
+      mensaje.style.animation = 'popIn 0.3s reverse';
+      setTimeout(() => {
+        mensaje.remove();
+        style.remove();
+      }, 300);
+    }, 1500);
   }
-  
-  // Envío del formulario
-  if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const datos = {
-        categoria: document.getElementById('addCategoriaIngreso').value,
-        metodo: document.getElementById('addMetodoIngreso').value,
-        monto: document.getElementById('addMontoIngreso').value,
-        fecha: document.getElementById('addFechaIngreso').value,
-        descripcion: document.getElementById('addDescripcionIngreso').value,
-        esRecurrente: checkRecurrente.checked,
-        frecuencia: document.getElementById('addFrecuenciaIngreso').value,
-        tieneCuenta: checkCuenta.checked,
-        cuenta: document.getElementById('addCuentaAsociadaIngreso').value
-      };
-      
-      // Guardar en localStorage
-      let ingresos = JSON.parse(localStorage.getItem('ingresos')) || [];
-      ingresos.push(datos);
-      localStorage.setItem('ingresos', JSON.stringify(ingresos));
-      
-      // Mostrar mensaje de éxito
-      mostrarMensaje('¡Ingreso guardado exitosamente!', 'success');
-      
-      // Actualizar la tabla
-      renderIngresos();
-      
-      // Cerrar modal
-      cerrarModalIngreso();
-    });
-  }
-  
+
   // Función para cerrar y limpiar el modal
   function cerrarModalIngreso() {
     modal.classList.add('d-none');
-    if (form) {
-      form.reset();
-      step2.classList.add('hidden');
-      step1.classList.remove('hidden');
-      frecuenciaOptions.classList.remove('visible');
-      cuentaOptions.classList.remove('visible');
-    }
+    form.reset();
+    step2.classList.add('hidden');
+    step1.classList.remove('hidden');
+    frecuenciaOptions.classList.remove('visible');
+    cuentaOptions.classList.remove('visible');
+    // Resetear marca de inicialización para permitir reabrir
+    modal.dataset.initialized = 'false';
   }
 }
 
@@ -796,14 +917,18 @@ document.addEventListener('DOMContentLoaded', function () {
       const confirmar = confirm('¿Estás seguro de que deseas cerrar sesión?');
       
       if (confirmar) {
-        // Si confirma, limpiar datos de sesión y redirigir
-        localStorage.removeItem('walletflow_current_user');
+        // Limpiar datos de usuario
+        localStorage.removeItem('walletflow_user_data');
         localStorage.removeItem('walletflow_remembered_user');
         
+        // Cerrar sesión en Firebase si está disponible
+        if (window.firebaseAuth) {
+          window.firebaseAuth.cerrarSesion();
+        }
+        
         // Redirigir al inicio de sesión
-  window.location.href = '../../login/inicio de sesion/inicio.html';
+        window.location.href = '../../login/inicio de sesion/inicio.html';
       }
-      // Si no confirma, no hace nada
     });
   }
 });

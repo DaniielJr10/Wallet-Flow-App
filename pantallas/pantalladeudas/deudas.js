@@ -14,8 +14,16 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const confirmar = confirm('¿Estás seguro de que deseas cerrar sesión?');
       if (confirmar) {
-        localStorage.removeItem('walletflow_current_user');
+        // Limpiar datos de usuario
+        localStorage.removeItem('walletflow_user_data');
         localStorage.removeItem('walletflow_remembered_user');
+        
+        // Cerrar sesión en Firebase si está disponible
+        if (window.firebaseAuth) {
+          window.firebaseAuth.cerrarSesion();
+        }
+        
+        // Redirigir al login
         window.location.href = '../../login/inicio de sesion/inicio.html';
       }
     });

@@ -213,14 +213,18 @@ document.addEventListener('DOMContentLoaded', function () {
       const confirmar = confirm('¿Estás seguro de que deseas cerrar sesión?');
       
       if (confirmar) {
-        // Si confirma, limpiar datos de sesión y redirigir
-        localStorage.removeItem('walletflow_current_user');
+        // Limpiar datos de usuario
+        localStorage.removeItem('walletflow_user_data');
         localStorage.removeItem('walletflow_remembered_user');
         
+        // Cerrar sesión en Firebase si está disponible
+        if (window.firebaseAuth) {
+          window.firebaseAuth.cerrarSesion();
+        }
+        
         // Redirigir al inicio de sesión
-  window.location.href = '../../login/inicio de sesion/inicio.html';
+        window.location.href = '../../login/inicio de sesion/inicio.html';
       }
-      // Si no confirma, no hace nada
     });
   }
 });

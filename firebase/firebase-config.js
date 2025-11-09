@@ -1,7 +1,6 @@
 // Configuración de Firebase para WalletFlow
 // Importamos las funciones que necesitamos de Firebase
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDztE_yiWLWNSqzT6EPK2xar4V_NFotn78",
   authDomain: "walletflow-ed3ca.firebaseapp.com",
@@ -12,5 +11,4 @@ const firebaseConfig = {
   measurementId: "G-105YB4D75Z"
 };
 
-// Exportamos la configuración para uso en otros archivos
 window.firebaseConfig = firebaseConfig;

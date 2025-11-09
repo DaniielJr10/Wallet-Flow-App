@@ -9,15 +9,24 @@ let gastoEditando = null;
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Sistema de gastos iniciado');
+    console.log('=== Sistema de gastos iniciado ===');
     cargarGastos();
     inicializarEventListeners();
     actualizarInterfaz();
     configurarFiltros();
+    console.log('=== Inicialización completada ===');
 });
 
-// Actualizar datos cuando la ventana recibe el foco (por si viene desde el formulario)
+// Actualizar datos cuando la ventana recibe el foco (por si viene desde otra página)
 window.addEventListener('focus', function() {
+    console.log('Ventana recibió el foco, recargando gastos...');
+    cargarGastos();
+    actualizarInterfaz();
+});
+
+// Recargar al volver a la página
+window.addEventListener('pageshow', function(event) {
+    console.log('Evento pageshow detectado, recargando gastos...');
     cargarGastos();
     actualizarInterfaz();
 });
@@ -26,6 +35,7 @@ window.addEventListener('focus', function() {
 setInterval(function() {
     const gastosActuales = JSON.parse(localStorage.getItem('gastos') || '[]');
     if (gastosActuales.length !== gastos.length) {
+        console.log('Cambios detectados en localStorage, recargando...');
         cargarGastos();
         actualizarInterfaz();
     }
@@ -33,17 +43,56 @@ setInterval(function() {
 
 // ===== GESTIÓN DE DATOS =====
 function cargarGastos() {
-    const gastosGuardados = localStorage.getItem('gastos');
-    if (gastosGuardados) {
-        gastos = JSON.parse(gastosGuardados);
+    try {
+        const gastosGuardados = localStorage.getItem('gastos');
+        console.log('Intentando cargar gastos desde localStorage...');
+        
+        if (gastosGuardados && gastosGuardados !== 'null' && gastosGuardados !== 'undefined') {
+      gastos = JSON.parse(gastosGuardados) || [];
+      // Migración: asegurar que cada gasto tenga un id único
+      let actualizado = false;
+      gastos = gastos.map(g => {
+        if (!g.id) {
+          actualizado = true;
+          return { ...g, id: (Date.now().toString(36) + Math.random().toString(36).slice(2,8)) };
+        }
+        return g;
+      });
+      if (actualizado) {
+        try { localStorage.setItem('gastos', JSON.stringify(gastos)); } catch {}
+      }
+      console.log(`✓ Gastos cargados exitosamente: ${gastos.length} registros`);
+        } else {
+            gastos = [];
+            console.log('No hay gastos guardados. Iniciando con array vacío.');
+        }
+        
+        gastosFiltrados = [...gastos];
+        console.log(`Total de gastos disponibles: ${gastos.length}`);
+        
+    } catch (error) {
+        console.error('Error al cargar gastos:', error);
+        gastos = [];
+        gastosFiltrados = [];
     }
-    gastosFiltrados = [...gastos];
-    console.log(`Cargados ${gastos.length} gastos`);
 }
 
 function guardarGastos() {
-    localStorage.setItem('gastos', JSON.stringify(gastos));
-    console.log('Gastos guardados en localStorage');
+    try {
+        localStorage.setItem('gastos', JSON.stringify(gastos));
+        console.log(`✓ Gastos guardados correctamente: ${gastos.length} registros`);
+        
+        // Verificar que se guardó correctamente
+        const verificacion = localStorage.getItem('gastos');
+        if (verificacion) {
+            console.log('✓ Verificación exitosa: los datos persisten en localStorage');
+        } else {
+            console.error('⚠️ ADVERTENCIA: Los datos NO se guardaron correctamente');
+        }
+    } catch (error) {
+        console.error('❌ Error al guardar gastos:', error);
+        alert('Error al guardar los datos. Por favor, intenta nuevamente.');
+    }
 }
 
 // ===== EVENT LISTENERS =====
@@ -72,20 +121,30 @@ function inicializarEventListeners() {
         btnCancelar.addEventListener('click', cerrarFormulario);
     }
 
-    // Filtros
-    const filtros = ['filtroCategoria', 'filtroMetodo', 'filtroRecurrente', 'filtroCuenta'];
-    filtros.forEach(filtro => {
-        const elemento = document.getElementById(filtro);
-        if (elemento) {
-            elemento.addEventListener('change', aplicarFiltros);
-        }
-    });
-
-    // Búsqueda
+    // --- FILTROS Y BÚSQUEDA (LÓGICA CENTRALIZADA) ---
     const busqueda = document.getElementById('buscarGasto');
     if (busqueda) {
         busqueda.addEventListener('input', aplicarFiltros);
     }
+
+    const filtroCategoria = document.getElementById('filtroCategoria');
+    if (filtroCategoria) {
+        filtroCategoria.addEventListener('change', aplicarFiltros);
+    }
+
+    const filtroMes = document.getElementById('filtroMes');
+    if (filtroMes) {
+        filtroMes.addEventListener('change', aplicarFiltros);
+    }
+    
+    const btnLimpiar = document.querySelector('button[onclick="limpiarFiltros()"]');
+    if (btnLimpiar) {
+        btnLimpiar.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevenir comportamiento por defecto si lo hubiera
+            limpiarFiltros();
+        });
+    }
+    // --- FIN DE FILTROS ---
 
     // Paginación
     document.addEventListener('click', function(e) {
@@ -97,6 +156,28 @@ function inicializarEventListeners() {
             }
         }
     });
+    
+    // Cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrarSesionBtn');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const confirmar = confirm('¿Estás seguro de que deseas cerrar sesión?');
+            if (confirmar) {
+                // Limpiar datos de usuario
+                localStorage.removeItem('walletflow_user_data');
+                localStorage.removeItem('walletflow_remembered_user');
+                
+                // Cerrar sesión en Firebase si está disponible
+                if (window.firebaseAuth) {
+                    window.firebaseAuth.cerrarSesion();
+                }
+                
+                // Redirigir al login
+                window.location.href = '../../login/inicio de sesion/inicio.html';
+            }
+        });
+    }
 }
 
 // ===== FORMULARIO =====
@@ -173,6 +254,7 @@ function guardarGasto(e) {
         const indice = gastos.findIndex(g => g.id === gastoEditando.id);
         if (indice !== -1) {
             gastos[indice] = { ...datos, id: gastoEditando.id };
+            console.log(`Gasto editado con ID: ${gastoEditando.id}`);
         }
     } else {
         // Agregar nuevo gasto
@@ -181,17 +263,27 @@ function guardarGasto(e) {
             id: Date.now().toString()
         };
         gastos.push(nuevoGasto);
+        console.log(`Nuevo gasto creado con ID: ${nuevoGasto.id}`, nuevoGasto);
     }
 
+    // Guardar inmediatamente en localStorage
     guardarGastos();
+    
+    // Actualizar interfaz
+    gastosFiltrados = [...gastos];
     actualizarInterfaz();
     cerrarFormulario();
-    mostrarNotificacion(gastoEditando ? 'Gasto actualizado' : 'Gasto agregado');
+    
+    // Mostrar notificación
+    mostrarNotificacion(gastoEditando ? 'Gasto actualizado correctamente' : 'Gasto agregado correctamente');
+    
+    console.log(`Total de gastos después de guardar: ${gastos.length}`);
 }
 
 // ===== TABLA Y VISUALIZACIÓN =====
 function actualizarInterfaz() {
-    aplicarFiltros();
+    // No llamar a aplicarFiltros() aquí para evitar bucles infinitos.
+    // aplicarFiltros ya llama a las funciones de actualización.
     actualizarEstadisticas();
     actualizarTabla();
     actualizarPaginacion();
@@ -208,7 +300,7 @@ function actualizarTabla() {
     if (gastosPagina.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="10" class="text-center py-5">
+                <td colspan="9" class="text-center py-5">
                     <div class="estado-vacio">
                         <i class="bi bi-receipt icono-vacio" style="font-size: 3rem; color: #e74c3c; margin-bottom: 1rem;"></i>
                         <h5>No hay gastos registrados</h5>
@@ -225,9 +317,6 @@ function actualizarTabla() {
 
     tbody.innerHTML = gastosPagina.map(gasto => `
         <tr>
-            <td>
-                <input type="checkbox" class="form-check-input" value="${gasto.id}">
-            </td>
             <td>
                 <span class="categoria-badge">
                     ${gasto.categoria}
@@ -299,16 +388,16 @@ function actualizarEstadisticas() {
         elementoPromedio.textContent = `$${Math.round(promedioGastos).toLocaleString('es-CO')}`;
     }
 
-    // Actualizar categoría principal
-    const categorias = {};
-    gastosFiltrados.forEach(gasto => {
-        categorias[gasto.categoria] = (categorias[gasto.categoria] || 0) + Number(gasto.monto);
-    });
-    
-    const categoriaPrincipal = Object.keys(categorias).reduce((a, b) => 
-        categorias[a] > categorias[b] ? a : b, 'Sin datos'
+    // Actualizar categoría principal (por frecuencia)
+    const categoriasContadas = gastosFiltrados.reduce((acc, gasto) => {
+        acc[gasto.categoria] = (acc[gasto.categoria] || 0) + 1;
+        return acc;
+    }, {});
+
+    const categoriaPrincipal = Object.keys(categoriasContadas).reduce((a, b) =>
+        categoriasContadas[a] > categoriasContadas[b] ? a : b, 'Sin datos'
     );
-    
+
     const elementoCategoria = document.getElementById('categoriaPrincipal');
     if (elementoCategoria) {
         elementoCategoria.textContent = categoriaPrincipal;
@@ -324,38 +413,36 @@ function actualizarEstadisticas() {
 function configurarFiltros() {
     actualizarOpcionesFiltros();
     
-    // Configurar checkbox de recurrente
-    const checkRecurrente = document.getElementById('esRecurrente');
-    const contenedorFrecuencia = document.getElementById('contenedorFrecuencia');
-    
-    if (checkRecurrente && contenedorFrecuencia) {
-        checkRecurrente.addEventListener('change', function() {
-            contenedorFrecuencia.style.display = this.checked ? 'block' : 'none';
-        });
+    // Configurar listeners para los filtros
+    const idsFiltros = ['buscarGasto', 'filtroCategoria', 'filtroMes'];
+    idsFiltros.forEach(id => {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            elemento.addEventListener('input', aplicarFiltros); // 'input' para búsqueda en tiempo real
+            if (elemento.tagName === 'SELECT') {
+                elemento.addEventListener('change', aplicarFiltros);
+            }
+        }
+    });
+
+    // Botón limpiar
+    const btnLimpiar = document.querySelector('.btn-outline-secondary');
+    if (btnLimpiar && btnLimpiar.textContent.includes('Limpiar')) {
+        btnLimpiar.addEventListener('click', limpiarFiltros);
     }
 }
 
 function actualizarOpcionesFiltros() {
     const categorias = [...new Set(gastos.map(g => g.categoria))].filter(Boolean);
-    const metodos = [...new Set(gastos.map(g => g.metodo))].filter(Boolean);
-    const cuentas = [...new Set(gastos.map(g => g.cuenta))].filter(Boolean);
-
-    actualizarSelectFiltro('filtroCategoria', categorias);
-    actualizarSelectFiltro('filtroMetodo', metodos);
-    actualizarSelectFiltro('filtroCuenta', cuentas);
+    actualizarSelectFiltro('filtroCategoria', categorias, 'Todas las categorías');
 }
 
-function actualizarSelectFiltro(id, opciones) {
+function actualizarSelectFiltro(id, opciones, textoDefault) {
     const select = document.getElementById(id);
     if (!select) return;
 
     const valorActual = select.value;
-    const opcionesTodas = select.querySelector('option[value=""]');
-    
-    select.innerHTML = '';
-    if (opcionesTodas) {
-        select.appendChild(opcionesTodas);
-    }
+    select.innerHTML = `<option value="">${textoDefault}</option>`; // Opción por defecto
 
     opciones.forEach(opcion => {
         const option = document.createElement('option');
@@ -368,45 +455,37 @@ function actualizarSelectFiltro(id, opciones) {
 }
 
 function aplicarFiltros() {
-    const filtroCategoria = document.getElementById('filtroCategoria')?.value || '';
-    const filtroMetodo = document.getElementById('filtroMetodo')?.value || '';
-    const filtroRecurrente = document.getElementById('filtroRecurrente')?.value || '';
-    const filtroCuenta = document.getElementById('filtroCuenta')?.value || '';
     const busqueda = document.getElementById('buscarGasto')?.value.toLowerCase() || '';
+    const filtroCategoria = document.getElementById('filtroCategoria')?.value || '';
+    const filtroMes = document.getElementById('filtroMes')?.value || '';
 
     gastosFiltrados = gastos.filter(gasto => {
+        // Filtro por búsqueda de texto
+        const cumpleBusqueda = !busqueda ||
+            (gasto.descripcion && gasto.descripcion.toLowerCase().includes(busqueda)) ||
+            (gasto.categoria && gasto.categoria.toLowerCase().includes(busqueda)) ||
+            (gasto.monto && gasto.monto.toString().toLowerCase().includes(busqueda)) ||
+            (gasto.metodo && gasto.metodo.toLowerCase().includes(busqueda));
+
+        // Filtro por categoría
         const cumpleCategoria = !filtroCategoria || gasto.categoria === filtroCategoria;
-        const cumpleMetodo = !filtroMetodo || gasto.metodo === filtroMetodo;
-        const cumpleCuenta = !filtroCuenta || gasto.cuenta === filtroCuenta;
-        
-        let cumpleRecurrente = true;
-        if (filtroRecurrente === 'si') {
-            cumpleRecurrente = gasto.esRecurrente === true;
-        } else if (filtroRecurrente === 'no') {
-            cumpleRecurrente = gasto.esRecurrente === false;
-        }
 
-        const cumpleBusqueda = !busqueda || 
-            gasto.descripcion.toLowerCase().includes(busqueda) ||
-            gasto.categoria.toLowerCase().includes(busqueda) ||
-            gasto.metodo.toLowerCase().includes(busqueda) ||
-            gasto.cuenta.toLowerCase().includes(busqueda);
+        // Filtro por mes (compara el inicio del string de fecha 'YYYY-MM-DD' con 'YYYY-MM')
+        const cumpleMes = !filtroMes || (gasto.fecha && gasto.fecha.startsWith(filtroMes));
 
-        return cumpleCategoria && cumpleMetodo && cumpleCuenta && cumpleRecurrente && cumpleBusqueda;
+        return cumpleBusqueda && cumpleCategoria && cumpleMes;
     });
 
-    paginaActual = 1;
-    actualizarEstadisticas();
+    paginaActual = 1; // Resetear a la primera página con cada nuevo filtro
     actualizarTabla();
     actualizarPaginacion();
+    actualizarEstadisticas();
 }
 
 function limpiarFiltros() {
-    document.getElementById('filtroCategoria').value = '';
-    document.getElementById('filtroMetodo').value = '';
-    document.getElementById('filtroRecurrente').value = '';
-    document.getElementById('filtroCuenta').value = '';
     document.getElementById('buscarGasto').value = '';
+    document.getElementById('filtroCategoria').value = '';
+    document.getElementById('filtroMes').value = '';
     aplicarFiltros();
 }
 
@@ -414,6 +493,18 @@ function limpiarFiltros() {
 function actualizarPaginacion() {
     const totalPaginas = Math.ceil(gastosFiltrados.length / gastosPorPagina);
     const contenedorPaginacion = document.getElementById('paginacionGastos');
+    
+    // Actualizar información de paginación SIEMPRE
+    const infoPaginacion = document.getElementById('infoPaginacion');
+    if (infoPaginacion) {
+        if (gastosFiltrados.length === 0) {
+            infoPaginacion.textContent = 'Mostrando 0 de 0 registros';
+        } else {
+            const inicio = (paginaActual - 1) * gastosPorPagina + 1;
+            const fin = Math.min(paginaActual * gastosPorPagina, gastosFiltrados.length);
+            infoPaginacion.textContent = `Mostrando ${inicio}-${fin} de ${gastosFiltrados.length} registros`;
+        }
+    }
     
     if (!contenedorPaginacion) return;
 
@@ -443,14 +534,6 @@ function actualizarPaginacion() {
     
     html += '</ul></nav>';
     contenedorPaginacion.innerHTML = html;
-
-    // Actualizar información de paginación
-    const infoPaginacion = document.getElementById('infoPaginacion');
-    if (infoPaginacion) {
-        const inicio = (paginaActual - 1) * gastosPorPagina + 1;
-        const fin = Math.min(paginaActual * gastosPorPagina, gastosFiltrados.length);
-        infoPaginacion.textContent = `Mostrando ${inicio}-${fin} de ${gastosFiltrados.length} gastos`;
-    }
 }
 
 function cambiarPagina(nuevaPagina) {
@@ -465,13 +548,26 @@ function cambiarPagina(nuevaPagina) {
 // ===== ELIMINAR GASTO =====
 function eliminarGasto(id) {
     const gasto = gastos.find(g => g.id === id);
-    if (!gasto) return;
+    if (!gasto) {
+        console.error('Gasto no encontrado con ID:', id);
+        return;
+    }
 
     if (confirm(`¿Estás seguro de eliminar el gasto "${gasto.descripcion}"?`)) {
+        console.log(`Eliminando gasto con ID: ${id}`);
         gastos = gastos.filter(g => g.id !== id);
+        
+        // Guardar inmediatamente
         guardarGastos();
+        
+        // Actualizar lista filtrada
+        gastosFiltrados = [...gastos];
+        
+        // Actualizar interfaz
         actualizarInterfaz();
-        mostrarNotificacion('Gasto eliminado');
+        mostrarNotificacion('Gasto eliminado correctamente');
+        
+        console.log(`Total de gastos después de eliminar: ${gastos.length}`);
     }
 }
 
@@ -548,7 +644,15 @@ function mostrarNotificacion(mensaje) {
 
 // ===== FUNCIONES GLOBALES PARA EVENTOS =====
 window.mostrarFormularioAgregar = mostrarFormularioAgregar;
-window.mostrarFormularioEditar = mostrarFormularioEditar;
+// Redefinimos el editor para trabajar con el modal del archivo (funciones editar/actualizar existentes)
+window.mostrarFormularioEditar = function(id) {
+  const idx = gastos.findIndex(g => g.id === id);
+  if (idx === -1) {
+    alert('No se encontró el gasto a editar');
+    return;
+  }
+  editarGasto(idx);
+};
 window.eliminarGasto = eliminarGasto;
 
 
@@ -573,33 +677,33 @@ function configurarFiltros() {
 
 // ===== FUNCIÓN PARA APLICAR FILTROS =====
 function aplicarFiltros() {
-  // Lee valores activos de filtros
-  const categoria = document.getElementById('filtroCategoria').value;
-  const metodo = document.getElementById('filtroMetodo').value;
-  const fechaInicio = document.getElementById('filtroFechaInicio').value;
-  const fechaFin = document.getElementById('filtroFechaFin').value;
+  // Lee valores activos de filtros con validación segura
+  const categoria = document.getElementById('filtroCategoria')?.value || '';
+  const metodo = document.getElementById('filtroMetodo')?.value || '';
+  const fechaInicio = document.getElementById('filtroFechaInicio')?.value || '';
+  const fechaFin = document.getElementById('filtroFechaFin')?.value || '';
   const texto = (document.getElementById('buscadorGlobal')?.value || '').trim().toLowerCase();
 
-  let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
+  let gastosTemp = JSON.parse(localStorage.getItem('gastos')) || [];
   
   // Aplicar filtros
   if (categoria) {
-    gastos = gastos.filter(gasto => gasto.categoria === categoria);
+    gastosTemp = gastosTemp.filter(gasto => gasto.categoria === categoria);
   }
   if (metodo) {
-    gastos = gastos.filter(gasto => gasto.metodo === metodo);
+    gastosTemp = gastosTemp.filter(gasto => gasto.metodo === metodo);
   }
   if (fechaInicio) {
-    gastos = gastos.filter(gasto => gasto.fecha >= fechaInicio);
+    gastosTemp = gastosTemp.filter(gasto => gasto.fecha >= fechaInicio);
   }
   if (fechaFin) {
-    gastos = gastos.filter(gasto => gasto.fecha <= fechaFin);
+    gastosTemp = gastosTemp.filter(gasto => gasto.fecha <= fechaFin);
   }
   if (texto) {
-    gastos = gastos.filter(gasto => (gasto.descripcion || '').toLowerCase().includes(texto));
+    gastosTemp = gastosTemp.filter(gasto => (gasto.descripcion || '').toLowerCase().includes(texto));
   }
 
-  renderGastosFiltrados(gastos);
+  renderGastosFiltrados(gastosTemp);
 }
 
 // ===== FUNCIÓN PARA RENDERIZAR GASTOS =====
@@ -991,6 +1095,7 @@ function guardarNuevoGasto(formData) {
   let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
   
   const nuevoGasto = {
+    id: (Date.now().toString(36) + Math.random().toString(36).slice(2,8)),
     categoria: formData.get('categoria'),
     metodo: formData.get('metodo'),
     monto: parseFloat(formData.get('monto')),
@@ -1004,9 +1109,10 @@ function guardarNuevoGasto(formData) {
   
   gastos.push(nuevoGasto);
   localStorage.setItem('gastos', JSON.stringify(gastos));
-  
-  renderGastos();
-  calcularResumen();
+  // Refrescar interfaz canónica
+  try { cargarGastos(); } catch {}
+  gastosFiltrados = [...gastos];
+  actualizarInterfaz();
   mostrarMensaje('¡Gasto agregado exitosamente!', 'success');
 }
 
@@ -1015,6 +1121,12 @@ function actualizarGasto(idx, formData) {
   // Sustituye datos de un gasto existente por índice
   let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
   
+  if (!gastos[idx]) {
+    console.error('Índice de gasto inválido para actualizar:', idx);
+    mostrarMensaje('No se pudo actualizar el gasto (índice inválido)', 'error');
+    return;
+  }
+
   gastos[idx] = {
     ...gastos[idx],
     categoria: formData.get('categoria'),
@@ -1029,9 +1141,10 @@ function actualizarGasto(idx, formData) {
   };
   
   localStorage.setItem('gastos', JSON.stringify(gastos));
-  
-  renderGastos();
-  calcularResumen();
+  // Refrescar interfaz canónica
+  try { cargarGastos(); } catch {}
+  gastosFiltrados = [...gastos];
+  actualizarInterfaz();
   mostrarMensaje('¡Gasto actualizado exitosamente!', 'success');
 }
 
@@ -1145,6 +1258,98 @@ function formatearFecha(fecha) {
   // Formatea fecha ISO (yyyy-mm-dd) a dd mes yyyy local
   const opciones = { day: '2-digit', month: 'short', year: 'numeric' };
   return new Date(fecha + 'T00:00:00').toLocaleDateString('es-ES', opciones);
+}
+
+// ===== SOLUCIÓN DE CONFLICTOS Y OVERRIDES CANÓNICOS =====
+// Nota: Este archivo tenía implementaciones duplicadas de filtros y CRUD.
+// Para garantizar que los controles de la interfaz funcionen, a partir de aquí
+// redefinimos las funciones clave con la versión canónica alineada al HTML actual.
+
+// Utilidad para normalizar texto (minúsculas + sin acentos)
+function normalizarTexto(t) {
+  return t ? t.toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim() : '';
+}
+
+// Filtros correctos (búsqueda, categoría y mes) compatibles con Gastos.html
+function configurarFiltros() {
+  // Búsqueda en tiempo real
+  const busqueda = document.getElementById('buscarGasto');
+  if (busqueda) {
+    busqueda.removeEventListener('input', aplicarFiltros);
+    busqueda.addEventListener('input', aplicarFiltros);
+  }
+
+  // Filtro por categoría
+  const filtroCategoria = document.getElementById('filtroCategoria');
+  if (filtroCategoria) {
+    filtroCategoria.removeEventListener('change', aplicarFiltros);
+    filtroCategoria.addEventListener('change', aplicarFiltros);
+  }
+
+  // Filtro por mes
+  const filtroMes = document.getElementById('filtroMes');
+  if (filtroMes) {
+    filtroMes.removeEventListener('change', aplicarFiltros);
+    filtroMes.addEventListener('change', aplicarFiltros);
+  }
+}
+
+function aplicarFiltros() {
+  const busquedaNorm = normalizarTexto(document.getElementById('buscarGasto')?.value || '');
+  const filtroCategoriaNorm = normalizarTexto(document.getElementById('filtroCategoria')?.value || '');
+  const filtroMes = document.getElementById('filtroMes')?.value || '';
+
+  gastosFiltrados = gastos.filter(gasto => {
+    const categoriaNorm = normalizarTexto(gasto.categoria);
+    const descripcionNorm = normalizarTexto(gasto.descripcion);
+    const metodoNorm = normalizarTexto(gasto.metodo);
+    const cuentaNorm = normalizarTexto(gasto.cuenta);
+
+    // 1) Búsqueda global
+    const cumpleBusqueda = !busquedaNorm ||
+      descripcionNorm.includes(busquedaNorm) ||
+      categoriaNorm.includes(busquedaNorm) ||
+      metodoNorm.includes(busquedaNorm) ||
+      cuentaNorm.includes(busquedaNorm) ||
+      (gasto.monto && gasto.monto.toString().includes(busquedaNorm));
+
+    // 2) Categoría (normalizada para acentos/mayúsculas)
+    const cumpleCategoria = !filtroCategoriaNorm || categoriaNorm === filtroCategoriaNorm;
+
+    // 3) Mes (YYYY-MM)
+    const cumpleMes = !filtroMes || (gasto.fecha && gasto.fecha.startsWith(filtroMes));
+
+    return cumpleBusqueda && cumpleCategoria && cumpleMes;
+  });
+
+  paginaActual = 1;
+  actualizarTabla();
+  actualizarPaginacion();
+  actualizarEstadisticas();
+}
+
+// Eliminar gasto por ID (coincide con el HTML que llama eliminarGasto('id'))
+function eliminarGasto(idOrIndex) {
+  // Acepta un id (string) o un índice numérico (compatibilidad con render alterno)
+  let gasto = gastos.find(g => g.id === idOrIndex);
+  if (!gasto) {
+    const idx = parseInt(idOrIndex, 10);
+    if (!isNaN(idx) && idx >= 0 && idx < gastos.length) {
+      gasto = gastos[idx];
+    }
+  }
+  if (!gasto) {
+    console.error('Gasto no encontrado para eliminar:', idOrIndex);
+    mostrarMensaje('No se encontró el gasto a eliminar', 'error');
+    return;
+  }
+  if (confirm(`¿Eliminar el gasto "${gasto.descripcion}"?`)) {
+    gastos = gastos.filter(g => g.id !== gasto.id);
+    guardarGastos();
+    gastosFiltrados = [...gastos];
+    actualizarInterfaz();
+    mostrarNotificacion('Gasto eliminado correctamente');
+  }
 }
 
 /* (Lógica de gráficos removida) */

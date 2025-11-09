@@ -12,12 +12,8 @@ const backToLoginLink = document.getElementById("back-to-login");
 
 // Campos del formulario
 const regEmail = document.getElementById("reg-email");
-const regId = document.getElementById("reg-id");
 const regName = document.getElementById("reg-name");
 const regLastname = document.getElementById("reg-lastname");
-const regBirthdate = document.getElementById("reg-birthdate");
-const regUsername = document.getElementById("reg-username");
-const regPhone = document.getElementById("reg-phone");
 const regPassword = document.getElementById("reg-password");
 const regConfirmPassword = document.getElementById("reg-confirm-password");
 
@@ -126,11 +122,6 @@ function validateCurrentStep() {
             showFieldError(regEmail, 'Ingresa un correo electrónico válido');
             isValid = false;
         }
-        
-        if (regId.value.length < 6) {
-            showFieldError(regId, 'El número de identificación debe tener al menos 6 caracteres');
-            isValid = false;
-        }
     }
     
     return isValid;
@@ -215,12 +206,8 @@ async function handleRegistration(e) {
         displayName: `${regName.value.trim()} ${regLastname.value.trim()}`,
         // Datos adicionales que podrías guardar en Firestore más tarde
         personalInfo: {
-            id: regId.value.trim(),
             name: regName.value.trim(),
-            lastname: regLastname.value.trim(),
-            birthdate: regBirthdate.value,
-            username: regUsername.value.trim(),
-            phone: regPhone.value.trim()
+            lastname: regLastname.value.trim()
         }
     };
     
@@ -248,7 +235,7 @@ function validateAllFields() {
     let isValid = true;
     
     // Validar paso 1
-    const step1Fields = [regEmail, regId, regName, regLastname, regBirthdate];
+    const step1Fields = [regEmail, regName, regLastname];
     step1Fields.forEach(field => {
         if (!validateField(field)) isValid = false;
     });
@@ -259,7 +246,7 @@ function validateAllFields() {
     }
     
     // Validar paso 2
-    const step2Fields = [regUsername, regPhone, regPassword, regConfirmPassword];
+    const step2Fields = [regPassword, regConfirmPassword];
     step2Fields.forEach(field => {
         if (!validateField(field)) isValid = false;
     });
@@ -273,6 +260,17 @@ function validateAllFields() {
 // ===== MANEJO DE RESPUESTAS =====
 function handleSuccessfulRegistration(result) {
     showMessage(result.message, 'success');
+    
+    // Guardar información del usuario en localStorage
+    const userData = {
+        email: regEmail.value.trim(),
+        nombre: regName.value.trim(),
+        apellido: regLastname.value.trim(),
+        nombreCompleto: `${regName.value.trim()} ${regLastname.value.trim()}`,
+        uid: result.user ? result.user.uid : null
+    };
+    
+    localStorage.setItem('walletflow_user_data', JSON.stringify(userData));
     
     // Redirigir al login después de un delay
     setTimeout(() => {

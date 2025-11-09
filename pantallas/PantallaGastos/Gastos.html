@@ -170,15 +170,6 @@
                     <button class="btn btn-outline-primary btn-sm" id="btnExportar">
                       <i class="bi bi-download me-1"></i>Exportar
                     </button>
-                    <div class="dropdown d-inline-block ms-2">
-                      <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-three-dots-vertical"></i>
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#" id="seleccionarTodo"><i class="bi bi-check-all me-2"></i>Seleccionar todo</a></li>
-                        <li><a class="dropdown-item" href="#" id="eliminarSeleccionados"><i class="bi bi-trash me-2"></i>Eliminar seleccionados</a></li>
-                      </ul>
-                    </div>
                   </div>
                 </div>
                 
@@ -186,7 +177,6 @@
                   <table class="table table-hover" id="tablaGastos">
                     <thead class="table-header">
                       <tr>
-                        <th width="40"><input type="checkbox" id="selectAll"></th>
                         <th><i class="bi bi-tag me-2"></i>Categoría</th>
                         <th><i class="bi bi-calendar me-2"></i>Fecha</th>
                         <th><i class="bi bi-credit-card me-2"></i>Método</th>
@@ -304,141 +294,5 @@
   <!-- Scripts -->
   <script src="Gastos.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-          <div class="mb-4 text-center">
-            <h1 class="titulo-principal mb-2"><i class="bi bi-cart-fill me-2"></i>Gastos</h1>
-            <p class="subtitulo-pagina mb-0">Controla, analiza y optimiza tu dinero</p>
-            <!-- Botones de exportar y nuevo gasto removidos por requerimiento -->
-          </div>
-
-          <!-- ===================== BLOQUE: RESUMEN KPI ===================== -->
-          <!-- Tarjetas de indicadores clave (totales y métricas rápidas) -->
-          <div class="row g-3 kpi-row mb-4 justify-content-center kpi-row-centered">
-            <div class="col-12 col-sm-6 col-xl-3">
-              <div class="kpi-card" data-kpi="total">
-                <div class="kpi-icon bg-grad-rojo"><i class="bi bi-currency-dollar"></i></div>
-                <div class="kpi-body">
-                  <span class="kpi-label">Total Gastado</span>
-                  <span class="kpi-value" id="totalGastos">$0.00</span>
-                  <span class="kpi-trend" id="comparacion"><i class="bi bi-arrow-left-right"></i> vs mes anterior</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-sm-6 col-xl-3">
-              <div class="kpi-card" data-kpi="categoria">
-                <div class="kpi-icon bg-grad-amarillo"><i class="bi bi-tag-fill"></i></div>
-                <div class="kpi-body">
-                  <span class="kpi-label">Categoría Principal</span>
-                  <span class="kpi-value" id="categoriaPrincipal">-</span>
-                  <span class="kpi-trend" id="porcentajeCategoria">--</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-sm-6 col-xl-3">
-              <div class="kpi-card" data-kpi="recurrentes">
-                <div class="kpi-icon bg-grad-morado"><i class="bi bi-repeat"></i></div>
-                <div class="kpi-body">
-                  <span class="kpi-label">Recurrentes</span>
-                  <span class="kpi-value" id="totalRecurrentes">0</span>
-                  <span class="kpi-trend" id="porcentajeRecurrentes">--</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- (Se removieron gráficos de evolución y distribución por decisión del usuario) -->
-
-          <!-- ===================== BLOQUE: FILTROS SIMPLIFICADOS ===================== -->
-          <!-- Barra de búsqueda y filtros básicos para localizar gastos rápidamente -->
-          <div class="filtros-simples mb-3" id="panelFiltros">
-            <div class="row g-2 align-items-end">
-              <div class="col-12 col-lg-4">
-                <div class="input-busqueda-global">
-                  <i class="bi bi-search"></i>
-                  <input type="text" id="buscadorGlobal" class="form-control" placeholder="Buscar (desc, categoría, método, cuenta)..." aria-label="Buscar gastos" />
-                </div>
-              </div>
-              <div class="col-6 col-lg-2">
-                <label class="form-label small mb-1">Categoría</label>
-                <select class="form-select form-select-sm" id="filtroCategoria" aria-label="Filtrar por categoría">
-                  <option value="">Todas</option>
-                  <option value="Alimentación">Alimentación</option>
-                  <option value="Transporte">Transporte</option>
-                  <option value="Entretenimiento">Entretenimiento</option>
-                  <option value="Servicios">Servicios</option>
-                  <option value="Salud">Salud</option>
-                  <option value="Educación">Educación</option>
-                  <option value="Compras">Compras</option>
-                  <option value="Otros">Otros</option>
-                </select>
-              </div>
-              <div class="col-6 col-lg-2">
-                <label class="form-label small mb-1">Método</label>
-                <select class="form-select form-select-sm" id="filtroMetodo" aria-label="Filtrar por método de pago">
-                  <option value="">Todos</option>
-                  <option value="Efectivo">Efectivo</option>
-                  <option value="Tarjeta de Débito">Tarjeta de Débito</option>
-                  <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
-                  <option value="Transferencia">Transferencia</option>
-                </select>
-              </div>
-              <div class="col-6 col-lg-2">
-                <label class="form-label small mb-1">Desde</label>
-                <input type="date" id="filtroFechaInicio" class="form-control form-control-sm" aria-label="Fecha desde" />
-              </div>
-              <div class="col-6 col-lg-2">
-                <label class="form-label small mb-1">Hasta</label>
-                <div class="d-flex gap-2">
-                  <input type="date" id="filtroFechaFin" class="form-control form-control-sm" aria-label="Fecha hasta" />
-                  <button class="btn btn-outline-soft btn-sm" id="btnLimpiarFiltros" aria-label="Limpiar filtros" title="Limpiar filtros"><i class="bi bi-x-lg"></i></button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ===================== BLOQUE: TABLA DE GASTOS ===================== -->
-          <!-- Listado principal con los registros almacenados -->
-          <div class="panel panel-tabla">
-            <div class="panel-header sticky-top">
-              <h6 class="panel-title mb-0"><i class="bi bi-list-ul me-2"></i>Listado de Gastos</h6>
-              <div class="panel-actions small text-muted" id="estadoTabla">0 registros</div>
-            </div>
-            <div class="panel-body p-0">
-              <div class="tabla-responsive-wrapper">
-                <table class="table align-middle mb-0" id="tablaGastos" aria-describedby="estadoTabla">
-                  <thead class="table-header">
-                    <tr>
-                      <th scope="col">Categoría</th>
-                      <th scope="col">Método</th>
-                      <th scope="col">Monto</th>
-                      <th scope="col">Fecha</th>
-                      <th scope="col" class="col-desc">Descripción</th>
-                      <th scope="col">Rec.</th>
-                      <th scope="col">Freq.</th>
-                      <th scope="col">Cuenta</th>
-                      <th scope="col" class="text-center">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <!-- filas dinámicas -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Botón flotante accesible -->
-  <button id="fabNuevoGasto" class="fab-gasto" aria-label="Agregar nuevo gasto" title="Agregar nuevo gasto" data-bs-toggle="tooltip" data-bs-placement="left">
-          <i class="bi bi-plus-lg"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="Gastos.js"></script>
 </body>
 </html>

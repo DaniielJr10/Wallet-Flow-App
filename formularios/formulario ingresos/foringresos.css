@@ -1,79 +1,68 @@
-/* Estilos para el modal del formulario de ingreso */
-.modal-ingreso {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(44, 62, 80, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-.modal-contenido {
-  background: #fff;
-  border-radius: 16px;
-  padding: 2rem 1.5rem;
-  min-width: 320px;
-  max-width: 90vw;
-  box-shadow: 0 8px 32px rgba(44,62,80,0.2);
-}
-.modal-contenido h3 {
-  color: #2e6835;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-#formIngreso .form-label {
-  color: #2e6835;
-  font-weight: 500;
-}
-#formIngreso .form-control {
-  border-radius: 8px;
-  border: 1px solid #2ecc71;
-}
-#formIngreso .btn-success {
-  background: #2ecc71;
-  border: none;
-}
-#formIngreso .btn-success:hover {
-  background: #27ae60;
-}
-#formIngreso .btn-secondary {
-  background: #b2bec3;
-  border: none;
-}
-#formIngreso .btn-secondary:hover {
-  background: #636e72;
-}
+/* Estilos mejorados para el modal del formulario de ingreso */
 
-/* Fondo oscuro para el modal */
+/* Fondo oscuro con blur para el modal */
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  top: 0; 
+  left: 0;
+  width: 100vw; 
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(5px);
   z-index: 998;
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-form {
-  background: #e6e6e6;
-  padding: 20px 20px 30px 20px;
-  border-radius: 20px;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  padding: 0;
+  border-radius: 25px;
   width: 90%;
-  max-width: 350px;
+  max-width: 450px;
   position: relative;
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease;
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .modal-form h2 {
   text-align: center;
-  margin: 0 0 20px 0;
-  padding: 15px 0;
-  font-size: 22px;
-  background-color: #2ecc71;
+  margin: 0;
+  padding: 25px 20px;
+  font-size: 26px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
   color: white;
-  border-radius: 20px 20px 0 0;
+  border-radius: 25px 25px 0 0;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+  letter-spacing: 0.5px;
+}
+
+.form-step {
+  padding: 30px 25px;
 }
 
 .form-step.hidden,
@@ -81,58 +70,131 @@
   display: none;
 }
 
+.modal-form label {
+  display: block;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  margin-top: 15px;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+
+.modal-form label:first-of-type {
+  margin-top: 0;
+}
+
 .modal-form input,
 .modal-form select,
 .modal-form textarea {
   width: 100%;
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 15px;
-  background-color: white;
-  margin-bottom: 10px;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #ffffff;
+  margin-bottom: 5px;
   box-sizing: border-box;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.modal-form input:focus,
+.modal-form select:focus,
+.modal-form textarea:focus {
+  outline: none;
+  border-color: #2ecc71;
+  box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.1);
+  transform: translateY(-2px);
+}
+
+.modal-form textarea {
+  min-height: 90px;
+  resize: vertical;
 }
 
 .nav-btn.next-step-btn,
 .nav-btn.prev-step-btn {
-  background: none;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
   border: none;
-  font-size: 40px;
+  font-size: 24px;
   cursor: pointer;
-  color: #2e6835;
-  padding: 10px;
-  transition: transform 0.2s;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
 }
 
 .nav-btn.next-step-btn:hover,
 .nav-btn.prev-step-btn:hover {
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.5);
+}
+
+.nav-btn.next-step-btn:active,
+.nav-btn.prev-step-btn:active {
+  transform: scale(0.95);
 }
 
 .checkbox-options {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin: 20px 0;
+  gap: 20px;
+  margin: 25px 0 20px 0;
+}
+
+.checkbox-item {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.checkbox-item:hover {
+  border-color: #2ecc71;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.1);
 }
 
 .checkbox-label {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 500;
+  font-weight: 600;
+  color: #2c3e50;
+  cursor: pointer;
+  user-select: none;
 }
 
 .checkbox-options input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   margin-left: 10px;
   cursor: pointer;
+  accent-color: #2ecc71;
 }
 
 .frecuencia-options {
-  margin-top: 5px;
+  margin-top: 12px;
   display: none;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .frecuencia-options.visible {
@@ -143,44 +205,93 @@
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin: 10px 0;
-  padding: 10px;
+  margin: 25px 0 0 0;
+  padding: 0;
 }
 
 .botones button {
-  padding: 8px 16px;
-  border-radius: 10px;
+  padding: 12px 24px;
+  border-radius: 12px;
   cursor: pointer;
-  font-size: 14px;
-  min-width: 80px;
+  font-size: 15px;
+  font-weight: 600;
+  min-width: 100px;
   border: none;
-  transition: background 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.botones button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.botones button:active {
+  transform: translateY(0);
 }
 
 button[type="submit"] {
-  background-color: #2e6835;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
   color: white;
 }
 
-button[type="button"] {
-  background-color: #dc3545;
+button[type="submit"]:hover {
+  background: linear-gradient(135deg, #229954, #27ae60);
+}
+
+button[type="button"]#cancelarIngreso {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
   color: white;
+}
+
+button[type="button"]#cancelarIngreso:hover {
+  background: linear-gradient(135deg, #c0392b, #a93226);
 }
 
 button[type="reset"] {
-  background-color: #b1afaa;
-  color: #333;
+  background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+  color: white;
 }
 
-@media screen and (max-width: 600px) {
-  .modal-form {
-    max-width: 98vw;
-    padding: 10px 5px 60px 5px;
-  }
+button[type="reset"]:hover {
+  background: linear-gradient(135deg, #7f8c8d, #6c7a7b);
 }
 
-.siguiente-container {
+.siguiente-container,
+.flecha-container {
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px;
+  margin-top: 20px;
+}
+
+.flecha-container {
+  justify-content: flex-start;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+  .modal-form {
+    max-width: 95vw;
+    margin: 20px;
+  }
+
+  .modal-form h2 {
+    font-size: 22px;
+    padding: 20px 15px;
+  }
+
+  .form-step {
+    padding: 20px 15px;
+  }
+
+  .botones {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .botones button {
+    width: 100%;
+  }
 }

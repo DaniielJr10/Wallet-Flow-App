@@ -1879,3 +1879,27 @@ input[type="checkbox"] {
 #tablaGastos tbody tr td {
   font-weight: bold !important;
 }
+
+/* ===== OCULTAR BARRA DE DESPLAZAMIENTO HORIZONTAL ===== */
+.table-responsive {
+  overflow-x: hidden !important;
+}
+
+/* Ocultar scrollbar en todos los navegadores */
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+.table-responsive {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Asegurar que el contenido no se desborde */
+.contenido-principal {
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+}

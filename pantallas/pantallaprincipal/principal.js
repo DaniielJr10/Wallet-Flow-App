@@ -34,17 +34,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function configurarPerfilUsuario() {
     // Cargar y mostrar el nombre del usuario en el perfil si existe en localStorage
-    const usuario = localStorage.getItem('walletflow_current_user');
-    if (usuario) {
+    const userDataStr = localStorage.getItem('walletflow_user_data');
+    
+    if (userDataStr) {
       try {
-        const userData = JSON.parse(usuario);
-        // Actualizar nombre en el dropdown header si existe
-        const dropdownHeader = document.querySelector('.dropdown-header strong');
-        if (dropdownHeader && userData.nombre) {
-          dropdownHeader.textContent = userData.nombre;
+        const userData = JSON.parse(userDataStr);
+        
+        // Actualizar el nombre en la bienvenida
+        const nombreBienvenida = document.getElementById('nombreUsuario');
+        if (nombreBienvenida && userData.nombreCompleto) {
+          nombreBienvenida.textContent = userData.nombreCompleto;
+        } else if (nombreBienvenida && userData.nombre) {
+          nombreBienvenida.textContent = userData.nombre;
         }
+        
+        // Actualizar nombre en el dropdown del perfil
+        const nombrePerfil = document.getElementById('nombreUsuarioPerfil');
+        if (nombrePerfil && userData.nombreCompleto) {
+          nombrePerfil.textContent = userData.nombreCompleto;
+        } else if (nombrePerfil && userData.nombre) {
+          nombrePerfil.textContent = userData.nombre;
+        }
+        
+        // Actualizar email en el dropdown del perfil
+        const emailPerfil = document.getElementById('emailUsuarioPerfil');
+        if (emailPerfil && userData.email) {
+          emailPerfil.textContent = userData.email;
+        }
+        
       } catch (e) {
-        console.log('No se pudo cargar datos del usuario');
+        console.log('No se pudo cargar datos del usuario:', e);
       }
     }
   }

@@ -97,6 +97,14 @@ class FirebaseAuth {
                 throw new Error('Firebase no está inicializado');
             }
 
+       
+            if (!email || !password) {
+                console.warn('Intento de login con campos vacíos');
+                return { success: false, error: 'auth/missing-credentials', message: 'Por favor ingresa correo y contraseña' };
+            }
+
+            console.log(`Intentando iniciar sesión con: ${email}`);
+
             const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
             const user = userCredential.user;
 
@@ -108,7 +116,13 @@ class FirebaseAuth {
             };
 
         } catch (error) {
-            console.error('Error al iniciar sesión:', error);
+      
+            console.error('Error al iniciar sesión (detallado):', error);
+            console.error('Código de error:', error && error.code);
+            console.error('Mensaje de error:', error && error.message);
+
+            const code = (error && error.code) ? error.code : 'auth/unknown-error';
+
             return {
                 success: false,
                 error: error.code,
@@ -207,6 +221,9 @@ class FirebaseAuth {
             'auth/invalid-email': 'El correo electrónico no es válido',
             'auth/user-not-found': 'No existe un usuario con este correo electrónico',
             'auth/wrong-password': 'La contraseña es incorrecta',
+            'auth/invalid-login-credentials': 'Credenciales inválidas. Verifica tu correo y contraseña',
+            'auth/missing-credentials': 'Faltan el correo o la contraseña',
+            'auth/unknown-error': 'Error desconocido. Revisa la consola para más detalles',
             'auth/too-many-requests': 'Demasiados intentos fallidos. Intenta más tarde',
             'auth/user-disabled': 'Esta cuenta ha sido deshabilitada',
             'auth/invalid-credential': 'Las credenciales son inválidas',
@@ -222,8 +239,8 @@ class FirebaseAuth {
 try {
     console.log('Creando instancia de FirebaseAuth...');
     window.firebaseAuth = new FirebaseAuth();
-    console.log('✅ FirebaseAuth creado exitosamente:', window.firebaseAuth);
+    console.log('FirebaseAuth creado exitosamente:', window.firebaseAuth);
     console.log('Métodos disponibles:', Object.getOwnPropertyNames(Object.getPrototypeOf(window.firebaseAuth)));
 } catch (error) {
-    console.error('❌ Error al crear FirebaseAuth:', error);
+    console.error('Error al crear FirebaseAuth:', error);
 }

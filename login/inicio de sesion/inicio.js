@@ -186,6 +186,21 @@ function handleSuccessfulLogin(user) {
         localStorage.removeItem('walletflow_remembered_user');
     }
     
+    // Obtener datos del usuario guardados durante el registro
+    let userData = JSON.parse(localStorage.getItem('walletflow_user_data') || '{}');
+    
+    // Si no hay datos guardados o el email no coincide, usar datos de Firebase
+    if (!userData.email || userData.email !== user.email) {
+        userData = {
+            email: user.email,
+            nombreCompleto: user.displayName || 'Usuario',
+            nombre: user.displayName ? user.displayName.split(' ')[0] : 'Usuario',
+            apellido: user.displayName ? user.displayName.split(' ').slice(1).join(' ') : '',
+            uid: user.uid
+        };
+        localStorage.setItem('walletflow_user_data', JSON.stringify(userData));
+    }
+    
     // Mostrar mensaje de éxito
     showMessage('¡Inicio de sesión exitoso! Bienvenido a WalletFlow.', 'success');
     

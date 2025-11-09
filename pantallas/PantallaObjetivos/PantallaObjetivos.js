@@ -11,8 +11,16 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const confirmar = confirm('¿Estás seguro de que deseas cerrar sesión?');
       if (confirmar) {
-        localStorage.removeItem('walletflow_current_user');
+        // Limpiar datos de usuario
+        localStorage.removeItem('walletflow_user_data');
         localStorage.removeItem('walletflow_remembered_user');
+        
+        // Cerrar sesión en Firebase si está disponible
+        if (window.firebaseAuth) {
+          window.firebaseAuth.cerrarSesion();
+        }
+        
+        // Redirigir al login
         window.location.href = '../../login/inicio de sesion/inicio.html';
       }
     });
@@ -34,8 +42,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return
     }
 
-    // Clear previous modal content
-    contenedorModalObjetivo.innerHTML = ""
+  // Clear previous modal content
+  contenedorModalObjetivo.innerHTML = ""
 
     // Load HTML for the add form
     fetch("../../formularios/FormularioObjetivo/FormularioOb.html")
@@ -48,8 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
         script.onload = () => {
           const initFormularioObjetivo = window.initFormularioObjetivo
           if (typeof initFormularioObjetivo === "function") {
-            initFormularioObjetivo(renderObjetivos) // Pass renderObjetivos as callback
-            // Show the modal
+            // Modo creación
+            initFormularioObjetivo(renderObjetivos)
             const modal = new bootstrap.Modal(document.getElementById("modalAgregarObjetivo"))
             modal.show()
           } else {
@@ -60,6 +68,47 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((error) => console.error("Error loading add objetivo form:", error))
   }
+
+  function openEditObjetivoModal(index) {
+    const contenedorModalObjetivo = document.getElementById("contenedorModalObjetivo")
+    if (!contenedorModalObjetivo) {
+      console.error("Contenedor para modal de objetivo no encontrado.")
+      return
+    }
+
+    // Clear previous modal content
+    contenedorModalObjetivo.innerHTML = ""
+
+    fetch("../../formularios/FormularioObjetivo/FormularioOb.html")
+      .then((response) => response.text())
+      .then((html) => {
+        contenedorModalObjetivo.innerHTML = html
+        const script = document.createElement("script")
+        script.src = "../../formularios/FormularioObjetivo/FormularioObj.js"
+        script.onload = () => {
+          const initFormularioObjetivo = window.initFormularioObjetivo
+          const objetivos = JSON.parse(localStorage.getItem("objetivos") || "[]")
+          const objetivo = objetivos[index]
+          if (!objetivo) {
+            console.error("Objetivo no encontrado para edición.")
+            return
+          }
+          if (typeof initFormularioObjetivo === "function") {
+            // Pasar datos para modo edición
+            initFormularioObjetivo(renderObjetivos, objetivo, index)
+            const modal = new bootstrap.Modal(document.getElementById("modalAgregarObjetivo"))
+            modal.show()
+          } else {
+            console.error("initFormularioObjetivo function not found")
+          }
+        }
+        document.body.appendChild(script)
+      })
+      .catch((error) => console.error("Error loading edit objetivo form:", error))
+  }
+
+  // Exponer función para edición
+  window.openEditObjetivoModal = openEditObjetivoModal
 })
 
 function renderObjetivos() {
@@ -104,7 +153,7 @@ function renderObjetivos() {
     }
 
     // Add rows for each objetivo
-    objetivos.forEach((objetivo, index) => {
+  objetivos.forEach((objetivo, index) => {
       console.log(`Procesando objetivo ${index}:`, objetivo)
       const row = document.createElement("tr")
       
@@ -239,10 +288,12 @@ function updateStats() {
 }
 
 function editarObjetivo(index) {
-  console.log("Editando objetivo en índice:", index)
-  // Aquí puedes implementar la lógica de edición si es necesario
-  // Por ahora, simplemente mostramos un alert
-  alert("Función de edición por implementar")
+  console.log("Solicitando edición para índice:", index)
+  if (typeof window.openEditObjetivoModal === 'function') {
+    window.openEditObjetivoModal(index)
+  } else {
+    alert("Editor no disponible todavía")
+  }
 }
 
 function eliminarObjetivo(index) {
