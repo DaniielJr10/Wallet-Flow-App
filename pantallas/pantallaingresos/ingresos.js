@@ -68,17 +68,23 @@ document.addEventListener('DOMContentLoaded', function () {
   function aplicarFiltros() {
     const textoBusqueda = document.getElementById('buscarIngreso').value.toLowerCase();
     const categoriaFiltro = document.getElementById('filtroCategoria').value;
-    const mesFiltro = document.getElementById('filtroMes').value;
+    const mesFiltro = document.getElementById('filtroMes').value; // formato: "MM" o "" para todos
 
     ingresosFiltrados = ingresosOriginales.filter(ingreso => {
       const coincideTexto = !textoBusqueda || 
-        ingreso.descripcion.toLowerCase().includes(textoBusqueda) ||
-        ingreso.categoria.toLowerCase().includes(textoBusqueda) ||
-        ingreso.metodo.toLowerCase().includes(textoBusqueda);
+        (ingreso.descripcion || '').toLowerCase().includes(textoBusqueda) ||
+        (ingreso.categoria || '').toLowerCase().includes(textoBusqueda) ||
+        (ingreso.metodo || '').toLowerCase().includes(textoBusqueda);
 
       const coincideCategoria = !categoriaFiltro || ingreso.categoria === categoriaFiltro;
 
-      const coincideMes = !mesFiltro || ingreso.fecha.startsWith(mesFiltro);
+      // Comparar sólo el mes de la fecha (suponiendo formato YYYY-MM-DD)
+      let coincideMes = true;
+      if (mesFiltro) {
+        const fecha = ingreso.fecha || '';
+        const mes = fecha.length >= 7 ? fecha.substring(5, 7) : '';
+        coincideMes = mes === mesFiltro;
+      }
 
       return coincideTexto && coincideCategoria && coincideMes;
     });
