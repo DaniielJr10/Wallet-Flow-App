@@ -71,17 +71,18 @@ body, html {
 .contenido-principal {
   position: relative;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  /* Fondo morado suave para toda la pantalla de Deudas */
+  background: linear-gradient(135deg, #f3e8ff 0%, #f8f0ff 100%);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   min-height: 100vh;
-  color: #2c3e50;
+  color: #3b0764;
 }
 
 /* ===== TÍTULO PRINCIPAL MEJORADO ===== */
 .titulo-principal {
-  background: linear-gradient(135deg, #6f42c1 0%, #6f42c1 100%);
+  background: linear-gradient(135deg, #6f42c1 0%, #5a2fa0 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -90,7 +91,7 @@ body, html {
   padding: 1rem 2rem;
   font-weight: 700;
   font-size: 2.5rem;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-shadow: 0 2px 6px rgba(111,66,193,0.12);
   margin: 0;
 }
 
@@ -280,4 +281,74 @@ body, html {
   border-radius: 8px;
   font-weight: 600;
   transition: all 0.3s ease;
+}
+
+/* ===== OVERRIDES PARA FORZAR TEMA MORADO EN ESTA PÁGINA ===== */
+/* Sobrescribir utilidades de Bootstrap dentro de .contenido-principal */
+.contenido-principal .text-danger,
+.contenido-principal .text-warning,
+.contenido-principal .text-success,
+.contenido-principal .text-muted,
+.contenido-principal .text-info {
+  color: #6f42c1 !important;
+}
+
+.contenido-principal .btn-danger,
+.contenido-principal .btn-warning,
+.contenido-principal .btn-success,
+.contenido-principal .btn-info,
+.contenido-principal .btn-outline-danger,
+.contenido-principal .btn-outline-warning {
+  background: linear-gradient(135deg, #7b4bd6 0%, #6f42c1 100%) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+}
+
+.contenido-principal .btn-danger:hover,
+.contenido-principal .btn-warning:hover,
+.contenido-principal .btn-success:hover,
+.contenido-principal .btn-info:hover {
+  box-shadow: 0 6px 20px rgba(111,66,193,0.28) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Badges y utilidades de fondo */
+.contenido-principal .badge.bg-info,
+.contenido-principal .badge.bg-primary,
+.contenido-principal .badge.bg-secondary {
+  background: linear-gradient(135deg, #6f42c1 0%, #5a2fa0 100%) !important;
+  color: #fff !important;
+}
+
+/* Progress bar morado (por si usa la clase bg-success o progress-bar) */
+.contenido-principal .progress-bar,
+.contenido-principal .bg-success {
+  background: linear-gradient(135deg, #6f42c1 0%, #5a2fa0 100%) !important;
+}
+
+/* Asegurar que iconos (bootstrap icons usan color mediante text-*) sean morados */
+.contenido-principal .bi {
+  color: #6f42c1;
+}
+
+/* Tablas: filas hover y textos */
+.contenido-principal .table tbody tr:hover {
+  background-color: rgba(111,66,193,0.04) !important;
+}
+
+/* Forzar botones pequeños de acciones a tener el estilo morado aunque JS agregue btn-warning/btn-danger */
+.contenido-principal .btn-editar, .contenido-principal .btn-eliminar {
+  background: linear-gradient(135deg, #7b4bd6 0%, #6f42c1 100%) !important;
+  border: none !important;
+}
+
+/* Forzar colores en tarjetas resumen */
+.contenido-principal .card .card-title,
+.contenido-principal .card .card-text {
+  color: #4b2a88 !important;
+}
+
+/* Asegurar que el mensaje vacío use icono morado */
+.contenido-principal #mensajeVacio .bi {
+  color: #6f42c1 !important;
 }

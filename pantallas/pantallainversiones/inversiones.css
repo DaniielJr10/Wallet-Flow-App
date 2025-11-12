@@ -281,3 +281,29 @@ body, html {
   font-weight: 600;
   transition: all 0.3s ease;
 }
+
+/* (No overrides — mantener tema azul por defecto en Inversiones) */
+
+/* ===== Forzar métricas y utilidades a AZUL en Inversiones ===== */
+/* Hace que las clases .text-success/.text-info/.text-warning/.text-primary muestren azul */
+.contenido-principal .text-success,
+.contenido-principal .text-info,
+.contenido-principal .text-warning,
+.contenido-principal .text-primary {
+  color: #007bff !important;
+}
+
+/* Asegurar que los iconos y títulos dentro de las tarjetas sean azules */
+.contenido-principal .bi,
+.contenido-principal .card .card-title,
+.contenido-principal .card .card-body h2,
+.contenido-principal .card .card-body .card-text {
+  color: #007bff !important;
+}
+
+/* Si hay badges o utilidades con bg-*, forzarlas a la paleta azul */
+.contenido-principal .badge.bg-info,
+.contenido-principal .badge.bg-primary {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+  color: #fff !important;
+}
