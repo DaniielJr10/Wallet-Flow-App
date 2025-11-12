@@ -31,9 +31,8 @@
 
   /* ...código existente... */
 
+/* Usar el mismo fondo suave y degradado que la pantalla de inicio de sesión */
 body {
-  background-image: url(wf.png); /* Cambia 'fondo.jpg' por el nombre de tu imagen */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: linear-gradient(135deg, #d1e7dd 0%, #f8f9fa 100%);
+  min-height: 100vh;
 }

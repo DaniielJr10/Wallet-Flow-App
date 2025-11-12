@@ -45,7 +45,8 @@ body {
 
 .background-container {
   min-height: 100vh;
-  background-image: url("img/fondo.jpg");
+  /* Usar el mismo degradado suave que la pantalla de inicio de sesión */
+  background: linear-gradient(135deg, #d1e7dd 0%, #f8f9fa 100%);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -58,7 +59,8 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  /* Removemos la superposición oscura para que el degradado quede limpio */
+  background: rgba(0, 0, 0, 0);
   z-index: 1;
 }
 
