@@ -3,9 +3,6 @@
 // Descripción: Maneja el registro de usuarios con Firebase
 
 // ===== ELEMENTOS DEL DOM =====
-const steps = Array.from(document.querySelectorAll(".form-step"));
-const nextBtns = document.querySelectorAll(".next-step");
-const prevBtns = document.querySelectorAll(".prev-step");
 const progress = document.getElementById("formProgress");
 const form = document.getElementById("multiStepForm");
 const backToLoginLink = document.getElementById("back-to-login");
@@ -17,13 +14,15 @@ const regLastname = document.getElementById("reg-lastname");
 const regPassword = document.getElementById("reg-password");
 const regConfirmPassword = document.getElementById("reg-confirm-password");
 
-let currentStep = 0;
-
 // ===== INICIALIZACIÓN =====
 document.addEventListener("DOMContentLoaded", async () => {
     await initializeFirebase();
     setupEventListeners();
-    updateFormSteps();
+    // Al tener un solo formulario, marcar progreso al 100%
+    if (progress) {
+        progress.style.width = '100%';
+        progress.setAttribute('aria-valuenow', 100);
+    }
     checkAuthState();
 });
 
@@ -52,10 +51,6 @@ async function initializeFirebase() {
 
 // ===== CONFIGURACIÓN DE EVENT LISTENERS =====
 function setupEventListeners() {
-    // Navegación entre pasos
-    nextBtns.forEach(btn => btn.addEventListener("click", handleNextStep));
-    prevBtns.forEach(btn => btn.addEventListener("click", handlePrevStep));
-    
     // Envío del formulario
     form.addEventListener("submit", handleRegistration);
     
@@ -72,7 +67,6 @@ function setupEventListeners() {
     // Validación de email
     regEmail.addEventListener("input", validateEmailField);
 }
-
 // ===== VERIFICAR ESTADO DE AUTENTICACIÓN =====
 function checkAuthState() {
     // Si ya hay un usuario autenticado, redirigir a la pantalla principal
@@ -81,49 +75,23 @@ function checkAuthState() {
         window.location.href = '../../pantallas/pantallaprincipal/principal.html';
     }
 }
-
-// ===== NAVEGACIÓN ENTRE PASOS =====
-function updateFormSteps() {
-    steps.forEach((step, i) => {
-        step.classList.toggle("d-none", i !== currentStep);
-    });
-    const pct = ((currentStep + 1) / steps.length) * 100;
-    progress.style.width = `${pct}%`;
-    progress.setAttribute("aria-valuenow", pct);
-}
-
-function handleNextStep() {
-    if (validateCurrentStep()) {
-        currentStep++;
-        updateFormSteps();
-    }
-}
-
-function handlePrevStep() {
-    currentStep--;
-    updateFormSteps();
-}
-
 // ===== VALIDACIONES =====
 function validateCurrentStep() {
-    const currentStepElement = steps[currentStep];
-    const inputs = currentStepElement.querySelectorAll("input[required]");
+    // Mantengo la interfaz por compatibilidad, pero el formulario es único.
+    const inputs = form.querySelectorAll("input[required]");
     let isValid = true;
-    
+
     for (let input of inputs) {
         if (!validateField(input)) {
             isValid = false;
         }
     }
-    
-    // Validaciones específicas del paso 1
-    if (currentStep === 0) {
-        if (!isValidEmail(regEmail.value)) {
-            showFieldError(regEmail, 'Ingresa un correo electrónico válido');
-            isValid = false;
-        }
+
+    if (!isValidEmail(regEmail.value)) {
+        showFieldError(regEmail, 'Ingresa un correo electrónico válido');
+        isValid = false;
     }
-    
+
     return isValid;
 }
 
