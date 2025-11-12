@@ -81,23 +81,92 @@ body, html {
 
 /* ===== TÍTULO PRINCIPAL MEJORADO ===== */
 .titulo-principal {
-  background: linear-gradient(135deg, #fd7e14 0%, #fd7e14 100%);
+  background: linear-gradient(135deg, #fd7e14 0%, #f39c12 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #fd7e14; /* Fallback */
   border-radius: 15px;
-  padding: 1rem 2rem;
-  font-weight: 700;
-  font-size: 2.5rem;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 0.5rem 1rem;
+  font-weight: 800;
+  font-size: 2.6rem;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.06);
   margin: 0;
 }
 
 /* ===== SUBTÍTULO MEJORADO ===== */
 .subtitulo-pagina {
-  color: #fd7e14;
+  color: #f39c12;
   font-size: 1.1rem;
   font-weight: 500;
   margin-top: 0.5rem;
 }
+
+/* ===== NUEVOS ESTILOS PARA LA PANTALLA AHORROS (PARA COHERENCIA CON GASTOS) ===== */
+.card-resumen { background: white; padding: 1.25rem 1.5rem; border-radius: 14px; box-shadow: 0 10px 30px rgba(243,156,18,0.06); border-top: 6px solid rgba(253,126,20,0.12); display:flex; gap:1rem; align-items:center; min-height:120px }
+.card-resumen .card-icon { font-size: 1.9rem; color: #fff; min-width:56px; height:56px; display:flex; align-items:center; justify-content:center; border-radius:12px; background: linear-gradient(135deg,#fd7e14,#f39c12) }
+.card-resumen h5 { margin:0; font-size:0.9rem; font-weight:700; color:#6c757d }
+.card-resumen p { margin:0; font-size:1.5rem; font-weight:800; color:#fd7e14 }
+
+.card-filtros { background:white; padding:1rem; border-radius:12px; box-shadow: 0 4px 18px rgba(243,156,18,0.04); border:1px solid rgba(243,156,18,0.06) }
+
+.tabla-container { background:white; border-radius:14px; box-shadow:0 10px 30px rgba(243,156,18,0.05); padding:0.75rem; position:relative }
+/* make header chips sit flush together */
+.table { border-collapse: collapse; }
+.table-header { background: transparent; }
+.table-header th { background: transparent; padding: 0; border: none }
+
+/* chips para cada encabezado: estilo tipo 'barra segmentada' como en la imagen de Ingresos */
+
+.th-chip { display:block; width:100%; box-sizing:border-box; padding:14px 18px; border-radius:0; color:#fff; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; font-size:0.9rem; background: linear-gradient(90deg,#fd7e14,#f39c12); box-shadow: 0 6px 18px rgba(243,156,18,0.12), inset -1px 0 0 rgba(255,255,255,0.06); }
+.th-chip i { font-size:1.05rem; color: rgba(255,255,255,0.95); margin-right:8px }
+
+/* primeros y últimos: bordes redondeados para la barra */
+.table-header th:first-child .th-chip { border-top-left-radius:10px; border-bottom-left-radius:10px }
+.table-header th:last-child .th-chip { border-top-right-radius:10px; border-bottom-right-radius:10px }
+
+/* remove any extra spacing so chips touch */
+.table thead tr th { padding: 0 }
+.table thead th + th .th-chip { margin-left: 0 }
+
+/* ajustar altura y alineación para que coincida con la referencia */
+.table thead tr th { vertical-align: middle; }
+
+/* en pantallas pequeñas reducir padding */
+@media (max-width: 768px) {
+  .th-chip { padding:10px 12px; font-size:0.85rem }
+}
+
+.tabla-container .export-btn { position:absolute; right:16px; top:12px }
+.btn-export { background: #fff; border:1px solid #0d6efd; color:#0d6efd; padding:6px 10px; border-radius:8px }
+.btn-export:hover { background:#e9f4ff }
+/* export button disabled state */
+.btn-export[disabled], .btn-export.disabled { opacity:0.6; pointer-events:none }
+
+.table-responsive table thead tr th:first-child { border-top-left-radius:10px }
+.table-responsive table thead tr th:last-child { border-top-right-radius:10px }
+
+.table tbody tr { background: transparent }
+.table tbody tr:hover { background: rgba(253,126,20,0.03) }
+
+.tabla-footer { padding:10px 14px; color:#6c757d }
+
+/* estado vacío dentro de la tabla */
+.tabla-vacia { display:flex; align-items:center; justify-content:center; padding:36px 18px; flex-direction:column; color:#6c757d }
+.tabla-vacia .icono { font-size:48px; color:#f39c12; margin-bottom:12px }
+.tabla-vacia p { margin:0 0 12px 0 }
+.btn-primer { background: linear-gradient(135deg,#fd7e14,#f39c12); color:#fff; border:none; padding:8px 14px; border-radius:10px }
+
+.btn-warning { background: linear-gradient(135deg,#fd7e14,#f39c12); border:none; color:white }
+.btn-warning:hover { transform: translateY(-2px); box-shadow:0 6px 20px rgba(253,126,20,0.18) }
+
+/* Modal ligero para agregar ahorros (si se usa) */
+.modal-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.45); display:flex; align-items:center; justify-content:center; z-index:9999 }
+.modal-form { background:#fff; width:95%; max-width:520px; padding:20px; border-radius:12px }
+
+/* pequeños ajustes responsivos */
+@media (max-width: 768px) {
+  .titulo-principal { font-size: 1.8rem }
+  .card-resumen { min-height:100px }
+}
+

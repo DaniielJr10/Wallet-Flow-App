@@ -1,175 +1,195 @@
-// Renderiza las tarjetas de ahorros guardados en localStorage
-document.addEventListener('DOMContentLoaded', function () {
-	mostrarTarjetasAhorros();
-	configurarCerrarSesion();
+/* Ahorros: renderizado, filtros y modal de creación/edición
+   Implementa: carga desde localStorage, resumen, tabla, filtros (search, categoria, mes)
+*/
+document.addEventListener('DOMContentLoaded', () => {
+  initAhorrosUI();
 });
 
-// Configurar el botón de cerrar sesión
-function configurarCerrarSesion() {
-	const cerrarSesionBtn = document.getElementById('cerrarSesionBtn');
-	if (cerrarSesionBtn) {
-		cerrarSesionBtn.addEventListener('click', function(e) {
-			e.preventDefault();
-			const confirmar = confirm('¿Estás seguro de que deseas cerrar sesión?');
-			if (confirmar) {
-				// Limpiar datos de usuario
-				localStorage.removeItem('walletflow_user_data');
-				localStorage.removeItem('walletflow_remembered_user');
-				
-				// Cerrar sesión en Firebase si está disponible
-				if (window.firebaseAuth) {
-					window.firebaseAuth.cerrarSesion();
-				}
-				
-				// Redirigir al login
-				window.location.href = '../../login/inicio de sesion/inicio.html';
-			}
-		});
-	}
+function initAhorrosUI() {
+  // elementos
+  const buscar = document.getElementById('buscarAhorro');
+  const filtroCat = document.getElementById('filtroCategoriaAhorro');
+  const filtroMes = document.getElementById('filtroMesAhorro');
+  const tbody = document.getElementById('tbodyAhorros');
+  const totalEl = document.getElementById('totalAhorros');
+  const conteoEl = document.getElementById('conteoAhorros');
+  const promEl = document.getElementById('promAhorros');
+  const metaEl = document.getElementById('metaPrincipal');
+
+  const btnLimpiar = document.getElementById('btnLimpiarAhorros');
+  const btnAgregar = document.getElementById('btnAgregarAhorro');
+
+  // proteger por si faltan elementos en el HTML
+  if (!buscar || !filtroCat || !filtroMes || !tbody || !totalEl || !conteoEl || !promEl || !metaEl) return;
+
+  // eventos
+  buscar.addEventListener('input', renderList);
+  filtroCat.addEventListener('change', renderList);
+  filtroMes.addEventListener('change', renderList);
+  if (btnLimpiar) btnLimpiar.addEventListener('click', () => { buscar.value=''; filtroCat.value=''; filtroMes.value=''; renderList(); });
+  if (btnAgregar) btnAgregar.addEventListener('click', () => openAhorroModal());
+
+  // export
+  const exportBtn = document.getElementById('exportAhorros');
+  let currentFiltered = [];
+  if (exportBtn) {
+    // start disabled until there are records
+    exportBtn.disabled = true;
+    exportBtn.addEventListener('click', () => {
+      if (!currentFiltered || currentFiltered.length === 0) return alert('No hay registros para exportar');
+      exportCSV(currentFiltered);
+    });
+  }
+
+  renderList();
+
+  // modal creación/edición dinámico
+  function openAhorroModal(editIndex = null) {
+    // construir modal HTML simple
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `
+      <div class="modal-form">
+        <h5>${editIndex === null ? 'Agregar Ahorro' : 'Editar Ahorro'}</h5>
+        <form id="formAhorro">
+          <div class="mb-2"><label>Categoría</label><select id="catAhorro" class="form-select" required>
+            <option value="meta">Meta específica</option>
+            <option value="emergencia">Fondo de emergencia</option>
+            <option value="inversion">Inversión</option>
+            <option value="educacion">Educación</option>
+            <option value="viaje">Viaje</option>
+            <option value="otro">Otro</option>
+          </select></div>
+          <div class="mb-2"><label>Monto</label><input id="montoAhorro" class="form-control" type="number" min="0" step="0.01" required></div>
+          <div class="mb-2"><label>Fecha</label><input id="fechaAhorro" class="form-control" type="date" required></div>
+          <div class="mb-2"><label>Método</label><select id="metodoAhorro" class="form-select"><option value="cuenta_ahorros">Cuenta de ahorro</option><option value="banco">Banco</option><option value="alcancia">Alcancía</option><option value="efectivo">Efectivo</option></select></div>
+          <div class="mb-2"><label>Descripción</label><textarea id="descAhorro" class="form-control"></textarea></div>
+          <div class="d-flex justify-content-between mt-3"><button type="submit" class="btn btn-warning">Guardar</button><button type="button" id="cancelModal" class="btn btn-secondary">Cancelar</button></div>
+        </form>
+      </div>`;
+    document.body.appendChild(overlay);
+
+    const form = overlay.querySelector('#formAhorro');
+    const cancel = overlay.querySelector('#cancelModal');
+    if (editIndex !== null) {
+      const datos = (JSON.parse(localStorage.getItem('ahorros')) || [])[editIndex] || {};
+      overlay.querySelector('#catAhorro').value = datos.categoria || '';
+      overlay.querySelector('#montoAhorro').value = datos.monto || '';
+      overlay.querySelector('#fechaAhorro').value = datos.fecha || '';
+      overlay.querySelector('#metodoAhorro').value = datos.metodo || '';
+      overlay.querySelector('#descAhorro').value = datos.descripcion || '';
+    }
+
+    cancel.addEventListener('click', () => overlay.remove());
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const nuevo = {
+        categoria: overlay.querySelector('#catAhorro').value,
+        monto: overlay.querySelector('#montoAhorro').value,
+        fecha: overlay.querySelector('#fechaAhorro').value,
+        metodo: overlay.querySelector('#metodoAhorro').value,
+        descripcion: overlay.querySelector('#descAhorro').value
+      };
+      let ahorros = JSON.parse(localStorage.getItem('ahorros')) || [];
+      if (editIndex === null) ahorros.unshift(nuevo); else ahorros[editIndex] = nuevo;
+      localStorage.setItem('ahorros', JSON.stringify(ahorros));
+      overlay.remove(); renderList();
+    });
+  }
+
+  // render list
+  function renderList() {
+    const ahorros = JSON.parse(localStorage.getItem('ahorros')) || [];
+    const q = buscar.value.trim().toLowerCase();
+    const cat = filtroCat.value;
+    const mes = filtroMes.value;
+
+    const filtrados = ahorros.filter(a => {
+      if (cat && a.categoria !== cat) return false;
+      if (mes) {
+        const fecha = (a.fecha || '');
+        const m = fecha.substring(5,7);
+        if (m !== mes) return false;
+      }
+      if (q) {
+        const hay = (a.descripcion||'').toLowerCase().includes(q) || (a.categoria||'').toLowerCase().includes(q);
+        if (!hay) return false;
+      }
+      return true;
+    });
+
+  // tabla
+    tbody.innerHTML = '';
+    filtrados.forEach((a, idx) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${formateaCategoria(a.categoria)}</td><td>${a.fecha||''}</td><td>${formateaMetodo(a.metodo)}</td><td>$${formateaMonto(a.monto)}</td><td>${(a.descripcion||'')}</td><td><button class='btn btn-sm btn-outline-primary me-1' data-idx='${idx}' data-action='edit'>Editar</button><button class='btn btn-sm btn-outline-danger' data-idx='${idx}' data-action='delete'>Eliminar</button></td>`;
+      tbody.appendChild(tr);
+    });
+
+    // si no hay registros filtrados, mostrar estado vacío similar al ejemplo
+    if (filtrados.length === 0) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td colspan="6">
+        <div class="tabla-vacia">
+          <div class="icono"><i class="bi bi-wallet2"></i></div>
+          <p>No hay ahorros registrados<br><small>Comienza agregando tu primer ahorro</small></p>
+          <button class="btn-primer" id="btnPrimerAhorro"><i class="bi bi-plus-circle me-2"></i>Agregar Primer Ahorro</button>
+        </div>
+      </td>`;
+      tbody.appendChild(tr);
+      const primerBtn = document.getElementById('btnPrimerAhorro');
+      if (primerBtn) primerBtn.addEventListener('click', () => openAhorroModal());
+    }
+
+  // actualizar contador de mostrando
+  const mostrandoEl = document.getElementById('mostrandoCuenta');
+  if (mostrandoEl) mostrandoEl.textContent = `${filtrados.length} de ${ahorros.length}`;
+
+  // guardar filtrados para export
+  currentFiltered = filtrados.slice();
+  // habilitar/deshabilitar botón exportar
+  if (exportBtn) exportBtn.disabled = !currentFiltered || currentFiltered.length === 0;
+
+    // acciones de botones
+    tbody.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const i = Number(btn.getAttribute('data-idx'));
+        const action = btn.getAttribute('data-action');
+        if (action === 'edit') openAhorroModal(i);
+        if (action === 'delete') { if (confirm('Eliminar este ahorro?')) { let arr = JSON.parse(localStorage.getItem('ahorros'))||[]; arr.splice(i,1); localStorage.setItem('ahorros', JSON.stringify(arr)); renderList(); } }
+      });
+    });
+
+    // resumen
+    const total = (ahorros.reduce((s, it) => s + (Number(it.monto)||0), 0));
+    totalEl.textContent = '$' + formateaMonto(total);
+    conteoEl.textContent = ahorros.length;
+    // promedio últimos 3 meses (simple)
+    const prom = ahorros.length ? (total / Math.max(1, ahorros.length)).toFixed(2) : '0.00';
+    promEl.textContent = '$' + formateaMonto(prom);
+    // meta principal (ejemplo: nombre de mayor monto)
+    const mayor = ahorros.slice().sort((a,b) => (Number(b.monto)||0) - (Number(a.monto)||0))[0];
+    metaEl.textContent = mayor ? formateaCategoria(mayor.categoria) + ' - $' + formateaMonto(mayor.monto) : 'Sin datos';
+  }
+
 }
 
-function mostrarTarjetasAhorros() {
-	const contenedor = document.getElementById('contenedorTarjetasAhorros');
-	if (!contenedor) return;
-	contenedor.innerHTML = '';
-	const ahorros = JSON.parse(localStorage.getItem('ahorros')) || [];
-	if (ahorros.length === 0) {
-		contenedor.innerHTML = '<div class="text-center text-muted">No tienes ahorros registrados aún.</div>';
-		return;
-	}
-			ahorros.forEach((ahorro, idx) => {
-				const tarjeta = document.createElement('div');
-				tarjeta.className = 'col-12 col-md-6 col-lg-4';
-						tarjeta.innerHTML = `
-							<div class="card shadow-lg border-0 mb-4 rounded-4" style="background: linear-gradient(135deg, #f8fffe 0%, #eaf8ed 100%); border-radius: 2rem;">
-								<div class="card-body rounded-4 p-4 d-flex flex-column justify-content-between" style="border-radius: 2rem; min-height: 320px;">
-									<div>
-										<div class="d-flex align-items-center mb-3">
-											<div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); width: 54px; height: 54px;">
-												<i class="bi bi-piggy-bank-fill text-white" style="font-size: 2rem;"></i>
-											</div>
-											<h5 class="card-title text-success mb-0" style="font-weight:700; font-size:1.3rem;">${ahorro.categoria ? formateaCategoria(ahorro.categoria) : 'Ahorro'}</h5>
-										</div>
-									<p class="card-text mb-1"><strong>Monto:</strong> <span style="color:#27ae60; font-weight:600;">$${formateaMonto(ahorro.monto)}</span></p>
-										<p class="card-text mb-1"><strong>Fecha:</strong> <span style="color:#636e72;">${ahorro.fecha || '-'}</span></p>
-										<p class="card-text mb-1"><strong>Método:</strong> <span style="color:#2ecc71;">${formateaMetodo(ahorro.metodo)}</span></p>
-										<p class="card-text"><strong>Descripción:</strong> <span style="color:#2c3e50;">${ahorro.descripcion ? ahorro.descripcion : 'Sin descripción'}</span></p>
-									</div>
-									<div class="d-flex justify-content-end gap-2 mt-4">
-									<button class="btn btn-outline-primary btn-sm rounded-pill px-3" title="Editar" onclick="editarAhorro(${idx})"><i class="bi bi-pencil"></i> Editar</button>
-										<button class="btn btn-outline-danger btn-sm rounded-pill px-3" title="Eliminar" onclick="eliminarAhorro(${idx})"><i class="bi bi-trash"></i> Eliminar</button>
-									</div>
-								</div>
-							</div>
-						`;
-				contenedor.appendChild(tarjeta);
-			});
-	}
-	// Elimina un ahorro por índice y actualiza la vista
-function eliminarAhorro(idx) {
-	if (!confirm('¿Seguro que deseas eliminar este ahorro?')) return;
-	let ahorros = JSON.parse(localStorage.getItem('ahorros')) || [];
-	ahorros.splice(idx, 1);
-	localStorage.setItem('ahorros', JSON.stringify(ahorros));
-	mostrarTarjetasAhorros();
-}
+// Helpers
+function formateaCategoria(cat) { if (!cat) return '-'; const map = { meta:'Meta específica', emergencia:'Fondo de emergencia', inversion:'Ahorro para inversión', educacion:'Educación', viaje:'Viaje', otro:'Otro' }; return map[cat]||cat; }
+function formateaMetodo(metodo) { if (!metodo) return '-'; const map = { cuenta_ahorros:'Cuenta de ahorros', banco:'Banco', alcancia:'Alcancía', efectivo:'Efectivo', otro:'Otro' }; return map[metodo]||metodo; }
+function formateaMonto(monto) { const num = Number(monto); if (isNaN(num)) return String(monto); return new Intl.NumberFormat('es-CO',{ minimumFractionDigits:2, maximumFractionDigits:2 }).format(num); }
 
-// Edita un ahorro por índice usando el formulario completo en un modal
-function editarAhorro(idx) {
-	const ahorros = JSON.parse(localStorage.getItem('ahorros')) || [];
-	const ahorro = ahorros[idx];
-	if (!ahorro) return;
-
-	// Asegurar contenedor y estilos del modal de formulario
-	asegurarContenedorYEstilosAhorro();
-
-	// Cargar HTML y JS del formulario y abrir en modo edición
-	fetch("../../formularios/formulario ahorros/forahorros.html")
-		.then(r => r.text())
-		.then(html => {
-			const cont = document.getElementById('contenedorModalAhorro');
-			cont.innerHTML = html;
-
-			cargarScriptFormularioAhorro(() => {
-				if (typeof window.initFormularioAhorro === 'function') {
-					window.initFormularioAhorro({
-						modo: 'editar',
-						datos: ahorro,
-						indice: idx,
-						onSave: mostrarTarjetasAhorros
-					});
-				} else {
-					console.error('initFormularioAhorro no encontrado');
-				}
-			});
-		});
-}
-
-// Asegurar disponibilidad global para manejadores inline
-if (typeof window !== 'undefined') {
-  window.eliminarAhorro = eliminarAhorro;
-  window.editarAhorro = editarAhorro;
-}
-
-function formateaCategoria(cat) {
-	switch(cat) {
-		case 'meta': return 'Meta específica';
-		case 'emergencia': return 'Fondo de emergencia';
-		case 'inversion': return 'Ahorro para inversión';
-		case 'educacion': return 'Educación';
-		case 'viaje': return 'Viaje';
-		case 'otro': return 'Otro';
-		default: return cat;
-	}
-}
-
-function formateaMetodo(metodo) {
-	switch(metodo) {
-		case 'cuenta_ahorros': return 'Cuenta de ahorros';
-		case 'banco': return 'Banco';
-		case 'alcancia': return 'Alcancía';
-		case 'efectivo': return 'Efectivo';
-		case 'otro': return 'Otro';
-		default: return metodo || '-';
-	}
-}
-
-function formateaMonto(monto) {
-	if (monto === undefined || monto === null || monto === '') return '0,00';
-	const num = Number(monto);
-	if (isNaN(num)) return String(monto);
-	return new Intl.NumberFormat('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
-}
-
-// Utilidades para cargar formulario de ahorro como modal
-function asegurarContenedorYEstilosAhorro() {
-	let cont = document.getElementById('contenedorModalAhorro');
-	if (!cont) {
-		cont = document.createElement('div');
-		cont.id = 'contenedorModalAhorro';
-		document.body.appendChild(cont);
-	}
-	// CSS del formulario (si no está ya cargado)
-	if (!document.getElementById('ahorros-form-css')) {
-		const link = document.createElement('link');
-		link.id = 'ahorros-form-css';
-		link.rel = 'stylesheet';
-		link.href = '../../formularios/formulario ahorros/forahorros.css';
-		document.head.appendChild(link);
-	}
-}
-
-function cargarScriptFormularioAhorro(cb) {
-	// Evitar múltiples inclusiones del script
-	if (window.__forahorros_script_cargado) {
-		cb && cb();
-		return;
-	}
-	const script = document.createElement('script');
-	script.src = '../../formularios/formulario ahorros/forahorros.js';
-	script.onload = function(){
-		window.__forahorros_script_cargado = true;
-		cb && cb();
-	};
-	document.body.appendChild(script);
+function exportCSV(items) {
+  const headers = ['categoria','fecha','metodo','monto','descripcion'];
+  const rows = items.map(it => [it.categoria||'', it.fecha||'', it.metodo||'', it.monto||'', (it.descripcion||'').replace(/\r?\n/g,' ')]);
+  const csv = [headers.join(','), ...rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(','))].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ahorros_export.csv';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
