@@ -457,9 +457,9 @@ function actualizarSelectFiltro(id, opciones, textoDefault) {
 function aplicarFiltros() {
     const busqueda = document.getElementById('buscarGasto')?.value.toLowerCase() || '';
     const filtroCategoria = document.getElementById('filtroCategoria')?.value || '';
-    const filtroMes = document.getElementById('filtroMes')?.value || '';
+  const filtroMes = document.getElementById('filtroMes')?.value || ''; // formato MM
 
-    gastosFiltrados = gastos.filter(gasto => {
+  gastosFiltrados = gastos.filter(gasto => {
         // Filtro por búsqueda de texto
         const cumpleBusqueda = !busqueda ||
             (gasto.descripcion && gasto.descripcion.toLowerCase().includes(busqueda)) ||
@@ -470,8 +470,13 @@ function aplicarFiltros() {
         // Filtro por categoría
         const cumpleCategoria = !filtroCategoria || gasto.categoria === filtroCategoria;
 
-        // Filtro por mes (compara el inicio del string de fecha 'YYYY-MM-DD' con 'YYYY-MM')
-        const cumpleMes = !filtroMes || (gasto.fecha && gasto.fecha.startsWith(filtroMes));
+    // Filtro por mes: comparar solo el mes (MM) de la fecha 'YYYY-MM-DD'
+    let cumpleMes = true;
+    if (filtroMes) {
+      const fecha = gasto.fecha || '';
+      const mes = fecha.length >= 7 ? fecha.substring(5,7) : '';
+      cumpleMes = mes === filtroMes;
+    }
 
         return cumpleBusqueda && cumpleCategoria && cumpleMes;
     });
