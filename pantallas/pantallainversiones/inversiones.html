@@ -128,12 +128,25 @@
 
           <!-- Mensaje cuando no hay inversiones -->
           <div id="mensajeVacio" class="text-center" style="display: none;">
-            <i class="bi bi-graph-up-arrow display-1 text-muted mb-3"></i>
-            <h3 class="text-muted">No hay inversiones registradas</h3>
-            <p class="text-muted">Comienza a invertir haciendo clic en "Agregar Inversión"</p>
-            <button class="btn btn-primary" onclick="document.getElementById('btnAgregarInversionPage').click()">
-              <i class="bi bi-plus-circle me-2"></i>Agregar Primera Inversión
-            </button>
+            <!-- Toolbar compacta similar a Deudas, adaptada a la paleta azul -->
+            <div class="empty-toolbar w-100 mb-3">
+              <div class="toolbar-inner d-flex align-items-center justify-content-between px-3">
+                <div class="toolbar-item"><i class="bi bi-tag-fill me-2"></i>TIPO</div>
+                <div class="toolbar-item hide-sm"><i class="bi bi-calendar me-2"></i>FECHA</div>
+                <div class="toolbar-item hide-sm"><i class="bi bi-graph-up me-2"></i>RENDIMIENTO</div>
+                <div class="toolbar-item hide-md"><i class="bi bi-speedometer2 me-2"></i>RIESGO</div>
+                <div class="toolbar-item"><i class="bi bi-gear me-2"></i>ACCIONES</div>
+              </div>
+            </div>
+
+            <div class="empty-card text-center">
+              <i class="bi bi-graph-up-arrow display-1 text-muted mb-3 empty-icon" aria-hidden="true"></i>
+              <h3 class="text-muted">No hay inversiones registradas</h3>
+              <p class="text-muted">Comienza a invertir haciendo clic en "Agregar Inversión"</p>
+              <button class="btn btn-primary" onclick="document.getElementById('btnAgregarInversionPage').click()">
+                <i class="bi bi-plus-circle me-2"></i>Agregar Primera Inversión
+              </button>
+            </div>
           </div>
 
         </div>

@@ -217,12 +217,75 @@ body, html {
   font-weight: 600;
 }
 
-/* Mensaje de sin inversiones */
+/* Mensaje de sin inversiones - contenedor */
 #mensajeVacio {
-  padding: 60px 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Empty card (azul) que contiene el contenido del mensaje vacío */
+.empty-card {
+  width: 100%;
+  max-width: none;
+  padding: 80px 24px;
   background: linear-gradient(135deg, #cce7ff 0%, #b3d9ff 100%);
   border-radius: 20px;
   border: 2px solid #99ccff;
+  box-shadow: none;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 5rem;
+  color: rgba(0,0,0,0.35);
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 992px) {
+  .empty-card { padding: 40px 18px; }
+  .empty-icon { font-size:3rem; }
+}
+
+@media (max-width: 576px) {
+  .empty-card { padding: 28px 12px; }
+  .empty-icon { font-size:2.4rem; }
+}
+
+/* Barra/toolbar compacta usada en la vista vacía (similar a Deudas, paleta azul) */
+.empty-toolbar {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.empty-toolbar .toolbar-inner {
+  background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
+  color: #fff;
+  padding: 8px 0;
+  align-items: center;
+}
+.empty-toolbar .toolbar-item {
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+/* helper classes to hide less important columns on small screens */
+.hide-sm { display: inline-flex; }
+.hide-md { display: inline-flex; }
+
+@media (max-width: 768px) {
+  .empty-toolbar .toolbar-inner { padding: 10px 8px; }
+  .hide-sm { display: none; }
+}
+
+@media (max-width: 992px) {
+  .hide-md { display: none; }
 }
 
 /* Formulario de edición inline */

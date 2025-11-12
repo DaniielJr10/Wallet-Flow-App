@@ -109,7 +109,7 @@
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-hover" id="tablaDeudas">
-                  <thead class="table-dark">
+                  <thead class="table-header-custom">
                     <tr>
                       <th><i class="bi bi-person me-1"></i>Acreedor</th>
                       <th><i class="bi bi-currency-dollar me-1"></i>Monto</th>
@@ -130,10 +130,29 @@
           </div>
 
           <!-- Mensaje cuando no hay deudas -->
-          <div class="text-center mt-4" id="mensajeVacio" style="display: none;">
-            <i class="bi bi-emoji-smile text-success" style="font-size: 3rem;"></i>
-            <h4 class="text-muted mt-2">¡Sin deudas!</h4>
-            <p class="text-muted">No tienes deudas registradas. ¡Mantente así!</p>
+          <div class="d-flex justify-content-center mt-4 flex-column w-100" id="mensajeVacio" style="display: none;">
+            <!-- Toolbar estilo Deudas (encabezado compacto) -->
+            <div class="empty-toolbar w-100 mb-3">
+              <div class="toolbar-inner d-flex align-items-center justify-content-between px-3">
+                <div class="toolbar-item"><i class="bi bi-list-ul me-2"></i>CATEGORÍA</div>
+                <div class="toolbar-item hide-sm"><i class="bi bi-calendar me-2"></i>FECHA</div>
+                <div class="toolbar-item hide-sm"><i class="bi bi-credit-card-2-front me-2"></i>MÉTODO</div>
+                <div class="toolbar-item hide-md"><i class="bi bi-currency-dollar me-2"></i>MONTO</div>
+                <div class="toolbar-item hide-sm"><i class="bi bi-card-text me-2"></i>DESCRIPCIÓN</div>
+                <div class="toolbar-item"><i class="bi bi-gear me-2"></i>ACCIONES</div>
+              </div>
+            </div>
+
+            <div class="empty-card text-center p-4">
+              <div class="empty-icon mb-3">
+                <i class="bi bi-wallet2" aria-hidden="true"></i>
+              </div>
+              <h4 class="mb-1">No hay deudas registradas</h4>
+              <p class="text-muted mb-3">Comienza agregando tu primera deuda para llevar el control.</p>
+              <button class="btn btn-primary btn-empty-add" id="btnAgregarDeudaPage">
+                <i class="bi bi-plus-circle me-2"></i>Agregar Primera Deuda
+              </button>
+            </div>
           </div>
 
           <!-- Contenedores para modales -->

@@ -293,6 +293,16 @@ function renderDeudas() {
       editarDeuda(idx)
     })
   })
+
+  // Asegurar que cualquier botón de tipo "Agregar" (incluyendo el del empty-state) abra el formulario
+  document.querySelectorAll('.btn-empty-add, #btnAgregarDeudaPage').forEach((btn) => {
+    // evitar duplicar listeners si ya existen
+    btn.removeEventListener && btn.removeEventListener('click', openAddDeudaModal)
+    btn.addEventListener('click', (e) => {
+      e.preventDefault()
+      openAddDeudaModal()
+    })
+  })
 }
 
 function editarDeuda(idx) {
