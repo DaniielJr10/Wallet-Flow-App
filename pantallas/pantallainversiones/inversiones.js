@@ -33,39 +33,167 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Event listener for "Agregar Inversión" button on the page
-  document.getElementById("btnAgregarInversionPage").addEventListener("click", openAddInversionModal)
+  const btnAgregarInversion = document.getElementById("btnAgregarInversionPage")
+  if (btnAgregarInversion) btnAgregarInversion.addEventListener('click', openAddInversionModal)
 
-  function openAddInversionModal() {
+  function ensureCss(href) {
+    try {
+      const exists = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).some(l => l.href && l.href.includes(href))
+      if (exists) return
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = encodeURI(href)
+      document.head.appendChild(link)
+    } catch (e) {
+      console.warn('No se pudo inyectar CSS (inversiones):', e)
+    }
+  }
+
+  async function openAddInversionModal() {
     const contenedorModalInversion = document.getElementById("contenedorModalInversion")
     if (!contenedorModalInversion) {
       console.error("Contenedor para modal de inversión no encontrado.")
       return
     }
 
-    // Clear previous modal content
-    contenedorModalInversion.innerHTML = ""
+    contenedorModalInversion.innerHTML = ''
 
-    // Load HTML for the add form
-    fetch("../../formularios/formulario-inversiones/forinversiones.html")
-      .then((response) => response.text())
-      .then((html) => {
-        contenedorModalInversion.innerHTML = html
-        // Load JS for the add form
-        const script = document.createElement("script")
-        script.src = "../../formularios/formulario-inversiones/forinversiones.js"
-        script.onload = () => {
-          const initFormularioInversion = window.initFormularioInversion // Declare the variable before using it
-          if (typeof initFormularioInversion === "function") {
-            initFormularioInversion(renderInversiones) // Pass renderInversiones as callback
-          }
-          const modal = document.getElementById("modalAgregarInversion")
-          if (modal) {
-            modal.classList.remove("d-none")
-          }
-        }
+    const formHtmlPath = '../../formularios/formulario-inversiones/forinversiones.html'
+    const formJsPath = '../../formularios/formulario-inversiones/forinversiones.js'
+    const formCssPath = '../../formularios/formulario-inversiones/forinversiones.css'
+
+    try {
+      ensureCss(formCssPath)
+      const resp = await fetch(encodeURI(formHtmlPath))
+      if (!resp.ok) throw new Error('HTTP ' + resp.status)
+      const html = await resp.text()
+      contenedorModalInversion.innerHTML = html
+
+      // show modal immediately if present
+      const modalImmediate = document.getElementById('modalAgregarInversion')
+      if (modalImmediate) {
+        modalImmediate.classList.remove('d-none')
+        modalImmediate.style.display = 'flex'
+      }
+
+      // load script
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = formJsPath
+        script.onload = () => resolve()
+        script.onerror = (e) => reject(e)
         document.body.appendChild(script)
       })
-      .catch((error) => console.error("Error loading inversion form:", error))
+
+      if (typeof initFormularioInversion === 'function') {
+        try { initFormularioInversion(renderInversiones) } catch (e) { console.error('Error al initFormularioInversion:', e) }
+      } else {
+        console.warn('initFormularioInversion no encontrada después de cargar script')
+      }
+
+      setTimeout(() => {
+        const modal = document.getElementById('modalAgregarInversion')
+        if (modal) { modal.classList.remove('d-none'); modal.style.display = 'flex' }
+      }, 120)
+
+    } catch (err) {
+      console.error('Error loading inversion form:', err)
+      console.warn('Fallback embebido para formulario de inversión activado')
+
+      // embedded fallback
+      try {
+        const fallbackStyleId = 'inversion-fallback-styles'
+        if (!document.getElementById(fallbackStyleId)) {
+          const style = document.createElement('style')
+          style.id = fallbackStyleId
+          style.textContent = `
+            .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:10000}
+            .modal-form{background:#fff;border-radius:12px;padding:18px;width:92%;max-width:520px;box-shadow:0 12px 30px rgba(0,0,0,0.2)}
+            .modal-form h2{margin:0 0 12px}
+            .modal-form label{display:block;margin-bottom:6px;font-weight:600}
+            .modal-form input,.modal-form select,.modal-form textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e6e6;margin-bottom:12px}
+            .modal-form .botones{display:flex;gap:8px;justify-content:flex-end}
+          `
+          document.head.appendChild(style)
+        }
+
+        const embeddedHtml = `
+          <div id="modalAgregarInversion" class="modal-overlay">
+            <div class="modal-form">
+              <form id="formAgregarInversion" autocomplete="off">
+                <h2>Agregar Inversión</h2>
+                <label for="addTipoInversion">Tipo de Inversión</label>
+                <select id="addTipoInversion" required>
+                  <option value="acciones">Acciones</option>
+                  <option value="bonos">Bonos</option>
+                  <option value="fondos_mutuos">Fondos Mutuos</option>
+                  <option value="bienes_raices">Bienes Raíces</option>
+                  <option value="criptomonedas">Criptomonedas</option>
+                  <option value="otro">Otro</option>
+                </select>
+                <label for="addMontoInversion">Monto Invertido</label>
+                <input type="number" id="addMontoInversion" required min="0" step="0.01">
+                <label for="addFechaInicioInversion">Fecha de Inicio</label>
+                <input type="date" id="addFechaInicioInversion" required>
+                <label for="addRiesgoInversion">Nivel de Riesgo</label>
+                <select id="addRiesgoInversion" required>
+                  <option value="bajo">Bajo</option>
+                  <option value="medio">Medio</option>
+                  <option value="alto">Alto</option>
+                </select>
+                <label for="addFechaFinInversion">Fecha de Fin (Opcional)</label>
+                <input type="date" id="addFechaFinInversion">
+                <label for="addRendimientoEsperadoInversion">Rendimiento Esperado (%)</label>
+                <input type="number" id="addRendimientoEsperadoInversion" min="0" step="0.01">
+                <label for="addDescripcionInversion">Descripción</label>
+                <textarea id="addDescripcionInversion"></textarea>
+                <div class="botones" style="margin-top:6px">
+                  <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+                  <button type="button" id="cancelarInversionEmbedded" class="btn btn-secondary btn-sm">Cancelar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `
+
+        contenedorModalInversion.innerHTML = embeddedHtml
+
+        const modal = document.getElementById('modalAgregarInversion')
+        const form = document.getElementById('formAgregarInversion')
+        const cancelarBtn = document.getElementById('cancelarInversionEmbedded')
+
+        if (form) {
+          form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const datos = {
+              tipo: document.getElementById('addTipoInversion').value,
+              monto: document.getElementById('addMontoInversion').value,
+              fechaInicio: document.getElementById('addFechaInicioInversion').value,
+              riesgo: document.getElementById('addRiesgoInversion').value,
+              fechaFin: document.getElementById('addFechaFinInversion') ? document.getElementById('addFechaFinInversion').value : '',
+              rendimientoEsperado: document.getElementById('addRendimientoEsperadoInversion') ? document.getElementById('addRendimientoEsperadoInversion').value : '',
+              descripcion: document.getElementById('addDescripcionInversion') ? document.getElementById('addDescripcionInversion').value : '',
+            }
+            const inversiones = JSON.parse(localStorage.getItem('inversiones')) || []
+            datos.id = Date.now()
+            inversiones.push(datos)
+            localStorage.setItem('inversiones', JSON.stringify(inversiones))
+            if (modal && modal.parentNode) modal.parentNode.removeChild(modal)
+            renderInversiones()
+          })
+        }
+
+        if (cancelarBtn) cancelarBtn.addEventListener('click', () => {
+          const m = document.getElementById('modalAgregarInversion')
+          if (m && m.parentNode) m.parentNode.removeChild(m)
+        })
+
+        if (modal) modal.addEventListener('click', (ev) => { if (ev.target === modal) modal.remove() })
+
+      } catch (embedErr) {
+        console.error('Error al inyectar modal embebido de inversion:', embedErr)
+      }
+    }
   }
 
   function renderInversiones() {
