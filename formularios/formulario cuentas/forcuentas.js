@@ -59,6 +59,12 @@ function initFormularioCuenta() {
 
       // Cerrar y limpiar el modal
       cerrarModal();
+      // Notificar a la página que se guardó una cuenta para permitir refrescar listas
+      try {
+        window.dispatchEvent(new CustomEvent('cuenta:guardada', { detail: datosCuenta }));
+      } catch (e) {
+        console.warn('No se pudo despachar el evento cuenta:guardada', e);
+      }
     });
   }
 }

@@ -201,6 +201,78 @@ function showSuccessMessage(message) {
 // Renderizar las cuentas al cargar la página
 document.addEventListener('DOMContentLoaded', renderizarCuentas);
 
+// Configurar botón de agregar cuenta (tanto header como empty-state) y crear nueva cuenta
+document.addEventListener('DOMContentLoaded', function () {
+  const btnHeader = document.getElementById('btnAgregarCuentaPage')
+  const btnEmpty = document.getElementById('btnAgregarCuentaPageEmpty')
+
+  function openAddCuentaModal() {
+    // Goal: reuse the existing page Bootstrap modal (#modalAgregarCuenta) by
+    // fetching the canonical form HTML (forcuentas.html), injecting its
+    // form markup into the page's `form#formAgregarCuenta`, loading the
+    // form script if needed, initializing it and then opening the modal.
+    const formHtmlPath = '../../formularios/formulario cuentas/forcuentas.html'
+    const formJsPath = '../../formularios/formulario cuentas/forcuentas.js'
+
+    fetch(encodeURI(formHtmlPath))
+      .then((resp) => {
+        if (!resp.ok) throw new Error('HTTP ' + resp.status)
+        return resp.text()
+      })
+      .then((html) => {
+        // Inject the canonical form HTML into the contenedorModalCuenta so we
+        // use exactly the form markup you keep in /formularios.
+        const contenedor = document.getElementById('contenedorModalCuenta')
+        if (!contenedor) throw new Error('ContenedorModalCuenta no encontrado')
+
+        // Remove any existing injected modal with the same id to avoid duplicates
+        const existingInjected = contenedor.querySelector('#modalAgregarCuenta')
+        if (existingInjected) existingInjected.remove()
+
+        // Also remove page-local modal with same id if it exists (we will use the external form)
+        const pageModal = document.getElementById('modalAgregarCuenta')
+        if (pageModal && pageModal.parentElement !== contenedor) {
+          try { pageModal.remove(); } catch (e) { /* ignore */ }
+        }
+
+        contenedor.innerHTML = html
+
+        // Ensure the form script is loaded only once
+        const encodedJs = encodeURI(formJsPath)
+        let scriptAlready = Array.from(document.scripts).some(s => s.src && s.src.includes(encodedJs))
+        return new Promise((resolve, reject) => {
+          if (scriptAlready) return resolve()
+          const script = document.createElement('script')
+          script.src = encodedJs
+          script.onload = () => resolve()
+          script.onerror = (e) => reject(e)
+          document.body.appendChild(script)
+        })
+      })
+      .then(() => {
+        // Initialize the form script and display the injected overlay/modal
+        if (typeof initFormularioCuenta === 'function') {
+          try { initFormularioCuenta(); } catch (e) { console.error('Error initFormularioCuenta:', e) }
+        } else {
+          console.warn('initFormularioCuenta no encontrada; el script pudo no haberse cargado correctamente')
+        }
+
+        // Show the injected modal overlay (forcuentas.html uses #modalAgregarCuenta .d-none)
+        const injectedModal = document.getElementById('modalAgregarCuenta')
+        if (injectedModal) {
+          injectedModal.classList.remove('d-none')
+        }
+      })
+      .catch((err) => {
+        console.error('Error cargando formulario de cuenta:', err)
+        alert('No se pudo cargar el formulario de cuenta')
+      })
+  }
+
+  if (btnHeader) btnHeader.addEventListener('click', function(e){ e.preventDefault(); openAddCuentaModal(); })
+  if (btnEmpty) btnEmpty.addEventListener('click', function(e){ e.preventDefault(); openAddCuentaModal(); })
+})
+
 // Funcionalidad para cerrar sesión con confirmación
 document.addEventListener('DOMContentLoaded', function () {
   const cerrarSesionBtn = document.getElementById('cerrarSesionBtn');
@@ -228,3 +300,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+
+// Escuchar evento personalizado para refrescar la lista cuando un formulario externo guarde una cuenta
+window.addEventListener('cuenta:guardada', function (e) {
+  try {
+    renderizarCuentas();
+    // Si el modal de bootstrap está abierto, cerrarlo
+    const modalEl = document.getElementById('modalAgregarCuenta')
+    if (modalEl) {
+      try {
+        const bs = bootstrap.Modal.getInstance(modalEl)
+        if (bs) bs.hide()
+      } catch (err) {
+        // fallback: remover clase d-none
+        modalEl.classList.add('d-none')
+      }
+    }
+  } catch (err) {
+    console.error('Error manejando cuenta:guardada', err)
+  }
+})

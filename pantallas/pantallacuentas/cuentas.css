@@ -7,16 +7,16 @@ h1 {
 
 /* ===== TÍTULO PRINCIPAL MEJORADO ===== */
 .titulo-principal {
-  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background: linear-gradient(135deg, #4db6ac 0%, #00796b 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: #2ecc71; /* Fallback */
+  color: #4db6ac; /* Fallback */
   border-radius: 15px;
   padding: 1rem 2rem;
   font-weight: 700;
   font-size: 2.5rem;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.06);
   margin: 0;
 }
 
@@ -122,7 +122,94 @@ h1 {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #2ecc71, #27ae60, #16a085);
+  background: linear-gradient(90deg, #4db6ac, #00796b, #00695c);
+}
+.account-card {
+  background: linear-gradient(145deg, #ffffff 0%, #fffaf0 100%);
+  border-radius: 20px;
+  padding: 0;
+  border: 1px solid rgba(243, 156, 18, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+
+/* Toolbar + Empty card styles for Cuentas (amarillo) */
+.empty-toolbar {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.empty-toolbar .toolbar-inner {
+  background: linear-gradient(90deg, #4db6ac 0%, #00796b 100%);
+  color: #fff;
+  padding: 8px 0;
+  align-items: center;
+}
+.empty-toolbar .toolbar-item {
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+.empty-card {
+  width: 100%;
+  max-width: none;
+  padding: 60px 22px;
+  background: linear-gradient(135deg, #f7fffd 0%, #f0fffb 100%);
+  border-radius: 16px;
+  border: 2px solid rgba(0,121,107,0.12);
+  box-shadow: 0 10px 30px rgba(0,121,107,0.06);
+}
+.empty-icon {
+  width: 92px;
+  height: 92px;
+  margin: 0 auto;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(77,182,172,0.12), rgba(0,121,107,0.06));
+  color: #00796b;
+  font-size: 2.6rem;
+}
+.btn-empty-add {
+  background: linear-gradient(135deg, #4db6ac 0%, #00796b 100%);
+  border: none;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight:700;
+}
+
+@media (max-width: 992px) {
+  .empty-card { padding: 40px 18px; }
+  .empty-icon { font-size: 2.2rem; }
+}
+
+@media (max-width: 576px) {
+  .empty-card { padding: 28px 12px; }
+  .empty-icon { font-size: 1.8rem; }
+}
+.account-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,121,107,0.12);
+  border-color: rgba(0,121,107,0.2);
+}
+.account-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4db6ac, #00796b, #00695c);
 }
 
 /* Header de la tarjeta */
@@ -145,15 +232,36 @@ h1 {
   font-size: 24px;
   box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
 }
+.account-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #4db6ac, #00796b);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  box-shadow: 0 4px 12px rgba(77, 182, 172, 0.22);
+}
 
 .badge-principal {
-  background: linear-gradient(135deg, #f39c12, #e67e22);
+  background: linear-gradient(135deg, #4db6ac, #00796b);
   color: white;
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+  box-shadow: 0 2px 8px rgba(77,182,172,0.22);
+}
+.badge-principal {
+  background: linear-gradient(135deg, #f6c943, #f39c12);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(246, 201, 59, 0.22);
 }
 
 .badge-principal i {
@@ -197,6 +305,16 @@ h1 {
   border-radius: 12px;
   border: 1px solid rgba(46, 204, 113, 0.08);
 }
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  background: rgba(77, 182, 172, 0.02);
+  border-radius: 12px;
+  border: 1px solid rgba(77, 182, 172, 0.06);
+}
 
 .detail-item:last-child {
   margin-bottom: 0;
@@ -221,6 +339,11 @@ h1 {
   color: #2ecc71;
   font-size: 1rem;
 }
+.detail-label i {
+  margin-right: 0.5rem;
+  color: #00796b;
+  font-size: 1rem;
+}
 
 .detail-value {
   color: #2c3e50;
@@ -232,6 +355,11 @@ h1 {
 .balance-value {
   font-size: 1.1rem;
   color: #27ae60;
+  font-weight: 700;
+}
+.balance-value {
+  font-size: 1.1rem;
+  color: #00796b;
   font-weight: 700;
 }
 
@@ -269,6 +397,17 @@ h1 {
   background: linear-gradient(135deg, #2980b9, #21618c);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(52, 152, 219, 0.35);
+}
+.btn-edit {
+  background: linear-gradient(135deg, #4db6ac, #00796b);
+  color: white;
+  box-shadow: 0 2px 8px rgba(77,182,172,0.22);
+}
+
+.btn-edit:hover {
+  background: linear-gradient(135deg, #00796b, #00695c);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,121,107,0.28);
 }
 
 .btn-delete {
@@ -313,10 +452,23 @@ h1 {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
+.modern-form {
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #ffffff 0%, #f7fffd 100%);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
 
 /* Header del modal */
 .modern-header {
   background: linear-gradient(135deg, #2ecc71, #27ae60);
+  border: none;
+  padding: 1.5rem;
+  position: relative;
+}
+.modern-header {
+  background: linear-gradient(135deg, #4db6ac, #00796b);
   border: none;
   padding: 1.5rem;
   position: relative;
@@ -399,6 +551,10 @@ h1 {
   color: #2ecc71;
   font-size: 1rem;
 }
+.form-label-modern i {
+  color: #00796b;
+  font-size: 1rem;
+}
 
 .input-wrapper {
   position: relative;
@@ -420,6 +576,11 @@ h1 {
   background: white;
   box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.1);
 }
+.form-control-modern:focus {
+  border-color: #00796b;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(0,121,107,0.08);
+}
 
 .input-focus-border {
   position: absolute;
@@ -427,7 +588,7 @@ h1 {
   left: 50%;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, #2ecc71, #27ae60);
+  background: linear-gradient(90deg, #4db6ac, #00796b);
   transition: all 0.3s ease;
   transform: translateX(-50%);
 }
@@ -446,7 +607,7 @@ h1 {
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #2ecc71;
+  color: #00796b;
   font-size: 1.1rem;
   font-weight: 700;
   z-index: 2;
@@ -464,6 +625,12 @@ h1 {
 .toggle-wrapper {
   background: rgba(46, 204, 113, 0.05);
   border: 1px solid rgba(46, 204, 113, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+}
+.toggle-wrapper {
+  background: rgba(77, 182, 172, 0.03);
+  border: 1px solid rgba(77, 182, 172, 0.06);
   border-radius: 12px;
   padding: 1rem;
 }
@@ -509,6 +676,14 @@ h1 {
 
 .toggle-input:checked + .toggle-slider {
   background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.toggle-input:checked + .toggle-slider .toggle-knob {
+  transform: translateX(22px);
+  color: #f39c12;
+}
+.toggle-input:checked + .toggle-slider {
+  background: linear-gradient(135deg, #4db6ac, #00796b);
 }
 
 .toggle-input:checked + .toggle-slider .toggle-knob {
@@ -580,6 +755,16 @@ h1 {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(46, 204, 113, 0.4);
 }
+.btn-save {
+  background: linear-gradient(135deg, #4db6ac, #00796b);
+  color: white;
+}
+
+.btn-save:hover {
+  background: linear-gradient(135deg, #00796b, #00695c);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,121,107,0.28);
+}
 
 /* Animaciones */
 .modal.fade .modal-dialog {
@@ -638,9 +823,9 @@ h1 {
 }
 
 .alert-success {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  background: linear-gradient(135deg, #4db6ac, #00796b);
   color: white;
-  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+  box-shadow: 0 4px 12px rgba(77,182,172,0.3);
 }
 
 @keyframes slideInRight {
@@ -652,4 +837,29 @@ h1 {
     transform: translateX(0);
     opacity: 1;
   }
+}
+
+/* Override header CTA (only for Cuentas) - keep Bootstrap global classes untouched */
+.contenido-principal #btnAgregarCuentaPage,
+.contenido-principal .btn-warning#btnAgregarCuentaPage {
+  background: linear-gradient(135deg, #4db6ac 0%, #00796b 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+  padding: 8px 14px !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 6px 18px rgba(0,121,107,0.12) !important;
+}
+
+.contenido-principal #btnAgregarCuentaPage i,
+.contenido-principal #btnAgregarCuentaPage .bi {
+  color: #ffffff !important;
+  margin-right: 6px;
+}
+
+/* Also scope .btn-warning inside the cuentas content to teal to avoid yellow showing */
+.contenido-principal .btn-warning {
+  background: linear-gradient(135deg, #4db6ac 0%, #00796b 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
 }

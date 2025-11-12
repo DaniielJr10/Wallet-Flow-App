@@ -238,12 +238,13 @@ document.addEventListener('DOMContentLoaded', function () {
     cerrarMenuEmergente();
     
     try {
-  const response = await fetch('../../formularios/formulario ingresos/foringresos.html');
+      const response = await fetch(encodeURI('../../formularios/formulario ingresos/foringresos.html'));
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const html = await response.text();
       contenedorModalIngreso.innerHTML = html;
       
       const script = document.createElement('script');
-  script.src = '../../formularios/formulario ingresos/foringresos.js';
+      script.src = encodeURI('../../formularios/formulario ingresos/foringresos.js');
       script.onload = function() {
         if (typeof initFormularioIngreso === 'function') {
           initFormularioIngreso();
@@ -266,12 +267,13 @@ document.addEventListener('DOMContentLoaded', function () {
     cerrarMenuEmergente();
     
     try {
-      const response = await fetch('../../formularios/FormularioGastos/FormularioG.html');
+      const response = await fetch(encodeURI('../../formularios/FormularioGastos/FormularioG.html'));
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const html = await response.text();
       contenedorModalGasto.innerHTML = html;
       
       const script = document.createElement('script');
-      script.src = '../../formularios/FormularioGastos/FormularioG.js';
+      script.src = encodeURI('../../formularios/FormularioGastos/FormularioG.js');
       script.onload = function() {
         if (typeof initFormularioGasto === 'function') {
           initFormularioGasto();
@@ -293,12 +295,13 @@ document.addEventListener('DOMContentLoaded', function () {
     cerrarMenuEmergente();
 
     try {
-  const response = await fetch('../../formularios/formulario cuentas/forcuentas.html');
+      const response = await fetch(encodeURI('../../formularios/formulario cuentas/forcuentas.html'));
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const html = await response.text();
       contenedorModalCuenta.innerHTML = html;
 
       const script = document.createElement('script');
-  script.src = '../../formularios/formulario cuentas/forcuentas.js';
+      script.src = encodeURI('../../formularios/formulario cuentas/forcuentas.js');
       script.onload = function () {
         if (typeof initFormularioCuenta === 'function') {
           initFormularioCuenta();
@@ -322,7 +325,8 @@ document.addEventListener('DOMContentLoaded', function () {
     cerrarMenuEmergente();
 
     try {
-  const response = await fetch('../../formularios/formulario ahorros/forahorros.html');
+      const response = await fetch(encodeURI('../../formularios/formulario ahorros/forahorros.html'));
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const html = await response.text();
       // Si el contenedor no existe, lo creamos
       let contenedor = contenedorModalAhorro;
@@ -334,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function () {
       contenedor.innerHTML = html;
 
       const script = document.createElement('script');
-  script.src = '../../formularios/formulario ahorros/forahorros.js';
+      script.src = encodeURI('../../formularios/formulario ahorros/forahorros.js');
       script.onload = function() {
         if (typeof initFormularioAhorro === 'function') {
           initFormularioAhorro();
@@ -357,12 +361,13 @@ document.addEventListener('DOMContentLoaded', function () {
     cerrarMenuEmergente();
 
     try {
-      const response = await fetch('../../formularios/formulario-deudas/fordeudas.html');
+      const response = await fetch(encodeURI('../../formularios/formulario-deudas/fordeudas.html'));
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const html = await response.text();
       contenedorModalDeuda.innerHTML = html;
 
       const script = document.createElement('script');
-      script.src = '../../formularios/formulario-deudas/fordeudas.js';
+      script.src = encodeURI('../../formularios/formulario-deudas/fordeudas.js');
       script.onload = function() {
         if (typeof initFormularioDeuda === 'function') {
           // Pasar función de callback para refrescar si existe
@@ -387,12 +392,13 @@ document.addEventListener('DOMContentLoaded', function () {
     cerrarMenuEmergente();
 
     try {
-      const response = await fetch('../../formularios/formulario-inversiones/forinversiones.html');
+      const response = await fetch(encodeURI('../../formularios/formulario-inversiones/forinversiones.html'));
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const html = await response.text();
       contenedorModalInversion.innerHTML = html;
 
       const script = document.createElement('script');
-      script.src = '../../formularios/formulario-inversiones/forinversiones.js';
+      script.src = encodeURI('../../formularios/formulario-inversiones/forinversiones.js');
       script.onload = function() {
         if (typeof initFormularioInversion === 'function') {
           // Pasar función de callback para refrescar si existe

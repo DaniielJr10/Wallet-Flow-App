@@ -55,9 +55,44 @@
             </div>
           </div>
 
+          <!-- Acción: Agregar Cuenta (botón de cabecera) -->
+          <div class="row mb-4 align-items-center">
+            <div class="col-md-8">
+              <!-- espacio reservado para filtros futuros -->
+            </div>
+            <div class="col-md-4 text-end">
+              <button id="btnAgregarCuentaPage" class="btn btn-warning">
+                <i class="bi bi-plus-circle me-2"></i>Agregar Cuenta
+              </button>
+            </div>
+          </div>
+
           <!-- Contenedor de tarjetas -->
           <div id="contenedorCuentas" class="row">
             <!-- Las tarjetas se generarán dinámicamente aquí -->
+          </div>
+
+          <!-- Mensaje cuando no hay cuentas -->
+          <div id="mensajeVacio" class="d-flex justify-content-center mt-4 flex-column w-100" style="display:none;">
+            <div class="empty-toolbar w-100 mb-3">
+              <div class="toolbar-inner d-flex align-items-center justify-content-between px-3">
+                <div class="toolbar-item"><i class="bi bi-bank me-2"></i>TIPO</div>
+                <div class="toolbar-item hide-sm"><i class="bi bi-credit-card-2-front me-2"></i>NÚMERO</div>
+                <div class="toolbar-item hide-md"><i class="bi bi-cash-stack me-2"></i>SALDO</div>
+                <div class="toolbar-item"><i class="bi bi-gear me-2"></i>ACCIONES</div>
+              </div>
+            </div>
+
+            <div class="empty-card text-center p-4">
+              <div class="empty-icon mb-3">
+                <i class="bi bi-bank2" aria-hidden="true"></i>
+              </div>
+              <h4 class="mb-1">No hay cuentas registradas</h4>
+              <p class="text-muted mb-3">Agrega tu primera cuenta para empezar a administrarla desde aquí.</p>
+              <button class="btn btn-warning btn-empty-add" id="btnAgregarCuentaPageEmpty">
+                <i class="bi bi-plus-circle me-2"></i>Agregar Primera Cuenta
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -177,6 +212,8 @@
     </div>
   </div>  <!-- Scripts -->
   <script src="cuentas.js"></script>
+  <!-- Contenedor para cargar el formulario externo (forcuentas.html) dinámicamente -->
+  <div id="contenedorModalCuenta"></div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
