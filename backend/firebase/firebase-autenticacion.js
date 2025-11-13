@@ -67,6 +67,24 @@ class FirebaseAuth {
                 });
             }
 
+            // Guardar datos del usuario en Firestore
+            try {
+                const db = firebase.firestore();
+                await db.collection('users').doc(user.uid).set({
+                    email: user.email,
+                    displayName: userData.displayName || '',
+                    nombre: userData.personalInfo?.name || '',
+                    apellido: userData.personalInfo?.lastname || '',
+                    fechaRegistro: firebase.firestore.FieldValue.serverTimestamp(),
+                    emailVerificado: user.emailVerified,
+                    uid: user.uid
+                });
+                console.log('Datos del usuario guardados en Firestore');
+            } catch (firestoreError) {
+                console.error('Error al guardar en Firestore:', firestoreError);
+                // Continuar aunque falle Firestore
+            }
+
             // Enviar email de verificación
             await user.sendEmailVerification();
 

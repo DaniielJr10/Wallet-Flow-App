@@ -33,7 +33,10 @@ service cloud.firestore {
 
     // Perfil de usuario (si se usa un doc directo users/{uid})
     match /users/{userId} {
-      allow get, create, update, delete: if isOwner(userId);
+      // Permitir crear el documento durante el registro (cuando request.auth.uid == userId)
+      // o cuando el usuario ya está autenticado y es el dueño
+      allow get, update, delete: if isOwner(userId);
+      allow create: if request.auth != null && request.auth.uid == userId;
     }
 
     // Subcolecciones esperadas bajo users/{uid}
