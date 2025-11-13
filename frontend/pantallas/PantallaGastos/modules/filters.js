@@ -14,7 +14,7 @@
   }
   function initFiltros(){
     ['buscarGasto','filtroCategoria','filtroMes'].forEach(id=>{ const el=document.getElementById(id); if(!el) return; const evt= id==='buscarGasto'? 'input':'change'; el.addEventListener(evt, aplicarFiltros); });
-    const limpiarBtn=document.querySelector('button[onclick="limpiarFiltros()"]'); if(limpiarBtn){ limpiarBtn.addEventListener('click', e=>{ e.preventDefault(); const b=document.getElementById('buscarGasto'); const c=document.getElementById('filtroCategoria'); const m=document.getElementById('filtroMes'); if(b) b.value=''; if(c) c.value=''; if(m) m.value=''; aplicarFiltros(); }); }
+    const limpiarBtn=document.getElementById('btnLimpiarFiltros'); if(limpiarBtn){ limpiarBtn.addEventListener('click', e=>{ e.preventDefault(); const b=document.getElementById('buscarGasto'); const c=document.getElementById('filtroCategoria'); const m=document.getElementById('filtroMes'); if(b) b.value=''; if(c) c.value=''; if(m) m.value=''; aplicarFiltros(); }); }
   }
   window.gastosFilters={ initFiltros,aplicarFiltros };
 })();

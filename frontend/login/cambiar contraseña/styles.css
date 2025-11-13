@@ -1,4 +1,4 @@
-/* Variables CSS para colores personalizados */
+/* Variables CSS para cambiar contraseña*/
 :root {
   --primary-color: #059669;
   --primary-hover: #047857;
@@ -8,7 +8,7 @@
   --danger-color: #ef4444;
 }
 
-/* Override Bootstrap primary colors */
+
 .btn-primary {
   --bs-btn-bg: var(--primary-color);
   --bs-btn-border-color: var(--primary-color);
@@ -36,7 +36,7 @@
   --bs-alert-color: var(--primary-hover);
 }
 
-/* Background and layout */
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   margin: 0;
@@ -45,7 +45,7 @@ body {
 
 .background-container {
   min-height: 100vh;
-  /* Usar el mismo degradado suave que la pantalla de inicio de sesión */
+
   background: linear-gradient(135deg, #d1e7dd 0%, #f8f9fa 100%);
   background-size: cover;
   background-position: center;
@@ -59,7 +59,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  /* Removemos la superposición oscura para que el degradado quede limpio */
+
   background: rgba(0, 0, 0, 0);
   z-index: 1;
 }

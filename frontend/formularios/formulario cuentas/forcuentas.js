@@ -1,11 +1,11 @@
 // Inicializar el formulario de cuentas
 function initFormularioCuenta() {
-  // Elementos del formulario y modal
+
   const modal = document.getElementById('modalAgregarCuenta');
   const form = document.getElementById('formAgregarCuenta');
   const cancelarBtn = document.getElementById('cancelarCuenta');
 
-  // Mostrar el modal (puedes llamar esta función cuando sea necesario)
+ 
   function mostrarModal() {
     modal.classList.remove('d-none'); // Mostrar el modal
   }
@@ -16,19 +16,19 @@ function initFormularioCuenta() {
     form.reset(); // Limpiar los campos del formulario
   }
 
-  // Evento para cerrar el modal al hacer clic en "Cancelar"
+ 
   if (cancelarBtn) {
     cancelarBtn.addEventListener('click', cerrarModal);
   }
 
-  // Evento para cerrar el modal al presionar la tecla Escape
+
   document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape' && !modal.classList.contains('d-none')) {
       cerrarModal();
     }
   });
 
-  // Evento para cerrar el modal al hacer clic fuera del contenido
+
   modal.addEventListener('click', function (event) {
     if (event.target === modal) {
       cerrarModal();
@@ -38,7 +38,7 @@ function initFormularioCuenta() {
   // Evento para manejar el envío del formulario
   if (form) {
     form.addEventListener('submit', function (e) {
-      e.preventDefault(); // Evitar el comportamiento predeterminado del formulario
+      e.preventDefault();
 
       // Obtener los datos del formulario
       const datosCuenta = {
@@ -49,7 +49,7 @@ function initFormularioCuenta() {
         esPrincipal: document.getElementById('cuentaPrincipal').checked
       };
 
-      // Guardar los datos en localStorage
+     
       let cuentas = JSON.parse(localStorage.getItem('cuentas')) || [];
       cuentas.push(datosCuenta);
       localStorage.setItem('cuentas', JSON.stringify(cuentas));

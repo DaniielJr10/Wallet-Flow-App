@@ -1,6 +1,4 @@
-// ===== SISTEMA DE REGISTRO CON FIREBASE - WALLET FLOW =====
-// Archivo: registro.js
-// Descripción: Maneja el registro de usuarios con Firebase
+// ===== SISTEMA DE REGISTRO =====
 
 // ===== ELEMENTOS DEL DOM =====
 const progress = document.getElementById("formProgress");
@@ -18,7 +16,7 @@ const regConfirmPassword = document.getElementById("reg-confirm-password");
 document.addEventListener("DOMContentLoaded", async () => {
     await initializeFirebase();
     setupEventListeners();
-    // Al tener un solo formulario, marcar progreso al 100%
+  
     if (progress) {
         progress.style.width = '100%';
         progress.setAttribute('aria-valuenow', 100);
@@ -30,8 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function initializeFirebase() {
     try {
         console.log('Intentando inicializar Firebase en registro...');
-        
-        // Verificar que el objeto firebaseAuth esté disponible
+
         if (!window.firebaseAuth) {
             throw new Error('firebaseAuth no está disponible. Verifica que firebase-autenticacion.js se haya cargado.');
         }
@@ -77,7 +74,7 @@ function checkAuthState() {
 }
 // ===== VALIDACIONES =====
 function validateCurrentStep() {
-    // Mantengo la interfaz por compatibilidad, pero el formulario es único.
+
     const inputs = form.querySelectorAll("input[required]");
     let isValid = true;
 
@@ -165,14 +162,14 @@ async function handleRegistration(e) {
         return;
     }
     
-    // Mostrar loading
+
     showRegistrationLoading(true);
     
     const userData = {
         email: regEmail.value.trim(),
         password: regPassword.value,
         displayName: `${regName.value.trim()} ${regLastname.value.trim()}`,
-        // Datos adicionales que podrías guardar en Firestore más tarde
+ 
         personalInfo: {
             name: regName.value.trim(),
             lastname: regLastname.value.trim()
@@ -183,7 +180,10 @@ async function handleRegistration(e) {
         const result = await window.firebaseAuth.registrarUsuario(
             userData.email,
             userData.password,
-            { displayName: userData.displayName }
+            { 
+                displayName: userData.displayName,
+                personalInfo: userData.personalInfo
+            }
         );
         
         if (result.success) {
@@ -239,8 +239,7 @@ function handleSuccessfulRegistration(result) {
     };
     
     localStorage.setItem('walletflow_user_data', JSON.stringify(userData));
-    
-    // Redirigir al login después de un delay
+
     setTimeout(() => {
         window.location.href = '../inicio de sesion/inicio.html';
     }, 3000);
@@ -249,7 +248,7 @@ function handleSuccessfulRegistration(result) {
 function handleFailedRegistration(errorMessage) {
     showMessage(errorMessage, 'danger');
     
-    // Si el error es de email ya existente, ir al paso 1
+
     if (errorMessage.includes('correo electrónico ya está registrado')) {
         currentStep = 0;
         updateFormSteps();
@@ -270,7 +269,7 @@ function showRegistrationLoading(show) {
 }
 
 function showMessage(message, type = 'info') {
-    // Crear o actualizar mensaje de alerta
+
     let alertElement = document.querySelector('.alert');
     if (!alertElement) {
         alertElement = document.createElement('div');
@@ -281,10 +280,10 @@ function showMessage(message, type = 'info') {
     alertElement.className = `alert alert-${type} mt-3`;
     alertElement.textContent = message;
     
-    // Scroll hacia el mensaje
+
     alertElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     
-    // Auto-ocultar mensajes de éxito
+
     if (type === 'success') {
         setTimeout(() => {
             alertElement.remove();
@@ -296,7 +295,7 @@ function showFieldError(field, message) {
     field.classList.add('is-invalid');
     field.classList.remove('is-valid');
     
-    // Buscar o crear elemento de feedback
+   
     let feedback = field.parentNode.querySelector('.invalid-feedback');
     if (!feedback) {
         feedback = document.createElement('div');

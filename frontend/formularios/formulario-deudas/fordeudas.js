@@ -1,4 +1,4 @@
-// Lógica del formulario de deuda avanzado
+// Lógica del formulario de deuda
 
 function initFormularioDeuda(callbackRender) {
   // Elementos del formulario
@@ -13,7 +13,7 @@ function initFormularioDeuda(callbackRender) {
   // Paso siguiente
   if (nextStepBtn) {
     nextStepBtn.addEventListener("click", () => {
-      // Basic validation for step 1
+      // validacion basica para el paso 1
       const acreedor = document.getElementById("addAcreedorDeuda").value
       const monto = document.getElementById("addMontoDeuda").value
       const fechaInicio = document.getElementById("addFechaInicioDeuda").value
@@ -35,19 +35,19 @@ function initFormularioDeuda(callbackRender) {
       step1.classList.remove("hidden")
     })
   }
-  // Cancelar y cerrar modal
+ 
   if (cancelarBtn) {
     cancelarBtn.addEventListener("click", () => {
       cerrarModalDeuda()
     })
   }
-  // Cerrar modal con Escape
+
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && modal && !modal.classList.contains("d-none")) {
       cerrarModalDeuda()
     }
   })
-  // Cerrar modal al hacer clic fuera del contenido
+
   if (modal) {
     modal.addEventListener("click", (event) => {
       if (event.target === modal) {
@@ -70,20 +70,20 @@ function initFormularioDeuda(callbackRender) {
       }
       // Guardar en localStorage
       const deudas = JSON.parse(localStorage.getItem("deudas")) || []
-      datos.id = Date.now(); // Agregar ID único
+      datos.id = Date.now();
       deudas.push(datos)
       localStorage.setItem("deudas", JSON.stringify(deudas))
       
-      // Mensaje de éxito (opcional)
+    
       alert("¡Deuda guardada exitosamente!")
       cerrarModalDeuda()
       
-      // Actualizar la pantalla si hay callback de renderizado
+
       if (callbackRender) {
-        callbackRender() // Call the render function from the parent page
+        callbackRender()
       }
       
-      // Si estamos en la pantalla principal, mostrar notificación adicional
+   
       if (typeof mostrarNotificacion === 'function') {
         mostrarNotificacion('Deuda guardada correctamente', 'success');
       }

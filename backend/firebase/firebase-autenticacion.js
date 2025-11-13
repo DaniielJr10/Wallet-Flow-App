@@ -82,7 +82,7 @@ class FirebaseAuth {
                 console.log('Datos del usuario guardados en Firestore');
             } catch (firestoreError) {
                 console.error('Error al guardar en Firestore:', firestoreError);
-                // Continuar aunque falle Firestore
+
             }
 
             // Enviar email de verificación
@@ -92,7 +92,7 @@ class FirebaseAuth {
             return {
                 success: true,
                 user: user,
-                message: 'Usuario registrado exitosamente. Por favor verifica tu email.'
+                message: 'Usuario registrado exitosamente.'
             };
 
         } catch (error) {
@@ -226,7 +226,6 @@ class FirebaseAuth {
         return this.user;
     }
 
-    // Verificar si el usuario está autenticado
     isAuthenticated() {
         return this.user !== null;
     }

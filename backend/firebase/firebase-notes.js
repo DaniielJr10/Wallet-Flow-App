@@ -1,4 +1,4 @@
-// Módulo Notas: CRUD para notas financieras del usuario
+// Módulo Notas
 (function attachNotesModule(){
   if (!window.walletDB || (typeof WalletDB === 'undefined')) return;
   const proto = WalletDB.prototype;

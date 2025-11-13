@@ -1,4 +1,6 @@
-/* Fondo oscuro para el modal */
+/* =============================
+  Estilos para el modal de gastos
+  ============================= */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -137,7 +139,7 @@ button[type="reset"] {
   color: #333;
 }
 
-/* Responsive para pantallas pequeñas */
+
 @media screen and (max-width: 600px) {
   .modal-form {
     max-width: 98vw;

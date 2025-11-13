@@ -7,17 +7,17 @@ function initFormularioObjetivo(callback, objetivoAEditar = null, indexEdicion =
   refreshCallback = callback;
   editIndex = (typeof indexEdicion === 'number') ? indexEdicion : null;
   
-  // Establecer fecha actual como predeterminada
+ 
   const fechaHoy = new Date().toISOString().split('T')[0];
   const fechaCreacionField = document.getElementById('crearFechaCreacion');
   if (fechaCreacionField) {
     fechaCreacionField.value = fechaHoy;
   }
   
-  // Configurar eventos
+
   configurarEventosFormulario();
 
-  // Si hay objetivo para editar, precargar datos y ajustar UI
+
   if (objetivoAEditar) {
     precargarParaEdicion(objetivoAEditar);
   } else {
@@ -49,7 +49,7 @@ function manejarSubmitFormulario(e) {
     return;
   }
 
-  // Deshabilitar botón temporalmente
+
   const submitBtn = document.querySelector('button[type="submit"][form="formCrear"]');
   if (submitBtn) {
     submitBtn.disabled = true;
@@ -69,7 +69,7 @@ function manejarSubmitFormulario(e) {
         fechaCreacion: formatearFecha(fechaCreacion),
         fechaLimite: formatearFecha(fechaLimite),
         estado,
-        // Mantener progreso e ids si existen
+      
         progreso: typeof anterior.progreso === 'number' ? anterior.progreso : 0,
         fechaCreacionISO: fechaCreacion,
         fechaLimiteISO: fechaLimite,
@@ -103,11 +103,11 @@ function manejarSubmitFormulario(e) {
       modal.hide();
     }
     
-    // Limpiar formulario y restablecer modo
+
     limpiarFormulario();
     editIndex = null;
     
-    // Ejecutar callback para refrescar la pantalla
+
     if (refreshCallback && typeof refreshCallback === 'function') {
       setTimeout(refreshCallback, 300);
     }
@@ -117,7 +117,7 @@ function manejarSubmitFormulario(e) {
     mostrarNotificacion('Error al guardar el objetivo', 'danger');
   }
   
-  // Rehabilitar botón
+
   if (submitBtn) {
     setTimeout(() => {
       submitBtn.disabled = false;
@@ -135,7 +135,7 @@ function limpiarFormulario() {
     }
   });
   
-  // Restablecer fecha actual
+
   const fechaHoy = new Date().toISOString().split('T')[0];
   const fechaCreacionField = document.getElementById('crearFechaCreacion');
   if (fechaCreacionField) {
@@ -157,13 +157,13 @@ function desformatearFechaDDMMYYYYaISO(ddmmyyyy) {
 }
 
 function precargarParaEdicion(obj) {
-  // Cambiar títulos y textos del modal
+
   const tituloModal = document.getElementById('modalAgregarObjetivoLabel');
   if (tituloModal) tituloModal.innerHTML = '<i class="bi bi-pencil-square me-2"></i>Editar Objetivo';
   const btnSubmit = document.querySelector('button[type="submit"][form="formCrear"]');
   if (btnSubmit) btnSubmit.innerHTML = '<i class="bi bi-check-circle me-1"></i>Guardar Cambios';
 
-  // Precargar campos
+
   const titulo = document.getElementById('crearTitulo');
   const descripcion = document.getElementById('crearDescripcion');
   const fechaCreacion = document.getElementById('crearFechaCreacion');
@@ -174,7 +174,6 @@ function precargarParaEdicion(obj) {
   if (descripcion) descripcion.value = obj.descripcion || '';
   if (estado) estado.value = obj.estado || '';
 
-  // Manejar fechas: preferir ISO guardado
   const fechaCreacionISO = obj.fechaCreacionISO || desformatearFechaDDMMYYYYaISO(obj.fechaCreacion);
   const fechaLimiteISO = obj.fechaLimiteISO || desformatearFechaDDMMYYYYaISO(obj.fechaLimite);
   if (fechaCreacion && fechaCreacionISO) fechaCreacion.value = fechaCreacionISO;
@@ -190,7 +189,7 @@ function ajustarUiModoCrear() {
 
 // Función para mostrar notificaciones
 function mostrarNotificacion(mensaje, tipo = 'info') {
-  // Crear elemento de notificación
+ 
   const notification = document.createElement('div');
   notification.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
   notification.style.cssText = `
@@ -206,7 +205,7 @@ function mostrarNotificacion(mensaje, tipo = 'info') {
   
   document.body.appendChild(notification);
   
-  // Auto-eliminar después de 3 segundos
+
   setTimeout(() => {
     if (notification.parentNode) {
       notification.remove();
@@ -214,7 +213,7 @@ function mostrarNotificacion(mensaje, tipo = 'info') {
   }, 3000);
 }
 
-// Función legacy para compatibilidad
+
 function volverAtras() {
   const modal = bootstrap.Modal.getInstance(document.getElementById('modalAgregarObjetivo'));
   if (modal) {

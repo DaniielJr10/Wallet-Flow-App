@@ -1,9 +1,10 @@
-<!-- MODAL PROFESIONAL DE AHORROS -->
+<!-- MODAL DE AHORROS -->
 <div id="modalAgregarAhorro" class="modal-overlay d-none">
   <div class="modal-form">
     <form id="formAgregarAhorro" autocomplete="off">
       <h2>Registrar Ahorro</h2>
-      <!-- Sección única: Todos los campos en un solo bloque -->
+
+
       <label for="addCategoriaAhorro">Tipo de ahorro <span style="color:red">*</span></label>
       <select id="addCategoriaAhorro" required>
         <option value="">Selecciona el tipo de ahorro</option>
@@ -29,6 +30,7 @@
       </select>
       <label for="addDescripcionAhorro">Descripción o propósito</label>
       <textarea id="addDescripcionAhorro" name="descripcion" placeholder="Ej: Ahorro para comprar portátil"></textarea>
+
   <!-- Opciones avanzadas eliminadas: ahorro recurrente y vinculación bancaria -->
       <div class="botones">
         <button type="submit" id="guardarAhorro">Guardar ahorro</button>
@@ -39,7 +41,7 @@
   </div>
 </div>
 
-<!-- Estilo para cambiar el color de las etiquetas a negro -->
+
 <style>
   label {
     color: black;

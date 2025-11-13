@@ -1,6 +1,6 @@
-// ===== SISTEMA DE RECUPERACIÓN DE CONTRASEÑA CON FIREBASE - WALLET FLOW =====
-// Archivo: script.js
-// Descripción: Maneja la recuperación de contraseña con Firebase
+// ===== SISTEMA DE RECUPERACIÓN DE CONTRASEÑA =====
+
+
 
 class WalletFlowPasswordRecovery {
   constructor() {
@@ -74,7 +74,7 @@ class WalletFlowPasswordRecovery {
       this.checkPasswordMatch()
     })
 
-    // Botón de reenviar código
+   
     document.getElementById("resend-code-btn").addEventListener("click", () => {
       this.resendCode()
     })
@@ -109,7 +109,7 @@ class WalletFlowPasswordRecovery {
     this.hideMessages()
 
     try {
-      // Enviar email de recuperación con Firebase
+      
       const result = await window.firebaseAuth.recuperarContrasena(email)
 
       if (result.success) {
@@ -143,30 +143,32 @@ class WalletFlowPasswordRecovery {
 
     codeInput.classList.remove("is-invalid")
     codeInput.classList.add("is-valid")
-
+    // Intentar delegar la verificación al módulo de autenticación (si está implementado)
     this.setLoading(button, true)
     this.hideMessages()
 
-    try {
-      // Simular verificación de código
-      await this.delay(1500)
-
-      // Para demo, acepta cualquier código de 6 dígitos excepto 000000
-      if (code === "000000") {
-        throw new Error("Código incorrecto")
+    if (window.firebaseAuth && typeof window.firebaseAuth.verifyRecoveryCode === 'function') {
+      try {
+        const result = await window.firebaseAuth.verifyRecoveryCode(this.userEmail, code)
+        if (result && result.success) {
+          this.showSuccess(result.message || 'Código verificado correctamente')
+          this.stopCountdown()
+          setTimeout(() => this.goToStep('password'), 800)
+        } else {
+          codeInput.classList.add('is-invalid')
+          this.showError((result && result.message) || 'Código incorrecto. Verifica e inténtalo de nuevo.')
+        }
+      } catch (err) {
+        console.error('Error verificando código:', err)
+        codeInput.classList.add('is-invalid')
+        this.showError('Error verificando el código. Inténtalo más tarde.')
+      } finally {
+        this.setLoading(button, false)
       }
-
-      this.showSuccess("Código verificado correctamente")
-      this.stopCountdown()
-
-      setTimeout(() => {
-        this.goToStep("password")
-      }, 1500)
-    } catch (error) {
-      codeInput.classList.add("is-invalid")
-      this.showError("Código incorrecto. Verifica e inténtalo de nuevo.")
-    } finally {
+    } else {
+      // Si no hay soporte para verificación por código, orientar al usuario a usar el enlace enviado por email
       this.setLoading(button, false)
+      this.showError('Verificación por código no disponible en esta versión. Revisa el enlace enviado a tu correo para restablecer la contraseña.')
     }
   }
 
@@ -201,42 +203,61 @@ class WalletFlowPasswordRecovery {
 
     this.setLoading(button, true)
     this.hideMessages()
-
-    try {
-      // Simular restablecimiento de contraseña
-      await this.delay(2000)
-
-      this.showSuccess("Contraseña restablecida exitosamente")
-
-      setTimeout(() => {
-        this.goToLogin()
-      }, 2000)
-    } catch (error) {
-      this.showError("Error al restablecer la contraseña. Inténtalo de nuevo.")
-    } finally {
+    // Delegar restablecimiento al módulo de autenticación si está disponible
+    if (window.firebaseAuth && typeof window.firebaseAuth.resetPassword === 'function') {
+      try {
+        const result = await window.firebaseAuth.resetPassword(this.userEmail, newPassword)
+        if (result && result.success) {
+          this.showSuccess(result.message || 'Contraseña restablecida exitosamente')
+          setTimeout(() => this.goToLogin(), 1200)
+        } else {
+          this.showError((result && result.message) || 'No se pudo restablecer la contraseña.')
+        }
+      } catch (err) {
+        console.error('Error al restablecer contraseña:', err)
+        this.showError('Error al restablecer la contraseña. Inténtalo de nuevo más tarde.')
+      } finally {
+        this.setLoading(button, false)
+      }
+    } else {
+      // No hay implementación de restablecimiento por código; indicar usar enlace del correo
       this.setLoading(button, false)
+      this.showError('Restablecimiento por código no disponible aquí. Usa el enlace enviado a tu correo para crear una nueva contraseña.')
     }
   }
 
   async resendCode() {
     const button = document.getElementById("resend-code-btn")
     const originalText = button.textContent
-
+    // Intentar delegar el reenvío al módulo de autenticación
     button.disabled = true
-    button.textContent = "Reenviando..."
-    button.classList.add("disabled")
+    button.textContent = 'Reenviando...'
+    button.classList.add('disabled')
 
-    try {
-      await this.delay(1000)
-      this.showSuccess(`Código reenviado a ${this.userEmail}`)
-      this.countdownTime = 600
-      this.startCountdown()
-    } catch (error) {
-      this.showError("Error al reenviar el código")
-    } finally {
+    if (window.firebaseAuth && typeof window.firebaseAuth.resendRecoveryCode === 'function') {
+      try {
+        const res = await window.firebaseAuth.resendRecoveryCode(this.userEmail)
+        if (res && res.success) {
+          this.showSuccess(res.message || `Código reenviado a ${this.userEmail}`)
+          this.countdownTime = 600
+          this.startCountdown()
+        } else {
+          this.showError((res && res.message) || 'No se pudo reenviar el código')
+        }
+      } catch (err) {
+        console.error('Error reenviando código:', err)
+        this.showError('Error al reenviar el código')
+      } finally {
+        button.disabled = false
+        button.textContent = originalText
+        button.classList.remove('disabled')
+      }
+    } else {
+      // Fallback: no hay soporte de reenvío por código en el módulo auth
+      this.showError('Reenvío por código no disponible en esta versión. Revisa el enlace en tu correo.')
       button.disabled = false
       button.textContent = originalText
-      button.classList.remove("disabled")
+      button.classList.remove('disabled')
     }
   }
 

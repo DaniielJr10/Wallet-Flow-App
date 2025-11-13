@@ -8,33 +8,32 @@
 </head>
 <body>
 
-  <!-- ===== PANTALLA DE INTRODUCCIÓN / SPLASH SCREEN ===== -->
   <div id="splash">
     <div class="splash-content">
-      <!-- Logo de la aplicación -->
+
       <img src="logo.png" alt="Logo WalletFlow">
       
-      <!-- Título principal -->
+ 
       <h1>Wallet Flow</h1>
       
-      <!-- Descripción de la app -->
+  
       <p>Tu guía financiera, a la palma de tu mano</p>
       
-      <!-- Botón para continuar al inicio de sesión -->
+   
       <button id="continuarBtn">Continuar</button>
     </div>
   </div>
 
-  <!-- ===== JAVASCRIPT - NAVEGACIÓN A INICIO DE SESIÓN ===== -->
+ 
   <script>
-    // Funcionalidad del botón continuar
+
     document.getElementById('continuarBtn').addEventListener('click', () => {
       const splash = document.getElementById('splash');
       
-      // Aplicar animación de desvanecimiento
+
       splash.style.animation = 'fadeOut 1s forwards';
       
-      // Redirigir a la página de inicio de sesión después de la animación
+
       setTimeout(() => {
         window.location.href = '../inicio de sesion/inicio.html';
       }, 1000);

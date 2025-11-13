@@ -1,4 +1,4 @@
-/* Reemplazar el verde de Bootstrap por #2ecc71 */
+
 :root {
     --bs-success: #2ecc71;
   }
@@ -17,7 +17,7 @@
   }
   
   .btn-success:hover {
-    background-color: #2ecc71 !important; /* un tono más oscuro */
+    background-color: #2ecc71 !important;
     border-color: #2ecc71 !important;
   }
   
@@ -26,10 +26,9 @@
     box-shadow: 0 0 0 0.2rem rgba(46, 204, 113, 0.25) !important;
   }
   .card {
-    border-radius: 1.5rem !important; /* Más redondeado aún para el contenedor */
+    border-radius: 1.5rem !important;
   }
 
-  /* ...código existente... */
 
 /* Usar el mismo fondo suave y degradado que la pantalla de inicio de sesión */
 body {

@@ -60,8 +60,3 @@ class WalletDB {
 
 // Instancia global base. Los módulos se montan después.
 try { window.walletDB = new WalletDB(); } catch (e) { console.error('No se pudo crear WalletDB:', e); }
-
-// Nota: Asegúrate de incluir después de este script los nuevos archivos:
-// firebase-incomes.js, firebase-expenses.js, firebase-accounts.js, firebase-savings.js,
-// firebase-debts.js, firebase-investments.js, firebase-goals.js
-// para que se anexen los métodos CRUD al prototipo.

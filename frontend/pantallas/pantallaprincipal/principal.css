@@ -3,7 +3,7 @@ body, html {
   font-family: 'Inter', 'Segoe UI', 'Poppins', sans-serif;
 }
 
-/* ===== MENÚ LATERAL MEJORADO ===== */
+/* ===== MENÚ LATERAL ===== */
 .menu-lateral {
   background: linear-gradient(180deg, white 0%, #f8fffe 100%);
   border: 3px solid #2ecc71;
@@ -59,7 +59,7 @@ body, html {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: #2e6835; /* Fallback */
+  color: #2e6835;
 }
 /*hasta aqui termina el css para el menú lateral */
 
@@ -79,7 +79,7 @@ body, html {
   color: #2c3e50;
 }
 
-/* ===== SECCIÓN DE BIENVENIDA SIMPLIFICADA ===== */
+
 .seccion-bienvenida-simple {
   padding: 2rem 0;
   margin-bottom: 2rem;
@@ -91,7 +91,7 @@ body, html {
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  margin-right: 200px; /* Espacio para que no se tape con el perfil */
+  margin-right: 200px;
 }
 
 .titulo-bienvenida-simple {
@@ -108,7 +108,7 @@ body, html {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: #2ecc71; /* Fallback */
+  color: #2ecc71; 
 }
 
 /* Icono de billetera flotante */
@@ -136,7 +136,6 @@ body, html {
   }
 }
 
-/* Responsive para bienvenida simple */
 @media (max-width: 768px) {
   .seccion-bienvenida-simple {
     padding: 1.5rem 0;
@@ -146,7 +145,7 @@ body, html {
     flex-direction: column;
     text-align: center;
     gap: 1.5rem;
-    margin-right: 0; /* En móviles no necesita margen */
+    margin-right: 0;
   }
   
   .titulo-bienvenida-simple {
@@ -160,7 +159,7 @@ body, html {
   }
 }
 
-/* ===== PERFIL MEJORADO ===== */
+
 /* === PERFIL REDONDO === */
 .perfil-redondo {
   top: 20px;
@@ -327,7 +326,7 @@ body, html {
   transition: transform 0.3s ease;
 }
 
-/* Efecto ripple */
+
 .ripple {
   position: absolute;
   border-radius: 50%;
@@ -344,7 +343,7 @@ body, html {
   }
 }
 
-/* Animación de pulsación */
+
 @keyframes pulse {
   0% {
     box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
@@ -362,7 +361,7 @@ body, html {
   animation: pulse 2s infinite;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .boton-flotante-mejorado {
     bottom: 20px;
@@ -390,7 +389,7 @@ body, html {
   }
 }
 
-/* ===== MENÚ EMERGENTE MEJORADO ===== */
+/* ===== MENÚ EMERGENTE ===== */
 .menu-emergente {
   position: fixed;
   bottom: 120px;
@@ -536,7 +535,7 @@ body, html {
   border-color: rgba(46, 204, 113, 0.3);
 }
 
-/* Iconos específicos para cada tipo */
+
 .item-icon {
   width: 45px;
   height: 45px;
@@ -555,7 +554,7 @@ body, html {
   transform: scale(1.1);
 }
 
-/* Colores específicos para cada tipo */
+
 .ingreso-item .item-icon {
   background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
 }
@@ -584,7 +583,7 @@ body, html {
   background: linear-gradient(135deg, #fd7e14 0%, #dc3545 100%);
 }
 
-/* Contenido del item */
+
 .item-content {
   flex: 1;
   display: flex;
@@ -606,7 +605,7 @@ body, html {
   margin: 0;
 }
 
-/* Flecha */
+
 .item-arrow {
   color: #6c757d;
   font-size: 14px;
@@ -620,7 +619,7 @@ body, html {
   opacity: 1;
 }
 
-/* Efectos hover específicos */
+
 .ingreso-item:hover {
   background: linear-gradient(135deg, rgba(40, 167, 69, 0.05) 0%, rgba(32, 201, 151, 0.05) 100%);
   border-color: rgba(40, 167, 69, 0.3);
@@ -656,7 +655,7 @@ body, html {
   border-color: rgba(253, 126, 20, 0.3);
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .menu-emergente {
     width: 280px;

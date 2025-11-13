@@ -1,9 +1,7 @@
-// =============================
-// Lógica del formulario de ahorro (crear/editar)
-// =============================
+// Lógica del formulario de ahorro
 
 // Inicializa el formulario de ahorro y sus eventos
-// opciones: { modo: 'crear'|'editar', datos, indice, onSave }
+
 function initFormularioAhorro(opciones = {}) {
   const { modo = 'crear', datos = null, indice = null, onSave = null } = opciones;
 
@@ -37,14 +35,14 @@ function initFormularioAhorro(opciones = {}) {
     });
   }
 
-  // Evento: cerrar modal con la tecla Escape
+
   document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape' && modal && !modal.classList.contains('d-none')) {
       cerrarModalAhorro();
     }
   });
 
-  // Evento: cerrar modal al hacer clic fuera del contenido
+
   if (modal) {
     modal.addEventListener('click', function (event) {
       if (event.target === modal) {
@@ -53,7 +51,7 @@ function initFormularioAhorro(opciones = {}) {
     });
   }
 
-  // Evento: envío del formulario y guardado en localStorage
+ 
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -77,7 +75,7 @@ function initFormularioAhorro(opciones = {}) {
       // Cerrar modal y limpiar
       cerrarModalAhorro();
       if (typeof onSave === 'function') onSave();
-      // Notificación básica (opcional)
+      
       try { alert(modo === 'editar' ? '¡Ahorro actualizado!' : '¡Ahorro guardado exitosamente!'); } catch (_) {}
     }, { once: true });
   }

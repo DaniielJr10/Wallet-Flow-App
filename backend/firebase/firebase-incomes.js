@@ -1,5 +1,5 @@
-// Módulo Ingresos: añade métodos CRUD al prototipo de WalletDB
-// Requiere que firebase-db.js (base) se haya cargado primero.
+// Módulo Ingresos
+
 (function attachIncomeModule(){
     if (!window.walletDB || !window.WalletDB && typeof WalletDB === 'undefined') return;
     const proto = WalletDB.prototype;

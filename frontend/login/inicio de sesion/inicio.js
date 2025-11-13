@@ -1,6 +1,5 @@
-// ===== SISTEMA DE INICIO DE SESIÓN CON FIREBASE - WALLET FLOW =====
-// Archivo: inicio.js
-// Descripción: Maneja toda la lógica de autenticación con Firebase
+// ===== SISTEMA DE INICIO DE SESIÓN =====
+
 
 // ===== ELEMENTOS DEL DOM =====
 const loginForm = document.getElementById('loginForm');
@@ -39,22 +38,20 @@ async function initializeFirebase() {
 
 // ===== CONFIGURACIÓN DE EVENT LISTENERS =====
 function setupEventListeners() {
-    // Evento del formulario de login
+   
     loginForm.addEventListener('submit', handleFirebaseLogin);
     
-    // Toggle para mostrar/ocultar contraseña
+
     togglePasswordBtn.addEventListener('click', togglePasswordVisibility);
     
-    // Enlace para "olvidaste contraseña" - funciona automáticamente con href
-    
-    // Validación en tiempo real
+  
     loginIdentifier.addEventListener('input', clearValidation);
     loginPassword.addEventListener('input', clearValidation);
 }
 
 // ===== VERIFICAR ESTADO DE AUTENTICACIÓN =====
 function checkAuthState() {
-    // Si ya hay un usuario autenticado, redirigir a la pantalla principal
+ 
     if (window.firebaseAuth && window.firebaseAuth.isAuthenticated()) {
         console.log('Usuario ya autenticado, redirigiendo...');
         // window.location.href = '../../pantallas/pantallaprincipal/principal.html';
@@ -84,12 +81,12 @@ async function handleFirebaseLogin(e) {
     const email = loginIdentifier.value.trim();
     const password = loginPassword.value;
     
-    // Mostrar spinner de carga
+ 
     showLoginLoading(true);
     hideMessage();
     
     try {
-        // Intentar iniciar sesión con Firebase
+       
         const result = await window.firebaseAuth.iniciarSesion(email, password);
         
         if (result.success) {
@@ -179,17 +176,16 @@ function isValidEmail(email) {
 function handleSuccessfulLogin(user) {
     console.log('Login exitoso:', user);
     
-    // Guardar usuario recordado si está marcado
+ 
     if (rememberMe.checked) {
         localStorage.setItem('walletflow_remembered_user', user.email);
     } else {
         localStorage.removeItem('walletflow_remembered_user');
     }
     
-    // Obtener datos del usuario guardados durante el registro
+  
     let userData = JSON.parse(localStorage.getItem('walletflow_user_data') || '{}');
     
-    // Si no hay datos guardados o el email no coincide, usar datos de Firebase
     if (!userData.email || userData.email !== user.email) {
         userData = {
             email: user.email,
@@ -201,7 +197,7 @@ function handleSuccessfulLogin(user) {
         localStorage.setItem('walletflow_user_data', JSON.stringify(userData));
     }
     
-    // Mostrar mensaje de éxito
+   
     showMessage('¡Inicio de sesión exitoso! Bienvenido a WalletFlow.', 'success');
     
     // Redirigir después de un breve delay
@@ -215,18 +211,18 @@ function handleSuccessfulLogin(user) {
 function handleFailedLogin(errorMessage = 'Credenciales incorrectas. Verifica tu email y contraseña.') {
     showMessage(errorMessage, 'danger');
     
-    // Limpiar contraseña por seguridad
+    
     loginPassword.value = '';
     loginPassword.focus();
     
-    // Aplicar efecto de shake al formulario
+    
     loginForm.classList.add('shake');
     setTimeout(() => {
         loginForm.classList.remove('shake');
     }, 500);
 }
 
-// ===== TOGGLE PARA MOSTRAR/OCULTAR CONTRASEÑA =====
+
 function togglePasswordVisibility() {
     const isPassword = loginPassword.type === 'password';
     loginPassword.type = isPassword ? 'text' : 'password';
@@ -235,13 +231,13 @@ function togglePasswordVisibility() {
 
 // ===== FUNCIONES DE INTERFAZ DE USUARIO =====
 
-// Mostrar mensajes de estado en el login
+
 function showMessage(message, type) {
     loginMessage.className = `alert alert-${type}`;
     loginMessage.textContent = message;
     loginMessage.classList.remove('d-none');
     
-    // Auto-ocultar mensajes de error después de 5 segundos
+ 
     if (type === 'danger') {
         setTimeout(() => {
             loginMessage.classList.add('d-none');
@@ -249,32 +245,29 @@ function showMessage(message, type) {
     }
 }
 
-// Mostrar error en campo específico
 function showFieldError(field, message) {
     field.classList.add('is-invalid');
     field.classList.remove('is-valid');
     
-    // Actualizar mensaje de error
+
     const feedback = field.parentNode.querySelector('.invalid-feedback');
     if (feedback) {
         feedback.textContent = message;
     }
-}
 
-// Mostrar éxito en campo específico
 function showFieldSuccess(field) {
     field.classList.add('is-valid');
     field.classList.remove('is-invalid');
 }
 
-// Limpiar validación de campos
+
 function clearValidation() {
     loginMessage.classList.add('d-none');
     loginIdentifier.classList.remove('is-invalid', 'is-valid');
     loginPassword.classList.remove('is-invalid', 'is-valid');
 }
 
-// Mostrar/ocultar spinner de carga durante el login
+
 function showLoginLoading(show) {
     if (show) {
         loginSpinner.classList.remove('d-none');
@@ -311,7 +304,7 @@ window.checkAuth = function() {
 };
 
 // ===== ESTILOS CSS ADICIONALES =====
-// Agregar CSS para animación de shake
+
 const style = document.createElement('style');
 style.textContent = `
     .shake {
@@ -344,4 +337,5 @@ window.checkAuth = function() {
         return window.firebaseAuth.getCurrentUser();
     }
     return null;
+}
 };

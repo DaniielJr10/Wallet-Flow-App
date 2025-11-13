@@ -1,7 +1,7 @@
 // Cargador agregado de módulos CRUD de WalletDB
 // En lugar de incluir 8 scripts, basta incluir este después de firebase-db.js
 // Se autodetecta la ruta y carga: incomes, expenses, accounts, savings, debts,
-// investments y goals. Expone Promise window.walletDBModulesReady.
+
 (function(){
   try {
     var current = document.currentScript && document.currentScript.src || '';

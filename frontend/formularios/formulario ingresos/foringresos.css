@@ -1,6 +1,6 @@
-/* Estilos mejorados para el modal del formulario de ingreso */
-
-/* Fondo oscuro con blur para el modal */
+/* =============================
+  Estilos para el modal de ingresos
+  ============================= */
 .modal-overlay {
   position: fixed;
   top: 0; 

@@ -1,4 +1,4 @@
-// Lógica del formulario de inversión avanzado
+// Lógica del formulario de inversión
 
 function initFormularioInversion(callbackRender) {
   // Elementos del formulario
@@ -13,7 +13,7 @@ function initFormularioInversion(callbackRender) {
   // Paso siguiente
   if (nextStepBtn) {
     nextStepBtn.addEventListener("click", () => {
-      // Basic validation for step 1
+      // validacion basica para el paso 1
       const tipo = document.getElementById("addTipoInversion").value
       const monto = document.getElementById("addMontoInversion").value
       const fechaInicio = document.getElementById("addFechaInicioInversion").value
@@ -35,19 +35,19 @@ function initFormularioInversion(callbackRender) {
       step1.classList.remove("hidden")
     })
   }
-  // Cancelar y cerrar modal
+ 
   if (cancelarBtn) {
     cancelarBtn.addEventListener("click", () => {
       cerrarModalInversion()
     })
   }
-  // Cerrar modal con Escape
+
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && modal && !modal.classList.contains("d-none")) {
       cerrarModalInversion()
     }
   })
-  // Cerrar modal al hacer clic fuera del contenido
+
   if (modal) {
     modal.addEventListener("click", (event) => {
       if (event.target === modal) {
@@ -70,26 +70,26 @@ function initFormularioInversion(callbackRender) {
       }
       // Guardar en localStorage
       const inversiones = JSON.parse(localStorage.getItem("inversiones")) || []
-      datos.id = Date.now(); // Agregar ID único
+      datos.id = Date.now();
       inversiones.push(datos)
       localStorage.setItem("inversiones", JSON.stringify(inversiones))
       
-      // Mensaje de éxito (opcional)
+    
       alert("¡Inversión guardada exitosamente!")
       cerrarModalInversion()
       
-      // Actualizar la pantalla si hay callback de renderizado
+   
       if (callbackRender) {
-        callbackRender() // Call the render function from the parent page
+        callbackRender() 
       }
       
-      // Si estamos en la pantalla principal, mostrar notificación adicional
+ 
       if (typeof mostrarNotificacion === 'function') {
         mostrarNotificacion('Inversión guardada correctamente', 'success');
       }
     })
   }
-  // Función para cerrar y limpiar el modal
+
   function cerrarModalInversion() {
     modal.classList.add("d-none")
     if (form) {

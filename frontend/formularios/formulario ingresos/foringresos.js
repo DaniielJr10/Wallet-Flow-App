@@ -1,4 +1,4 @@
-// Lógica del formulario de ingreso avanzado
+// Lógica del formulario de ingreso
 
 function initFormularioIngreso() {
   // Elementos del formulario
@@ -18,7 +18,7 @@ function initFormularioIngreso() {
     return;
   }
 
-  // Evita re-registrar eventos si el modal ya fue inicializado
+
   if (modal.dataset.initialized === 'true') {
     return;
   }
@@ -38,19 +38,19 @@ function initFormularioIngreso() {
       step1.classList.remove('hidden');
     });
   }
-  // Mostrar/ocultar frecuencia
+ 
   if (checkRecurrente) {
     checkRecurrente.addEventListener('change', function () {
       frecuenciaOptions.classList.toggle('visible', checkRecurrente.checked);
     });
   }
-  // Mostrar/ocultar cuenta asociada
+ 
   if (checkCuenta) {
     checkCuenta.addEventListener('change', function () {
       cuentaOptions.classList.toggle('visible', checkCuenta.checked);
     });
   }
-  // Cancelar y cerrar modal
+ 
   if (cancelarBtn) {
     cancelarBtn.addEventListener('click', function () {
       cerrarModalIngreso();
@@ -64,7 +64,7 @@ function initFormularioIngreso() {
   };
   document.addEventListener('keydown', handleEscape);
 
-  // Cerrar modal al hacer clic fuera del contenido
+  
   modal.addEventListener('click', function (event) {
     if (event.target === modal) {
       cerrarModalIngreso();
@@ -75,7 +75,7 @@ function initFormularioIngreso() {
     e.preventDefault();
     e.stopPropagation();
     
-    console.log('Formulario enviado'); // Debug
+    console.log('Formulario enviado');
     
     const datos = {
       categoria: document.getElementById('addCategoriaIngreso').value,
@@ -89,19 +89,19 @@ function initFormularioIngreso() {
       cuenta: document.getElementById('addCuentaAsociadaIngreso').value
     };
     
-    console.log('Datos a guardar:', datos); // Debug
+    console.log('Datos a guardar:', datos);
     
     // Guardar en localStorage
     let ingresos = JSON.parse(localStorage.getItem('ingresos')) || [];
     ingresos.push(datos);
     localStorage.setItem('ingresos', JSON.stringify(ingresos));
     
-    console.log('Ingreso guardado en localStorage'); // Debug
+    console.log('Ingreso guardado en localStorage');
     
-    // Cerrar modal inmediatamente
+   
     cerrarModalIngreso();
     
-    // Mostrar mensaje de éxito después de cerrar
+    
     setTimeout(() => {
       mostrarMensajeExito();
     }, 100);
@@ -109,7 +109,7 @@ function initFormularioIngreso() {
 
   form.addEventListener('submit', handleSubmit);
 
-  // Función para mostrar mensaje de éxito
+ 
   function mostrarMensajeExito() {
     const mensaje = document.createElement('div');
     mensaje.className = 'mensaje-exito-ingreso';
@@ -124,7 +124,7 @@ function initFormularioIngreso() {
       <p>Tu ingreso se ha registrado exitosamente</p>
     `;
     
-    // Estilos inline para el mensaje
+  
     mensaje.style.cssText = `
       position: fixed;
       top: 50%;
@@ -139,7 +139,7 @@ function initFormularioIngreso() {
       animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     `;
     
-    // Agregar animación
+ 
     const style = document.createElement('style');
     style.textContent = `
       @keyframes popIn {
@@ -191,9 +191,9 @@ function initFormularioIngreso() {
     }, 1200);
   }
 
-  // Función para cerrar y limpiar el modal
+
   function cerrarModalIngreso() {
-    console.log('Cerrando modal...'); // Debug
+    console.log('Cerrando modal...'); 
     modal.classList.add('d-none');
     form.reset();
     step2.classList.add('hidden');
@@ -205,6 +205,6 @@ function initFormularioIngreso() {
     if (typeof renderIngresos === 'function') {
       renderIngresos();
     }
-    console.log('Modal cerrado'); // Debug
+    console.log('Modal cerrado');
   }
 }
