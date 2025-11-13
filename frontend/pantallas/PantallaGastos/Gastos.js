@@ -68,7 +68,17 @@ function inicializarEventListeners() {
     // Botón agregar gasto
     const btnAgregar = document.getElementById('btnAgregarGasto');
     if (btnAgregar) {
-        btnAgregar.addEventListener('click', mostrarFormularioAgregar);
+      // replace node to remove other modules' listeners and attach a single handler
+      const replacement = btnAgregar.cloneNode(true);
+      btnAgregar.parentNode.replaceChild(replacement, btnAgregar);
+      replacement.onclick = (e) => {
+        e.preventDefault();
+        if (window.gastosFormInit && typeof window.gastosFormInit.initFormulario === 'function') {
+          window.gastosFormInit.initFormulario();
+        } else {
+          mostrarFormularioAgregar();
+        }
+      };
     }
 
     // Botón exportar
@@ -1064,8 +1074,12 @@ async function guardarNuevoGasto(formData) {
         frecuencia: formData.get('frecuencia') || '',
         cuenta: (formData.get('cuenta') || '').trim()
       };
-      const id = await window.walletDB.addExpense(data);
-      await cargarGastosDesdeFirestore();
+      if (window.gastosService && typeof window.gastosService.agregarGasto === 'function') {
+        await window.gastosService.agregarGasto(data);
+      } else {
+        await window.walletDB.addExpense(data);
+        await cargarGastosDesdeFirestore();
+      }
       mostrarMensaje('¡Gasto agregado exitosamente!', 'success');
     }
   } catch (e) {

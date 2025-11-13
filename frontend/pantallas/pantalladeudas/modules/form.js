@@ -17,11 +17,16 @@
     const form=document.getElementById('formAgregarDeuda'); const cancelar=document.getElementById('cancelarDeudaFirestore');
     cancelar&& (cancelar.onclick=()=> cerrar());
     wrap.addEventListener('click',e=>{ if(e.target===wrap) cerrar(); });
-    form.addEventListener('submit', async e=>{
-      e.preventDefault(); const datos={ acreedor:val('addAcreedorDeuda'), monto:parseFloat(val('addMontoDeuda')), fechaInicio:val('addFechaInicioDeuda'), estado:val('addEstadoDeuda'), fechaVencimiento:val('addFechaVencimientoDeuda')||'', tasaInteres:parseFloat(val('addTasaInteresDeuda')||'0'), descripcion:val('addDescripcionDeuda').trim() };
-      if(!datos.acreedor || !datos.fechaInicio || isNaN(datos.monto)){ window.deudasMessages.mostrar('Datos inválidos','error'); return; }
-      await window.deudasService.agregarDeuda(datos); cerrar();
-    });
+    // Attach submit handler only once to avoid duplicate adds
+    if (!form.dataset.inited) {
+      form.dataset.inited = '1'
+      form.addEventListener('submit', async e=>{
+        console.trace('submit handler triggered: modules/form.js')
+        e.preventDefault(); const datos={ acreedor:val('addAcreedorDeuda'), monto:parseFloat(val('addMontoDeuda')), fechaInicio:val('addFechaInicioDeuda'), estado:val('addEstadoDeuda'), fechaVencimiento:val('addFechaVencimientoDeuda')||'', tasaInteres:parseFloat(val('addTasaInteresDeuda')||'0'), descripcion:val('addDescripcionDeuda').trim() };
+        if(!datos.acreedor || !datos.fechaInicio || isNaN(datos.monto)){ window.deudasMessages.mostrar('Datos inválidos','error'); return; }
+        await window.deudasService.agregarDeuda(datos); cerrar();
+      });
+    }
     function val(id){ return document.getElementById(id).value; }
     function cerrar(){ wrap.remove(); }
   }

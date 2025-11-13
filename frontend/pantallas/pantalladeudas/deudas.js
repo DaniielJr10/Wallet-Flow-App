@@ -50,12 +50,13 @@ async function openAddDeudaModal() {
   const modal = document.getElementById('modalAgregarDeuda');
   const form = document.getElementById('formAgregarDeuda');
   const cancelarBtn = document.getElementById('cancelarDeudaFirestore');
-  if (form){
+    if (form){
     form.addEventListener('submit', async e => {
+      console.trace('submit handler triggered: deudas.js (top add modal)')
       e.preventDefault();
       try {
         await waitForDB();
-        if (!window.walletDB) throw new Error('DB no disponible');
+        if (!window.deudasService || typeof window.deudasService.agregarDeuda !== 'function') throw new Error('Servicio de deudas no disponible');
         const datos = {
           acreedor: document.getElementById('addAcreedorDeuda').value.trim(),
           monto: parseFloat(document.getElementById('addMontoDeuda').value),
@@ -65,10 +66,8 @@ async function openAddDeudaModal() {
           tasaInteres: parseFloat(document.getElementById('addTasaInteresDeuda').value || '0'),
           descripcion: document.getElementById('addDescripcionDeuda').value.trim()
         };
-        await window.walletDB.addDebt(datos);
-        await cargarDeudasDesdeFirestore();
-        renderDeudas();
-        mostrarNotificacion('¡Deuda guardada exitosamente!','success');
+        await window.deudasService.agregarDeuda(datos);
+        // cargarDeudasDesdeFirestore() and renderDeudas() will be called by the service
         if (modal) modal.remove();
       } catch(err){ console.error('Error guardando deuda:', err); mostrarNotificacion('Error al guardar deuda','danger'); }
     });
@@ -115,6 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const cancelarBtn = document.getElementById('cancelarDeudaFirestore')
     if (form) {
       form.addEventListener('submit', async (e) => {
+        console.trace('submit handler triggered: deudas.js (DOM add modal)')
         e.preventDefault()
         try {
           if (!window.walletDB) throw new Error('DB no disponible')
@@ -127,10 +127,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             tasaInteres: parseFloat(document.getElementById('addTasaInteresDeuda').value || '0'),
             descripcion: document.getElementById('addDescripcionDeuda').value.trim()
           }
-          await window.walletDB.addDebt(datos)
-          await cargarDeudasDesdeFirestore()
-          renderDeudas()
-          mostrarNotificacion('¡Deuda guardada exitosamente!','success')
+          await window.deudasService.agregarDeuda(datos)
+          // service will reload and re-render
           if (modal) modal.remove()
         } catch(err){ console.error('Error guardando deuda:', err); mostrarNotificacion('Error al guardar deuda','danger') }
       })
@@ -238,14 +236,19 @@ function renderDeudas() {
     })
   })
 
-  // Asegurar que cualquier botón de tipo "Agregar" (incluyendo el del empty-state) abra el formulario
+  // Ensure any Add buttons open the same modal and remove previous listeners
   document.querySelectorAll('.btn-empty-add, #btnAgregarDeudaPage').forEach((btn) => {
-    // evitar duplicar listeners si ya existen
-    btn.removeEventListener && btn.removeEventListener('click', openAddDeudaModal)
-    btn.addEventListener('click', (e) => {
+    // replace the node to remove any existing listeners attached by other modules
+    const replacement = btn.cloneNode(true)
+    btn.parentNode.replaceChild(replacement, btn)
+    replacement.onclick = (e) => {
       e.preventDefault()
-      openAddDeudaModal()
-    })
+      if (window.deudasForm && typeof window.deudasForm.abrirModalAgregar === 'function') {
+        window.deudasForm.abrirModalAgregar()
+      } else if (typeof openAddDeudaModal === 'function') {
+        openAddDeudaModal()
+      }
+    }
   })
 }
 
