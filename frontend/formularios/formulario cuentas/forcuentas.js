@@ -1,5 +1,5 @@
 // Inicializar el formulario de cuentas
-function initFormularioCuenta() {
+function initFormularioCuenta(callbackRender) {
   // Elementos del formulario y modal
   const modal = document.getElementById('modalAgregarCuenta');
   const form = document.getElementById('formAgregarCuenta');
@@ -37,7 +37,9 @@ function initFormularioCuenta() {
 
   // Evento para manejar el envío del formulario
   if (form) {
-    form.addEventListener('submit', function (e) {
+    if (form.dataset.inited === '1') return;
+    form.dataset.inited = '1';
+    form.addEventListener('submit', async function (e) {
       e.preventDefault(); // Evitar el comportamiento predeterminado del formulario
 
       // Obtener los datos del formulario
@@ -45,26 +47,39 @@ function initFormularioCuenta() {
         nombre: document.getElementById('nombreCuenta').value,
         tipo: document.getElementById('tipoCuenta').value,
         numero: document.getElementById('numeroCuenta').value,
-        saldoInicial: parseFloat(document.getElementById('saldoInicial').value),
-        esPrincipal: document.getElementById('cuentaPrincipal').checked
+        saldo: parseFloat(document.getElementById('saldoInicial').value) || 0,
+        esPrincipal: document.getElementById('cuentaPrincipal').checked,
+        moneda: 'COP'
       };
 
-      // Guardar los datos en localStorage
-      let cuentas = JSON.parse(localStorage.getItem('cuentas')) || [];
-      cuentas.push(datosCuenta);
-      localStorage.setItem('cuentas', JSON.stringify(cuentas));
+      try{
+        // Preferir service
+        if(window.cuentasService && typeof window.cuentasService.agregarCuenta === 'function'){
+          await window.cuentasService.agregarCuenta(datosCuenta);
+        } else {
+          // Encolar en pending_cuentas
+          const key = 'pending_cuentas';
+          const q = JSON.parse(localStorage.getItem(key)||'[]');
+          datosCuenta.id = datosCuenta.id || ('local_'+Date.now());
+          q.push(datosCuenta);
+          localStorage.setItem(key, JSON.stringify(q));
+          // Also persist to visible local list
+          const visible = JSON.parse(localStorage.getItem('cuentas')||'[]'); visible.push(datosCuenta); localStorage.setItem('cuentas', JSON.stringify(visible));
+        }
 
-      // Mostrar mensaje de éxito
-      alert('¡Cuenta guardada exitosamente!');
+        // Cerrar y limpiar el modal
+        cerrarModal();
 
-      // Cerrar y limpiar el modal
-      cerrarModal();
-      // Notificar a la página que se guardó una cuenta para permitir refrescar listas
-      try {
-        window.dispatchEvent(new CustomEvent('cuenta:guardada', { detail: datosCuenta }));
-      } catch (e) {
-        console.warn('No se pudo despachar el evento cuenta:guardada', e);
-      }
+        // Notificar otras pantallas (via callback o localStorage)
+        if(typeof callbackRender === 'function'){
+          try{ callbackRender(); }catch(_){ }
+        } else {
+          try{ localStorage.setItem('wallet_notify_cuentas', JSON.stringify({ts: Date.now()})); }catch(e){ console.warn('notify failed', e); }
+        }
+
+        // Mensaje visual
+        try{ alert('¡Cuenta guardada exitosamente!'); }catch(_){ }
+      }catch(e){ console.error('Error guardando cuenta en formulario', e); alert('Error al guardar cuenta'); }
     });
   }
 }

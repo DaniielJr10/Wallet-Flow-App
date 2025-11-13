@@ -174,6 +174,13 @@ function editarInversion(id){
 
 document.addEventListener('DOMContentLoaded', async () => {
   window.renderInversiones = renderInversiones;
+  // Escuchar notificaciones desde otros tabs/páginas (ej. formulario en pantalla principal)
+  window.addEventListener('storage', function(e){
+    if(!e) return;
+    if(e.key === 'wallet_notify_inversiones' || e.key === 'pending_inversiones'){
+      try{ cargarInversionesDesdeFirestore().then(()=>renderInversiones()); }catch(err){ console.warn('Inversiones refresh failed on storage event', err); }
+    }
+  });
   const btnAgregar = document.getElementById('btnAgregarInversionPage');
   if(btnAgregar) btnAgregar.addEventListener('click', openAddInversionModal);
   const urlParams = new URLSearchParams(window.location.search);

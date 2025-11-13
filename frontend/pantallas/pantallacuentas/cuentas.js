@@ -11,14 +11,21 @@ async function waitForDB(maxMs=5000){
 
 async function cargarCuentasDesdeFirestore(){
   try {
-    const ok = await waitForDB();
-    if(!ok || !window.walletDB) throw new Error('DB no disponible');
-    await window.walletDB.init();
-    const auth = (typeof firebase!=='undefined' && firebase.auth)? firebase.auth(): null;
-    if(auth && !auth.currentUser) await new Promise(r=>auth.onAuthStateChanged(()=>r()));
-    if(!auth || !auth.currentUser){ console.warn('Cuentas: usuario no autenticado aún'); return; }
-    cuentasCache = await window.walletDB.listAccounts();
-  } catch(e){ console.error('Error cargando cuentas Firestore:', e); cuentasCache=[]; }
+    // Prefer walletDB list when available
+    if(window.walletDB && typeof window.walletDB.listAccounts === 'function'){
+      const ok = await waitForDB();
+      if(!ok || !window.walletDB) throw new Error('DB no disponible');
+      if(typeof window.walletDB.init === 'function') await window.walletDB.init();
+      const auth = (typeof firebase!=='undefined' && firebase.auth)? firebase.auth(): null;
+      if(auth && !auth.currentUser) await new Promise(r=>auth.onAuthStateChanged(()=>r()));
+      if(!auth || !auth.currentUser){ console.warn('Cuentas: usuario no autenticado aún'); cuentasCache = []; return; }
+      cuentasCache = await window.walletDB.listAccounts();
+    } else {
+      // Fallback to localStorage list to avoid runtime errors when walletDB API is partial
+      if(window.walletDB && typeof window.walletDB.listAccounts !== 'function') console.warn('walletDB.listAccounts no disponible, usando localStorage');
+      cuentasCache = JSON.parse(localStorage.getItem('cuentas')||'[]');
+    }
+  } catch(e){ console.error('Error cargando cuentas Firestore:', e); try{ cuentasCache = JSON.parse(localStorage.getItem('cuentas')||'[]'); }catch(_){ cuentasCache = []; } }
 }
 
 function renderizarCuentas(){
@@ -162,8 +169,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       const tipoSeleccionado = document.getElementById('tipoCuenta').value;
       if(!tipoSeleccionado){ showFormError('Por favor selecciona un tipo de cuenta'); return; }
       try {
-        await waitForDB();
-        await window.walletDB.init();
         const payload={
           nombre: document.getElementById('nombreCuenta').value.trim(),
           tipo: tipoSeleccionado,
@@ -174,9 +179,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
         const hiddenId=document.getElementById('hiddenAccountId');
         if(hiddenId && hiddenId.value){
-          await window.walletDB.updateAccount(hiddenId.value, payload);
+          // Try centralized service first
+          if(window.cuentasService && typeof window.cuentasService.actualizarCuenta === 'function'){
+            await window.cuentasService.actualizarCuenta(hiddenId.value, payload);
+          } else if(window.walletDB && typeof window.walletDB.updateAccount === 'function'){
+            await waitForDB(); if(typeof window.walletDB.init === 'function') await window.walletDB.init(); await window.walletDB.updateAccount(hiddenId.value, payload);
+          } else {
+            // Fallback: update localStorage list
+            const list = JSON.parse(localStorage.getItem('cuentas')||'[]');
+            const idx = list.findIndex(c=>c.id===hiddenId.value);
+            if(idx!==-1){ list[idx] = Object.assign({}, list[idx], payload); localStorage.setItem('cuentas', JSON.stringify(list)); }
+          }
         } else {
-          await window.walletDB.addAccount(payload);
+          if(window.cuentasService && typeof window.cuentasService.agregarCuenta === 'function'){
+            await window.cuentasService.agregarCuenta(payload);
+          } else if(window.walletDB && typeof window.walletDB.addAccount === 'function'){
+            await waitForDB(); if(typeof window.walletDB.init === 'function') await window.walletDB.init(); await window.walletDB.addAccount(payload);
+          } else {
+            // enqueue
+            const key = 'pending_cuentas';
+            const q = JSON.parse(localStorage.getItem(key)||'[]'); payload.id = payload.id || ('local_'+Date.now()); q.push(payload); localStorage.setItem(key, JSON.stringify(q)); const visible = JSON.parse(localStorage.getItem('cuentas')||'[]'); visible.push(payload); localStorage.setItem('cuentas', JSON.stringify(visible));
+          }
         }
         await cargarCuentasDesdeFirestore();
         renderizarCuentas();
@@ -184,9 +207,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(hiddenId) hiddenId.remove();
         const modalEl=document.getElementById('modalAgregarCuenta');
         if(modalEl){try{bootstrap.Modal.getInstance(modalEl)?.hide();}catch(_){modalEl.classList.add('d-none');}}
-        if(typeof mostrarNotificacion==='function') mostrarNotificacion('Cuenta guardada','success'); else showSuccessMessage('¡Cuenta guardada exitosamente!');
+        try{ if(typeof mostrarNotificacion==='function') mostrarNotificacion('Cuenta guardada','success'); else showSuccessMessage('¡Cuenta guardada exitosamente!'); }catch(_){ }
         document.getElementById('modalEditarCuentaLabel').textContent='Gestionar Cuenta';
-      } catch(err){ console.error('Error guardando cuenta:', err); if(typeof mostrarNotificacion==='function') mostrarNotificacion('Error al guardar','danger'); else showFormError('Error al guardar cuenta'); }
+      } catch(err){ console.error('Error guardando cuenta:', err); console.warn('Error guardando cuenta', err); showFormError('Error al guardar cuenta'); }
     });
   }
 });
@@ -295,4 +318,12 @@ document.addEventListener('DOMContentLoaded', function () {
 window.addEventListener('cuenta:guardada', async ()=>{
   await cargarCuentasDesdeFirestore();
   renderizarCuentas();
+});
+
+// Escuchar notificaciones desde otros tabs/páginas (ej. formulario en pantalla principal)
+window.addEventListener('storage', function(e){
+  if(!e) return;
+  if(e.key === 'wallet_notify_cuentas' || e.key === 'pending_cuentas'){
+    try{ cargarCuentasDesdeFirestore().then(()=>renderizarCuentas()); }catch(err){ console.warn('cargarCuentas failed on storage event', err); }
+  }
 });
