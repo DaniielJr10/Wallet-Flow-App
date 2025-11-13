@@ -1,7 +1,17 @@
 (function(){
   async function cargarInversiones(){
     const { setInversionesOriginales,setInversionesFiltradas }=window.inversionesState; let datos=[];
-    try{ if(!window.walletDB) throw new Error('DB no disponible'); const authed=(typeof firebase!=='undefined' && firebase.auth && firebase.auth().currentUser); if(!authed) throw new Error('Inicia sesión para ver inversiones'); datos=await window.walletDB.listInvestments(); }
+    try{
+      if(!window.walletDB) throw new Error('DB no disponible');
+      const authed=(typeof firebase!=='undefined' && firebase.auth && firebase.auth().currentUser);
+      if(!authed) throw new Error('Inicia sesión para ver inversiones');
+      if (typeof window.walletDB.listInvestments !== 'function'){
+        console.warn('walletDB.listInvestments no disponible - usando lista vacía');
+        datos = [];
+      } else {
+        datos=await window.walletDB.listInvestments();
+      }
+    }
     catch(e){ console.error('Error cargando inversiones',e); window.inversionesMessages.mostrar(e.message||'Error cargando','error'); }
     setInversionesOriginales(datos); setInversionesFiltradas([...datos]); window.inversionesSummary.actualizarResumen(datos); window.inversionesTable.renderTabla();
   }

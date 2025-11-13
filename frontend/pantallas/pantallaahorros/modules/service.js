@@ -1,7 +1,17 @@
 (function(){
   async function cargarAhorros(){
     const { setAhorrosOriginales,setAhorrosFiltrados }=window.ahorrosState; let datos=[];
-    try{ if(!window.walletDB) throw new Error('DB no disponible'); const authed=(typeof firebase!=='undefined' && firebase.auth && firebase.auth().currentUser); if(!authed) throw new Error('Inicia sesión para ver ahorros'); datos=await window.walletDB.listSavings(); }
+    try{
+      if(!window.walletDB) throw new Error('DB no disponible');
+      const authed=(typeof firebase!=='undefined' && firebase.auth && firebase.auth().currentUser);
+      if(!authed) throw new Error('Inicia sesión para ver ahorros');
+      if (typeof window.walletDB.listSavings !== 'function'){
+        console.warn('walletDB.listSavings no disponible - usando lista vacía');
+        datos = [];
+      } else {
+        datos=await window.walletDB.listSavings();
+      }
+    }
     catch(e){ console.error('Error cargando ahorros',e); window.ahorrosMessages.mostrar(e.message||'Error cargando','error'); }
     setAhorrosOriginales(datos); setAhorrosFiltrados([...datos]); window.ahorrosSummary.actualizarResumen(datos); window.ahorrosTable.renderTabla();
   }

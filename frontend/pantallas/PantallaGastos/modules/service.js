@@ -6,7 +6,12 @@
       if(!window.walletDB) throw new Error('DB no disponible');
       const authed=(typeof firebase!=='undefined' && firebase.auth && firebase.auth().currentUser);
       if(!authed) throw new Error('Inicia sesión para ver gastos');
-      datos=await window.walletDB.listExpenses();
+      if (typeof window.walletDB.listExpenses !== 'function'){
+        console.warn('walletDB.listExpenses no disponible - usando lista vacía');
+        datos = [];
+      } else {
+        datos=await window.walletDB.listExpenses();
+      }
     }catch(e){ console.error('Error cargando gastos',e); window.gastosMessages.mostrarMensaje(e.message||'Error cargando','error'); }
     setGastosOriginales(datos); setGastosFiltrados([...datos]);
     window.gastosSummary.actualizarResumenes(datos);

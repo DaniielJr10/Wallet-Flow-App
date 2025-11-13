@@ -6,7 +6,12 @@
       if(!window.walletDB) throw new Error('DB no disponible');
       const authed=(typeof firebase!=='undefined' && firebase.auth && firebase.auth().currentUser);
       if(!authed) throw new Error('Inicia sesión para ver deudas');
-      datos=await window.walletDB.listDebts();
+      if (typeof window.walletDB.listDebts !== 'function') {
+        console.warn('walletDB.listDebts no disponible - usando lista vacía');
+        datos = [];
+      } else {
+        datos=await window.walletDB.listDebts();
+      }
     }catch(e){ console.error('Error cargando deudas',e); window.deudasMessages.mostrar(e.message||'Error cargando','error'); }
     setDeudasOriginales(datos); setDeudasFiltradas([...datos]);
     window.deudasSummary.actualizarResumen(datos);
