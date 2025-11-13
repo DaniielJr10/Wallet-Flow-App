@@ -1,3 +1,83 @@
+## Carga de módulos WalletDB
+
+Tras la modularización de los métodos CRUD, ya NO es necesario incluir cada archivo (`firebase-incomes.js`, `firebase-expenses.js`, etc.) por separado en cada página. Basta con cargar el agregador después de `firebase-db.js`:
+
+```html
+<script src="/ruta/backend/firebase/firebase-db.js"></script>
+<script src="/ruta/backend/firebase/firebase-modulos.js"></script>
+```
+
+El agregador detecta su propia ruta y añade dinámicamente los scripts:
+
+```
+firebase-incomes.js
+firebase-expenses.js
+firebase-accounts.js
+firebase-savings.js
+firebase-debts.js
+firebase-investments.js
+firebase-goals.js
+```
+
+### Eventos y sincronización
+Expone `window.walletDBModulesReady` (Promise). Si necesitas esperar explícitamente a que todos los módulos estén cargados antes de ejecutar lógica que use los métodos, puedes hacer:
+
+```js
+window.walletDBModulesReady.then(() => {
+	// Ya disponibles: walletDB.addIncome, walletDB.listExpenses, etc.
+});
+```
+
+También dispara el evento global `walletdb-modules-ready`:
+
+```js
+window.addEventListener('walletdb-modules-ready', () => {
+	console.log('Módulos WalletDB listos');
+});
+```
+
+### Orden recomendado de scripts en páginas
+
+1. SDK Firebase compat (app, auth, firestore)
+2. `firebase-config.js`
+3. `firebase-autenticacion.js`
+4. `firebase-db.js` (clase base)
+5. `firebase-modulos.js` (agregador CRUD)
+6. Scripts específicos de la pantalla (`ingresos.js`, `Gastos.js`, etc.)
+
+### Migración rápida
+Si tu página ya tenía las etiquetas individuales, reemplaza el bloque:
+
+```html
+<!-- Antes -->
+<script src=".../firebase-db.js"></script>
+<script src=".../firebase-incomes.js"></script>
+<script src=".../firebase-expenses.js"></script>
+<!-- ... resto ... -->
+
+<!-- Después -->
+<script src=".../firebase-db.js"></script>
+<script src=".../firebase-modulos.js"></script>
+```
+
+### Notas (nuevo módulo)
+Se añadió `firebase-notes.js` al agregador. Métodos disponibles:
+
+```js
+walletDB.addNote({ titulo, contenido, categoria, prioridad, tags:["tag1"] })
+walletDB.listNotes()
+walletDB.updateNote(id, { titulo, contenido, prioridad })
+walletDB.deleteNote(id)
+```
+
+Campos estándar almacenados: `titulo`, `contenido`, `categoria`, `prioridad`, `tags` (array), `fechaCreacion` (ISO), `fechaModificacion` (ISO), más `createdAt` / `updatedAt` (timestamps server). 
+Si el usuario no está autenticado se debe usar un fallback local (por ejemplo localStorage) como se hace en `notas.js`.
+
+### Notas
+- Los métodos se añaden al prototipo de la instancia global `window.walletDB`, así que no cambia la forma de invocarlos.
+- Si un usuario no está autenticado, los métodos que requieren `requireAuth()` seguirán lanzando error.
+- El agregador evita duplicar carga usando `data-fbmod` en cada script generado.
+
 # 🔐 SISTEMA DE AUTENTICACIÓN FIREBASE - WALLET FLOW
 
 ## ✅ ARCHIVOS IMPLEMENTADOS

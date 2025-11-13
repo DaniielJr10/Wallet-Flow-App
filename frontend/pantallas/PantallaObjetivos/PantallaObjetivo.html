@@ -152,9 +152,32 @@
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- Scripts Firebase + App -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="../../../backend/firebase/firebase-config.js"></script>
+  <script src="../../../backend/firebase/firebase-autenticacion.js"></script>
+  <script src="../../../backend/firebase/firebase-db.js"></script>
+  <script src="../../../backend/firebase/firebase-modulos.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="PantallaObjetivos.js"></script>
+  <!-- <script src="PantallaObjetivos.js"></script> Monolítico comentado tras refactor modular -->
+  <!-- Utilidades comunes -->
+  <script src="../../common/utils/format.js"></script>
+  <script src="../../common/utils/messages.js"></script>
+  <script src="../../common/utils/csv.js"></script>
+  <!-- Módulos Objetivos -->
+  <script src="modules/state.js"></script>
+  <script src="modules/messages.js"></script>
+  <script src="modules/service.js"></script>
+  <script src="modules/summary.js"></script>
+  <script src="modules/table.js"></script>
+  <script src="modules/form.js"></script>
+  <script src="modules/edit.js"></script>
+  <script src="modules/actions.js"></script>
+  <script src="modules/filters.js"></script>
+  <script src="auth-init.js"></script>
+  <script src="index.modular.js"></script>
 </body>
 </html>
 

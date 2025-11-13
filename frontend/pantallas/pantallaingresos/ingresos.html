@@ -299,7 +299,55 @@
   </div>
 
   <!-- Scripts -->
-  <script src="ingresos.js"></script>
+  <!-- Firebase SDK v9 compat (núcleo, auth y firestore) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-compat-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-compat-firestore.js"></script>
+
+  <!-- Config y servicios Firebase -->
+  <script src="../../../backend/firebase/firebase-config.js"></script>
+  <script src="../../../backend/firebase/firebase-autenticacion.js"></script>
+  <script src="../../../backend/firebase/firebase-db.js"></script>
+  <script src="../../../backend/firebase/firebase-modulos.js"></script>
+
+  <!-- Inicialización básica (asegura autenticación antes de usar la DB) -->
+  <script>
+    (async function(){
+      try {
+        if (window.firebaseAuth) {
+          await window.firebaseAuth.init();
+        }
+        if (window.walletDB) {
+          await window.walletDB.init();
+        }
+        // Si no hay usuario autenticado, redirigir a login
+        const auth = firebase.auth();
+        if (!auth.currentUser) {
+          auth.onAuthStateChanged((u)=>{ if(!u){ window.location.href='../../login/inicio de sesion/inicio.html'; } });
+        }
+      } catch(e) { console.error('Error inicializando Firebase/DB:', e); }
+    })();
+  </script>
+
+  <!-- Scripts modulares (orden importa) -->
+  <!-- Utilidades comunes (ruta corregida) -->
+  <script src="../../common/utils/format.js"></script>
+  <script src="../../common/utils/messages.js"></script>
+  <script src="../../common/utils/csv.js"></script>
+  <script src="modules/state.js"></script>
+  <script src="modules/messages.js"></script>
+  <script src="modules/success.js"></script>
+  <script src="modules/filters.js"></script>
+  <script src="modules/summary.js"></script>
+  <script src="modules/service.js"></script>
+  <script src="modules/edit.js"></script>
+  <script src="modules/table.js"></script>
+  <script src="modules/form.js"></script>
+  <script src="modules/actions.js"></script>
+  <script src="index.modular.js"></script>
+  <script src="modules/auth-init.js"></script>
+  <!-- Script monolítico anterior (desactivado) -->
+  <!-- <script src="ingresos.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

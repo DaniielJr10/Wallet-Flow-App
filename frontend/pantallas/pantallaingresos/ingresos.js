@@ -8,11 +8,41 @@ document.addEventListener('DOMContentLoaded', function () {
   // Hacer renderIngresos accesible globalmente
   window.renderIngresos = renderIngresos;
 
-  // Inicializar funcionalidades
-  renderIngresos();
-  initFormularioIngreso();
-  initFiltros();
-  initAccionesTabla();
+  // Esperar a que Firebase Auth esté listo antes de cargar desde Firestore
+  esperarAuthYInicializar();
+    function esperarAuthYInicializar() {
+      try {
+        const auth = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth() : null;
+        if (!auth) {
+          // Si no hay SDK, continuar con localStorage
+          inicializarUI();
+          return;
+        }
+        if (auth.currentUser) {
+          inicializarUI();
+        } else {
+          const unsub = auth.onAuthStateChanged((user) => {
+            if (unsub) unsub();
+            if (user) {
+              inicializarUI();
+            } else {
+              // No autenticado: intentar mostrar datos locales y dejar que el guard redirija
+              inicializarUI();
+            }
+          });
+        }
+      } catch (e) {
+        console.warn('Auth no disponible, iniciando UI con localStorage', e);
+        inicializarUI();
+      }
+    }
+
+    function inicializarUI() {
+      renderIngresos();
+      initFormularioIngreso();
+      initFiltros();
+      initAccionesTabla();
+    }
   
   // Configurar botón para abrir modal
   const btnAgregarIngreso = document.getElementById('btnAgregarIngreso');
@@ -168,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.removeChild(link);
   }
 
-  function eliminarSeleccionados() {
+  async function eliminarSeleccionados() {
     const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]:checked');
     const indices = Array.from(checkboxes).map(cb => parseInt(cb.dataset.index));
     
@@ -179,19 +209,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const confirmacion = confirm(`¿Estás seguro de eliminar ${indices.length} ingreso(s)?`);
     if (confirmacion) {
-      // Eliminar en orden inverso para mantener índices
-      indices.sort((a, b) => b - a).forEach(index => {
-        ingresosOriginales.splice(index, 1);
-      });
-      
-      localStorage.setItem('ingresos', JSON.stringify(ingresosOriginales));
-      renderIngresos();
-      mostrarMensaje(`${indices.length} ingreso(s) eliminado(s) exitosamente`, 'success');
+      try {
+        // Eliminar en Firestore (obligatorio)
+        if (!window.walletDB) throw new Error('Servicio de base de datos no disponible');
+        for (const index of indices) {
+          const item = ingresosOriginales[index];
+          if (!item || !item.id) continue;
+          await window.walletDB.deleteIncome(item.id);
+        }
+        await cargarIngresosDesdeDB();
+        mostrarMensaje(`${indices.length} ingreso(s) eliminado(s) exitosamente`, 'success');
+      } catch (e) {
+        console.error(e);
+        mostrarMensaje('Error al eliminar en Firestore', 'danger');
+      }
     }
   }
 
-  function renderIngresos() {
-    ingresosOriginales = JSON.parse(localStorage.getItem('ingresos')) || [];
+  async function cargarIngresosDesdeDB() {
+    try {
+      if (!window.walletDB) throw new Error('Servicio de base de datos no disponible');
+      // Requiere sesión
+      const authed = (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser);
+      if (!authed) throw new Error('Debes iniciar sesión para ver ingresos');
+      const datos = await window.walletDB.listIncomes();
+      ingresosOriginales = datos;
+    } catch (e) {
+      console.error('No se pudieron cargar ingresos desde Firestore', e);
+      mostrarMensaje(e.message || 'Error cargando ingresos', 'danger');
+      ingresosOriginales = [];
+    }
     ingresosFiltrados = [...ingresosOriginales];
     
     // Actualizar resúmenes
@@ -199,6 +246,10 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Renderizar tabla con paginación
     renderTablaConPaginacion();
+  }
+
+  async function renderIngresos() {
+    await cargarIngresosDesdeDB();
   }
 
   function renderTablaConPaginacion() {
@@ -221,11 +272,9 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Renderizar filas
     ingresosPagina.forEach((ingreso, indexLocal) => {
-      const indexGlobal = ingresosOriginales.findIndex(item => 
-        item.fecha === ingreso.fecha && 
-        item.monto === ingreso.monto && 
-        item.categoria === ingreso.categoria
-      );
+      const indexGlobal = ingresosOriginales.findIndex(item => item.id ? item.id === ingreso.id : (
+        item.fecha === ingreso.fecha && item.monto === ingreso.monto && item.categoria === ingreso.categoria
+      ));
       
       const fila = document.createElement('tr');
       fila.innerHTML = `
@@ -328,22 +377,26 @@ document.addEventListener('DOMContentLoaded', function () {
   function configurarEventosTabla() {
     // Configurar eventos con mejor feedback
     document.querySelectorAll('.btn-eliminar').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', async function () {
         const idx = this.getAttribute('data-index');
         const confirmacion = confirm('¿Estás seguro de que deseas eliminar este ingreso?\n\nEsta acción no se puede deshacer.');
         if (confirmacion) {
-          // Animación de eliminación
           const fila = this.closest('tr');
           fila.style.transition = 'all 0.3s ease';
           fila.style.opacity = '0';
           fila.style.transform = 'translateX(-100px)';
-          
-          setTimeout(() => {
-            ingresosOriginales.splice(idx, 1);
-            localStorage.setItem('ingresos', JSON.stringify(ingresosOriginales));
-            renderIngresos();
-            mostrarMensaje('¡Ingreso eliminado exitosamente!', 'success');
-          }, 300);
+          try {
+            const item = ingresosOriginales[idx];
+            if (!window.walletDB || !item || !item.id) throw new Error('No se puede eliminar (sin id o DB)');
+            await window.walletDB.deleteIncome(item.id);
+            setTimeout(async () => {
+              await renderIngresos();
+              mostrarMensaje('¡Ingreso eliminado exitosamente!', 'success');
+            }, 300);
+          } catch (e) {
+            console.error('Error eliminando ingreso:', e);
+            mostrarMensaje('Error al eliminar el ingreso', 'danger');
+          }
         }
       });
     });
@@ -454,7 +507,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function editarIngreso(idx) {
-    let ingresos = JSON.parse(localStorage.getItem('ingresos')) || [];
+    let ingresos = ingresosOriginales;
     const ingreso = ingresos[idx];
 
     const formHtml = `
@@ -599,15 +652,24 @@ document.addEventListener('DOMContentLoaded', function () {
         cuenta: formData.get('cuenta').trim()
       };
       
-      localStorage.setItem('ingresos', JSON.stringify(ingresos));
-      
-      // Animación de cierre y actualización
-      modal.style.animation = 'fadeOut 0.3s ease';
-      setTimeout(() => {
-        document.body.removeChild(modal);
-        renderIngresos();
-        mostrarMensaje('¡Ingreso actualizado exitosamente!', 'success');
-      }, 300);
+      (async () => {
+        try {
+          if (ingreso.id && window.walletDB) {
+            await window.walletDB.updateIncome(ingreso.id, ingresos[idx]);
+          } else {
+            localStorage.setItem('ingresos', JSON.stringify(ingresos));
+          }
+          modal.style.animation = 'fadeOut 0.3s ease';
+          setTimeout(async () => {
+            document.body.removeChild(modal);
+            await renderIngresos();
+            mostrarMensaje('¡Ingreso actualizado exitosamente!', 'success');
+          }, 300);
+        } catch (e) {
+          console.error('Error actualizando ingreso:', e);
+          mostrarMensaje('Error actualizando en la nube', 'danger');
+        }
+      })();
     };
 
     // Cerrar modal al hacer clic fuera
@@ -772,7 +834,7 @@ function initFormularioIngreso() {
     }
   });
 
-  const handleSubmit = function (e) {
+  const handleSubmit = async function (e) {
     e.preventDefault();
     e.stopPropagation();
     
@@ -787,31 +849,27 @@ function initFormularioIngreso() {
       tieneCuenta: checkCuenta.checked,
       cuenta: document.getElementById('addCuentaAsociadaIngreso').value
     };
-    
-    console.log('Guardando ingreso:', datos); // Debug
-    
-    // Guardar en localStorage
-    let ingresos = JSON.parse(localStorage.getItem('ingresos')) || [];
-    ingresos.push(datos);
-    localStorage.setItem('ingresos', JSON.stringify(ingresos));
-    
-    console.log('Ingresos en localStorage:', ingresos); // Debug
-    
-    // Cerrar modal
-    cerrarModalIngreso();
-    
-    // Actualizar la tabla usando la función global
-    if (typeof window.renderIngresos === 'function') {
-      console.log('Actualizando tabla...'); // Debug
-      window.renderIngresos();
-    } else {
-      console.error('renderIngresos no está definida'); // Debug
-      // Recargar la página como fallback
-      setTimeout(() => location.reload(), 1000);
+    // Validación mínima obligatoria
+    if (!datos.categoria || !datos.metodo || !datos.fecha || !datos.monto || parseFloat(datos.monto) <= 0) {
+      mostrarMensaje('Completa categoría, método, monto (>0) y fecha', 'danger');
+      // Volver a Step1 para facilitar el llenado
+      if (step1 && step2) { step2.classList.add('hidden'); step1.classList.remove('hidden'); }
+      return;
     }
     
-    // Mostrar mensaje de éxito mejorado
-    mostrarMensajeExitoInterno();
+    try {
+      const isAuthed = (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser);
+      if (!window.walletDB || !isAuthed) {
+        throw new Error('Debes iniciar sesión para guardar en Firebase');
+      }
+      await window.walletDB.addIncome(datos);
+      cerrarModalIngreso();
+      if (typeof window.renderIngresos === 'function') await window.renderIngresos();
+      mostrarMensajeExitoInterno();
+    } catch (e) {
+      console.error('Error guardando ingreso en Firestore:', e);
+      mostrarMensaje(e.message || 'Error guardando el ingreso', 'danger');
+    }
   };
 
   form.addEventListener('submit', handleSubmit);
@@ -938,3 +996,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+

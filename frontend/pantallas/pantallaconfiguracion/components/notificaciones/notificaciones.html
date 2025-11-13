@@ -1,0 +1,52 @@
+<!-- Componente Notificaciones -->
+<div class="tool-card" data-tool="notificaciones" id="notificaciones">
+  <div class="tool-card-header">
+    <div class="tool-icon-wrapper notif-bg"><i class="bi bi-bell-fill"></i></div>
+    <span class="tool-badge">ORGANIZACIÓN</span>
+  </div>
+  <div class="tool-card-body">
+    <h3 class="tool-title">Notificaciones</h3>
+    <p class="tool-description">Configura alertas, recordatorios y frecuencia de notificaciones</p>
+    <div class="tool-features">
+      <span class="feature-tag"><i class="bi bi-envelope"></i> Alertas por email</span>
+      <span class="feature-tag"><i class="bi bi-clock"></i> Frecuencia</span>
+    </div>
+  </div>
+  <div class="tool-card-footer">
+    <button class="btn-open-tool" data-tool-target="notificaciones">Abrir herramienta <i class="bi bi-arrow-right-circle"></i></button>
+  </div>
+</div>
+<div class="tool-modal" id="modal-notificaciones">
+  <div class="tool-modal-content">
+    <div class="tool-modal-header notif-bg">
+      <h2><i class="bi bi-bell-fill"></i> Notificaciones</h2>
+      <button class="close-modal-btn" data-close="notificaciones"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="tool-modal-body">
+      <div class="toggle-row">
+        <div class="toggle-info"><i class="bi bi-envelope-fill text-primary"></i><div><strong>Notificaciones por Email</strong><p>Recibir alertas importantes en tu correo</p></div></div>
+        <label class="toggle-switch"><input type="checkbox" id="emailNotifications"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info"><i class="bi bi-cash-coin text-success"></i><div><strong>Recordatorios de Pagos</strong><p>Alertas de próximos vencimientos</p></div></div>
+        <label class="toggle-switch"><input type="checkbox" id="paymentReminders" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info"><i class="bi bi-lightbulb-fill text-warning"></i><div><strong>Consejos Financieros</strong><p>Tips para mejorar tus finanzas</p></div></div>
+        <label class="toggle-switch"><input type="checkbox" id="financialTips" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="form-row">
+        <label><i class="bi bi-clock-history"></i> Frecuencia de Notificaciones</label>
+        <select id="notificationFrequency" class="input-field">
+          <option value="daily">Diarias</option>
+          <option value="weekly">Semanales</option>
+          <option value="important">Solo importantes</option>
+        </select>
+      </div>
+    </div>
+    <div class="tool-modal-footer">
+      <button class="btn-secondary" data-close="notificaciones">Cancelar</button>
+      <button class="btn-save" id="btnSaveNotifications"><i class="bi bi-check-circle"></i> Guardar Preferencias</button>
+    </div>
+  </div>
+</div>

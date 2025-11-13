@@ -955,3 +955,16 @@ input[type="checkbox"] {
     padding: 10px 5px 60px 5px;
   }
 }
+/* ===== MODULAR: Animaciones trasladadas desde JS ===== */
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes fadeOut { from { opacity:1; } to { opacity:0; } }
+@keyframes slideInRight { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+@keyframes slideOutRight { from { transform:translateX(0); opacity:1; } to { transform:translateX(100%); opacity:0; } }
+@keyframes popIn { 0% { transform:translate(-50%,-50%) scale(0); opacity:0; } 100% { transform:translate(-50%,-50%) scale(1); opacity:1; } }
+@keyframes checkmark { 0% { transform:scale(0) rotate(0deg); } 50% { transform:scale(1.2) rotate(10deg); } 100% { transform:scale(1) rotate(0deg); } }
+
+.alerta-personalizada { font-size:0.9rem; }
+.botones-accion { display:flex; gap:0.25rem; }
+.mensaje-exito-ingreso h3 { color:#27ae60; margin:15px 0 10px 0; font-size:24px; }
+.mensaje-exito-ingreso p { color:#7f8c8d; margin:0; font-size:16px; }
+.mensaje-icono { display:inline-block; animation:checkmark .5s ease .2s; }

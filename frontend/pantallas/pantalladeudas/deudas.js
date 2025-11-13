@@ -1,209 +1,151 @@
-// Consolidated and cleaned up deudas.js
-document.addEventListener('DOMContentLoaded', () => {
-  // Inicializar y exponer renderDeudas
-  window.renderDeudas = renderDeudas
-  renderDeudas()
+// Deudas Firestore-only
+let deudasCache = []
 
-  // Botón Agregar Deuda
-  const btnAgregar = document.getElementById('btnAgregarDeudaPage')
-  if (btnAgregar) btnAgregar.addEventListener('click', openAddDeudaModal)
-
-  // Botón cerrar sesión (si existe)
-  const cerrarSesionBtn = document.getElementById('cerrarSesionBtn')
-  if (cerrarSesionBtn) {
-    cerrarSesionBtn.addEventListener('click', function (e) {
-      e.preventDefault()
-      const confirmar = confirm('¿Estás seguro de que deseas cerrar sesión?')
-      if (confirmar) {
-        localStorage.removeItem('walletflow_user_data')
-        localStorage.removeItem('walletflow_remembered_user')
-        if (window.firebaseAuth) window.firebaseAuth.cerrarSesion()
-        window.location.href = '../../login/inicio de sesion/inicio.html'
-      }
-    })
+async function waitForDB(maxMs=5000){
+  const start = Date.now();
+  while ((!window.walletDB || !window.walletDB.db) && Date.now()-start < maxMs){
+    await new Promise(r=>setTimeout(r,100));
   }
+  return window.walletDB && window.walletDB.db;
+}
 
-  // Si viene openForm=true en la URL abrir el formulario automáticamente
-  const urlParams = new URLSearchParams(window.location.search)
-  if (urlParams.get('openForm') === 'true') openAddDeudaModal()
-})
-
-function ensureCss(href) {
+async function cargarDeudasDesdeFirestore(){
   try {
-    const exists = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).some(l => l.href && l.href.includes(href))
-    if (exists) return
-    const link = document.createElement('link')
-    link.rel = 'stylesheet'
-    link.href = encodeURI(href)
-    document.head.appendChild(link)
-  } catch (e) {
-    console.warn('No se pudo inyectar CSS:', e)
-  }
+    await waitForDB();
+    if (!window.walletDB) throw new Error('DB no disponible');
+    const auth = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth() : null;
+    if (auth && !auth.currentUser) await new Promise(r => auth.onAuthStateChanged(()=>r()));
+    if (!auth || !auth.currentUser){ console.warn('Deudas: usuario no autenticado aún'); return; }
+    deudasCache = await window.walletDB.listDebts();
+  } catch(e){ console.error('Error cargando deudas Firestore:', e); deudasCache = []; }
 }
 
 async function openAddDeudaModal() {
-  const contenedorModalDeuda = document.getElementById('contenedorModalDeuda')
-  if (!contenedorModalDeuda) {
-    console.error('Contenedor para modal de deuda no encontrado.')
-    return
+  const contenedorModalDeuda = document.getElementById('contenedorModalDeuda');
+  if (!contenedorModalDeuda) { console.error('Contenedor modal deuda no encontrado'); return; }
+  contenedorModalDeuda.innerHTML = '';
+  const styleId = 'deuda-firestore-styles';
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = `.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:10000}.modal-form{background:#fff;border-radius:14px;padding:20px;width:95%;max-width:540px;box-shadow:0 12px 32px rgba(0,0,0,.25)}.modal-form h2{margin:0 0 14px;font-size:1.25rem}.modal-form label{font-weight:600;margin-top:8px}.modal-form input,.modal-form select,.modal-form textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;margin-top:4px}.botones{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}`;
+    document.head.appendChild(style);
   }
-
-  // limpiar
-  contenedorModalDeuda.innerHTML = ''
-
-  const formHtmlPath = '../../formularios/formulario-deudas/fordeudas.html'
-  const formJsPath = '../../formularios/formulario-deudas/fordeudas.js'
-  const formCssPath = '../../formularios/formulario-deudas/fordeudas.css'
-
-  try {
-    // Cargar y mostrar HTML + CSS
-    ensureCss(formCssPath)
-    const resp = await fetch(encodeURI(formHtmlPath))
-    if (!resp.ok) throw new Error('HTTP ' + resp.status)
-    const html = await resp.text()
-    contenedorModalDeuda.innerHTML = html
-
-    // Mostrar modal inmediatamente (si existe)
-    const modalImmediate = document.getElementById('modalAgregarDeuda')
-    if (modalImmediate) {
-      modalImmediate.classList.remove('d-none')
-      modalImmediate.style.display = 'flex'
-    }
-
-    // Cargar script
-    await new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = formJsPath
-      script.onload = () => resolve()
-      script.onerror = (e) => reject(e)
-      document.body.appendChild(script)
-    })
-
-    // Inicializar si existe la función
-    if (typeof initFormularioDeuda === 'function') {
+  contenedorModalDeuda.innerHTML = `
+    <div id="modalAgregarDeuda" class="modal-overlay">
+      <div class="modal-form">
+        <form id="formAgregarDeuda" autocomplete="off">
+          <h2>Agregar Deuda</h2>
+          <label>Acreedor<input type="text" id="addAcreedorDeuda" required></label>
+          <label>Monto<input type="number" id="addMontoDeuda" required min="0" step="0.01"></label>
+          <label>Fecha Inicio<input type="date" id="addFechaInicioDeuda" required></label>
+          <label>Estado<select id="addEstadoDeuda"><option value="pendiente">Pendiente</option><option value="pagada">Pagada</option><option value="renegociada">Renegociada</option></select></label>
+          <label>Fecha Vencimiento (Opcional)<input type="date" id="addFechaVencimientoDeuda"></label>
+          <label>Tasa de Interés (%)<input type="number" id="addTasaInteresDeuda" min="0" step="0.01"></label>
+          <label>Descripción<textarea id="addDescripcionDeuda"></textarea></label>
+          <div class="botones"><button type="submit" class="btn btn-success btn-sm">Guardar</button><button type="button" id="cancelarDeudaFirestore" class="btn btn-secondary btn-sm">Cancelar</button></div>
+        </form>
+      </div>
+    </div>`;
+  const modal = document.getElementById('modalAgregarDeuda');
+  const form = document.getElementById('formAgregarDeuda');
+  const cancelarBtn = document.getElementById('cancelarDeudaFirestore');
+  if (form){
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
       try {
-        initFormularioDeuda(renderDeudas)
-      } catch (e) {
-        console.error('Error ejecutando initFormularioDeuda:', e)
-      }
-    } else {
-      console.warn('initFormularioDeuda no encontrada después de cargar script')
+        await waitForDB();
+        if (!window.walletDB) throw new Error('DB no disponible');
+        const datos = {
+          acreedor: document.getElementById('addAcreedorDeuda').value.trim(),
+          monto: parseFloat(document.getElementById('addMontoDeuda').value),
+          fechaInicio: document.getElementById('addFechaInicioDeuda').value,
+          estado: document.getElementById('addEstadoDeuda').value,
+          fechaVencimiento: document.getElementById('addFechaVencimientoDeuda').value || '',
+          tasaInteres: parseFloat(document.getElementById('addTasaInteresDeuda').value || '0'),
+          descripcion: document.getElementById('addDescripcionDeuda').value.trim()
+        };
+        await window.walletDB.addDebt(datos);
+        await cargarDeudasDesdeFirestore();
+        renderDeudas();
+        mostrarNotificacion('¡Deuda guardada exitosamente!','success');
+        if (modal) modal.remove();
+      } catch(err){ console.error('Error guardando deuda:', err); mostrarNotificacion('Error al guardar deuda','danger'); }
+    });
+  }
+  if (cancelarBtn) cancelarBtn.addEventListener('click', ()=>{ if (modal) modal.remove(); });
+  if (modal) modal.addEventListener('click', ev => { if (ev.target === modal) modal.remove(); });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  window.renderDeudas = renderDeudas;
+  await cargarDeudasDesdeFirestore();
+  renderDeudas();
+
+  // Botón Agregar Deuda
+  async function openAddDeudaModal() {
+    const contenedorModalDeuda = document.getElementById('contenedorModalDeuda')
+    if (!contenedorModalDeuda) { console.error('Contenedor modal deuda no encontrado'); return }
+    contenedorModalDeuda.innerHTML = ''
+    const styleId = 'deuda-firestore-styles'
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style')
+      style.id = styleId
+      style.textContent = `.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:10000}.modal-form{background:#fff;border-radius:14px;padding:20px;width:95%;max-width:540px;box-shadow:0 12px 32px rgba(0,0,0,.25)}.modal-form h2{margin:0 0 14px;font-size:1.25rem}.modal-form label{font-weight:600;margin-top:8px}.modal-form input,.modal-form select,.modal-form textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;margin-top:4px}.botones{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}`
+      document.head.appendChild(style)
     }
-
-    // Asegurar visible
-    setTimeout(() => {
-      const modal = document.getElementById('modalAgregarDeuda')
-      if (modal) {
-        modal.classList.remove('d-none')
-        modal.style.display = 'flex'
-      }
-    }, 120)
-
-  } catch (err) {
-  console.error('Error loading deuda form:', err)
-  // No mostrar notificación visual para el usuario aquí (el fallback embebido gestiona la experiencia)
-  console.warn('Fallback embebido para formulario de deuda activado:', err)
-
-    // (Se omitió el aviso emergente en caso de error para evitar mostrar mensajes intrusivos en la UI)
-    // Para depuración, dejamos un aviso en la consola.
-    console.warn('No se pudo cargar el formulario en la app. Fallback embebido activo. (Aviso visual eliminado)')
-
-    // Embedded fallback: inyectar un modal mínimo y su lógica para permitir el guardado sin dependencias externas
-    try {
-      const fallbackStyleId = 'deuda-fallback-styles'
-      if (!document.getElementById(fallbackStyleId)) {
-        const style = document.createElement('style')
-        style.id = fallbackStyleId
-        style.textContent = `
-          .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:10000}
-          .modal-form{background:#fff;border-radius:12px;padding:18px;width:92%;max-width:520px;box-shadow:0 12px 30px rgba(0,0,0,0.2)}
-          .modal-form h2{margin:0 0 12px}
-          .modal-form label{display:block;margin-bottom:6px;font-weight:600}
-          .modal-form input,.modal-form select,.modal-form textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e6e6;margin-bottom:12px}
-          .modal-form .botones{display:flex;gap:8px;justify-content:flex-end}
-        `
-        document.head.appendChild(style)
-      }
-
-      const embeddedHtml = `
-        <div id="modalAgregarDeuda" class="modal-overlay">
-          <div class="modal-form">
-            <form id="formAgregarDeuda" autocomplete="off">
-              <h2>Agregar Deuda</h2>
-              <label for="addAcreedorDeuda">Acreedor</label>
-              <input type="text" id="addAcreedorDeuda" required>
-              <label for="addMontoDeuda">Monto</label>
-              <input type="number" id="addMontoDeuda" required min="0" step="0.01">
-              <label for="addFechaInicioDeuda">Fecha de Inicio</label>
-              <input type="date" id="addFechaInicioDeuda" required>
-              <label for="addEstadoDeuda">Estado</label>
-              <select id="addEstadoDeuda">
-                <option value="pendiente">Pendiente</option>
-                <option value="pagada">Pagada</option>
-                <option value="renegociada">Renegociada</option>
-              </select>
-              <label for="addFechaVencimientoDeuda">Fecha de Vencimiento (Opcional)</label>
-              <input type="date" id="addFechaVencimientoDeuda">
-              <label for="addTasaInteresDeuda">Tasa de Interés (%)</label>
-              <input type="number" id="addTasaInteresDeuda" min="0" step="0.01">
-              <label for="addDescripcionDeuda">Descripción</label>
-              <textarea id="addDescripcionDeuda"></textarea>
-              <div class="botones" style="margin-top:6px">
-                <button type="submit" class="btn btn-success btn-sm">Guardar</button>
-                <button type="button" id="cancelarDeudaEmbedded" class="btn btn-secondary btn-sm">Cancelar</button>
-              </div>
-            </form>
-          </div>
+    contenedorModalDeuda.innerHTML = `
+      <div id="modalAgregarDeuda" class="modal-overlay">
+        <div class="modal-form">
+          <form id="formAgregarDeuda" autocomplete="off">
+            <h2>Agregar Deuda</h2>
+            <label>Acreedor<input type="text" id="addAcreedorDeuda" required></label>
+            <label>Monto<input type="number" id="addMontoDeuda" required min="0" step="0.01"></label>
+            <label>Fecha Inicio<input type="date" id="addFechaInicioDeuda" required></label>
+            <label>Estado<select id="addEstadoDeuda"><option value="pendiente">Pendiente</option><option value="pagada">Pagada</option><option value="renegociada">Renegociada</option></select></label>
+            <label>Fecha Vencimiento (Opcional)<input type="date" id="addFechaVencimientoDeuda"></label>
+            <label>Tasa de Interés (%)<input type="number" id="addTasaInteresDeuda" min="0" step="0.01"></label>
+            <label>Descripción<textarea id="addDescripcionDeuda"></textarea></label>
+            <div class="botones"><button type="submit" class="btn btn-success btn-sm">Guardar</button><button type="button" id="cancelarDeudaFirestore" class="btn btn-secondary btn-sm">Cancelar</button></div>
+          </form>
         </div>
-      `
-
-      contenedorModalDeuda.innerHTML = embeddedHtml
-
-      // Lógica mínima del formulario embebido
-      const modal = document.getElementById('modalAgregarDeuda')
-      const form = document.getElementById('formAgregarDeuda')
-      const cancelarBtn = document.getElementById('cancelarDeudaEmbedded')
-
-      if (form) {
-        form.addEventListener('submit', (e) => {
-          e.preventDefault()
+      </div>`
+    const modal = document.getElementById('modalAgregarDeuda')
+    const form = document.getElementById('formAgregarDeuda')
+    const cancelarBtn = document.getElementById('cancelarDeudaFirestore')
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        try {
+          if (!window.walletDB) throw new Error('DB no disponible')
           const datos = {
-            acreedor: document.getElementById('addAcreedorDeuda').value,
-            monto: document.getElementById('addMontoDeuda').value,
+            acreedor: document.getElementById('addAcreedorDeuda').value.trim(),
+            monto: parseFloat(document.getElementById('addMontoDeuda').value),
             fechaInicio: document.getElementById('addFechaInicioDeuda').value,
             estado: document.getElementById('addEstadoDeuda').value,
-            fechaVencimiento: document.getElementById('addFechaVencimientoDeuda') ? document.getElementById('addFechaVencimientoDeuda').value : '',
-            tasaInteres: document.getElementById('addTasaInteresDeuda') ? document.getElementById('addTasaInteresDeuda').value : '',
-            descripcion: document.getElementById('addDescripcionDeuda') ? document.getElementById('addDescripcionDeuda').value : '',
+            fechaVencimiento: document.getElementById('addFechaVencimientoDeuda').value || '',
+            tasaInteres: parseFloat(document.getElementById('addTasaInteresDeuda').value || '0'),
+            descripcion: document.getElementById('addDescripcionDeuda').value.trim()
           }
-          const deudas = JSON.parse(localStorage.getItem('deudas')) || []
-          datos.id = Date.now()
-          deudas.push(datos)
-          localStorage.setItem('deudas', JSON.stringify(deudas))
-          if (modal && modal.parentNode) modal.parentNode.removeChild(modal)
-          mostrarNotificacion && mostrarNotificacion('¡Deuda guardada exitosamente!', 'success')
+          await window.walletDB.addDebt(datos)
+          await cargarDeudasDesdeFirestore()
           renderDeudas()
-        })
-      }
-
-      if (cancelarBtn) cancelarBtn.addEventListener('click', () => {
-        const m = document.getElementById('modalAgregarDeuda')
-        if (m && m.parentNode) m.parentNode.removeChild(m)
+          mostrarNotificacion('¡Deuda guardada exitosamente!','success')
+          if (modal) modal.remove()
+        } catch(err){ console.error('Error guardando deuda:', err); mostrarNotificacion('Error al guardar deuda','danger') }
       })
-
-      if (modal) modal.addEventListener('click', (ev) => { if (ev.target === modal) modal.remove() })
-
-    } catch (embedErr) {
-      console.error('Error al inyectar modal embebido de deuda:', embedErr)
     }
+    if (cancelarBtn) cancelarBtn.addEventListener('click', () => { if (modal) modal.remove() })
+    if (modal) modal.addEventListener('click', ev => { if (ev.target === modal) modal.remove() })
   }
-}
+
+});
 
 function renderDeudas() {
   const tablaEl = document.getElementById('tablaDeudas')
   const tabla = tablaEl ? tablaEl.querySelector('tbody') : null
   const mensajeVacio = document.getElementById('mensajeVacio')
-  const deudas = JSON.parse(localStorage.getItem('deudas')) || []
+  const deudas = deudasCache || []
   if (tabla) tabla.innerHTML = ''
 
   let totalDeuda = 0
@@ -274,15 +216,17 @@ function renderDeudas() {
 
   // attach actions
   document.querySelectorAll('.btn-eliminar').forEach((btn) => {
-    btn.addEventListener('click', function () {
+    btn.addEventListener('click', async function () {
       const idx = this.getAttribute('data-index')
       const deuda = deudas[idx]
-      const confirmacion = confirm(`¿Estás seguro de que deseas eliminar la deuda con ${deuda.acreedor}?\n\nMonto: $${Number.parseFloat(deuda.monto || 0).toLocaleString('es-CO')}`)
+      const confirmacion = confirm(`¿Eliminar deuda con ${deuda.acreedor}?\n\nMonto: $${Number.parseFloat(deuda.monto || 0).toLocaleString('es-CO')}`)
       if (confirmacion) {
-        deudas.splice(idx, 1)
-        localStorage.setItem('deudas', JSON.stringify(deudas))
-        renderDeudas()
-        mostrarNotificacion('¡Deuda eliminada exitosamente!', 'success')
+        try {
+          await window.walletDB.deleteDebt(deuda.id)
+          await cargarDeudasDesdeFirestore()
+          renderDeudas()
+          mostrarNotificacion('¡Deuda eliminada exitosamente!','success')
+        } catch(err){ console.error('Error eliminando deuda:', err); mostrarNotificacion('Error al eliminar deuda','danger') }
       }
     })
   })
@@ -306,7 +250,7 @@ function renderDeudas() {
 }
 
 function editarDeuda(idx) {
-  const deudas = JSON.parse(localStorage.getItem('deudas')) || []
+  const deudas = deudasCache || []
   const deuda = deudas[idx]
   const contenedorModalEditarDeuda = document.getElementById('contenedorModalEditarDeuda')
   if (!contenedorModalEditarDeuda) {
@@ -359,22 +303,25 @@ function editarDeuda(idx) {
 
   const form = document.getElementById('formEditarDeuda')
   if (form) {
-    form.onsubmit = function (e) {
+    form.onsubmit = async function (e) {
       e.preventDefault()
       const formData = new FormData(this)
-      deudas[idx] = {
+      const updated = {
         acreedor: formData.get('acreedor'),
-        monto: formData.get('monto'),
+        monto: parseFloat(formData.get('monto')), 
         fechaInicio: formData.get('fechaInicio'),
         fechaVencimiento: formData.get('fechaVencimiento'),
-        tasaInteres: formData.get('tasaInteres'),
+        tasaInteres: parseFloat(formData.get('tasaInteres')||'0'),
         estado: formData.get('estado'),
-        descripcion: formData.get('descripcion'),
+        descripcion: formData.get('descripcion')
       }
-      localStorage.setItem('deudas', JSON.stringify(deudas))
-      contenedorModalEditarDeuda.innerHTML = ''
-      renderDeudas()
-      mostrarNotificacion('¡Deuda actualizada exitosamente!', 'success')
+      try {
+        await window.walletDB.updateDebt(deuda.id, updated)
+        await cargarDeudasDesdeFirestore()
+        contenedorModalEditarDeuda.innerHTML = ''
+        renderDeudas()
+        mostrarNotificacion('¡Deuda actualizada exitosamente!','success')
+      } catch(err){ console.error('Error actualizando deuda:', err); mostrarNotificacion('Error al actualizar deuda','danger') }
     }
   }
 }

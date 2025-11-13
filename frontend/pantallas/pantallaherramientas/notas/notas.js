@@ -4,7 +4,12 @@ let notaActual = null;
 let filtroActivo = 'todas';
 
 // Inicializar la aplicación
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // Esperar a que Firebase y módulos estén listos si existen
+    try {
+        if (window.walletDB) await window.walletDB.init();
+        if (window.walletDBModulesReady) await window.walletDBModulesReady;
+    } catch(e){ console.warn('Firebase init falló, usando localStorage', e); }
     cargarNotas();
     configurarEventListeners();
     actualizarVista();
@@ -30,42 +35,42 @@ function configurarEventListeners() {
 }
 
 // Cargar notas desde localStorage
-function cargarNotas() {
+async function cargarNotas() {
+    // Intentar Firestore primero
+    const authed = (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser);
+    const puedeCloud = !!(window.walletDB && window.walletDB.listNotes && authed);
+    if (puedeCloud) {
+        try {
+            const datos = await window.walletDB.listNotes();
+            // Normalizar estructura
+            notas = datos.map(n => ({
+                id: n.id,
+                titulo: n.titulo || '',
+                contenido: n.contenido || '',
+                categoria: n.categoria || 'general',
+                prioridad: n.prioridad || 'media',
+                tags: Array.isArray(n.tags) ? n.tags : [],
+                fechaCreacion: n.fechaCreacion || new Date().toISOString(),
+                fechaModificacion: n.fechaModificacion || n.updatedAt || new Date().toISOString(),
+                _cloud: true
+            }));
+            return;
+        } catch(e) {
+            console.warn('Fallo listNotes Firestore, usando localStorage', e);
+        }
+    }
+    // Fallback localStorage
     const notasGuardadas = localStorage.getItem('wallet_flow_notas');
     if (notasGuardadas) {
         notas = JSON.parse(notasGuardadas);
     } else {
-        // Notas de ejemplo
-        notas = [
-            {
-                id: generateId(),
-                titulo: "Plan de Ahorro 2025",
-                contenido: "Metas para este año:\n• Ahorrar 20% del salario mensual\n• Crear fondo de emergencia\n• Investigar opciones de inversión",
-                categoria: "ahorros",
-                prioridad: "alta",
-                tags: ["metas", "2025", "ahorro"],
-                fechaCreacion: new Date().toISOString(),
-                fechaModificacion: new Date().toISOString()
-            },
-            {
-                id: generateId(),
-                titulo: "Control de Gastos Mensuales",
-                contenido: "Revisar y categorizar todos los gastos del mes. Identificar áreas donde se puede reducir el gasto.",
-                categoria: "gastos",
-                prioridad: "media",
-                tags: ["control", "mensual"],
-                fechaCreacion: new Date(Date.now() - 86400000).toISOString(),
-                fechaModificacion: new Date(Date.now() - 86400000).toISOString()
-            }
-        ];
+        notas = [];
         guardarNotasEnStorage();
     }
 }
 
 // Guardar notas en localStorage
-function guardarNotasEnStorage() {
-    localStorage.setItem('wallet_flow_notas', JSON.stringify(notas));
-}
+function guardarNotasEnStorage() { localStorage.setItem('wallet_flow_notas', JSON.stringify(notas)); }
 
 // Generar ID único
 function generateId() {
@@ -207,7 +212,7 @@ function editarNota(id) {
 }
 
 // Guardar nota
-function guardarNota() {
+async function guardarNota() {
     const titulo = document.getElementById('titulo-nota').value.trim();
     const contenido = document.getElementById('contenido-nota').value.trim();
     const categoria = document.getElementById('categoria-nota').value;
@@ -221,18 +226,28 @@ function guardarNota() {
 
     const tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag) : [];
 
+    const authed = (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser);
+    const puedeCloud = !!(window.walletDB && window.walletDB.addNote && authed);
+
     if (notaActual) {
-        // Actualizar nota existente
         notaActual.titulo = titulo;
         notaActual.contenido = contenido;
         notaActual.categoria = categoria;
         notaActual.prioridad = prioridad;
         notaActual.tags = tags;
         notaActual.fechaModificacion = new Date().toISOString();
-        
-        mostrarAlerta('Nota actualizada correctamente', 'success');
+        try {
+            if (puedeCloud && notaActual._cloud) {
+                await window.walletDB.updateNote(notaActual.id, {
+                    titulo, contenido, categoria, prioridad, tags
+                });
+            }
+            mostrarAlerta('Nota actualizada correctamente', 'success');
+        } catch(e){
+            console.error('Error actualizando nota en nube', e);
+            mostrarAlerta('Actualizada localmente (sin sincronizar)', 'warning');
+        }
     } else {
-        // Crear nueva nota
         const nuevaNota = {
             id: generateId(),
             titulo,
@@ -241,18 +256,25 @@ function guardarNota() {
             prioridad,
             tags,
             fechaCreacion: new Date().toISOString(),
-            fechaModificacion: new Date().toISOString()
+            fechaModificacion: new Date().toISOString(),
+            _cloud: false
         };
-        
+        if (puedeCloud) {
+            try {
+                const newId = await window.walletDB.addNote(nuevaNota);
+                nuevaNota.id = newId;
+                nuevaNota._cloud = true;
+            } catch(e){
+                console.warn('Fallo addNote nube, quedará local', e);
+            }
+        }
         notas.unshift(nuevaNota);
         mostrarAlerta('Nota creada correctamente', 'success');
     }
 
-    guardarNotasEnStorage();
+    if (!puedeCloud) guardarNotasEnStorage();
     actualizarVista();
     filtrarNotas();
-    
-    // Cerrar modal
     const modal = bootstrap.Modal.getInstance(document.getElementById('modalNota'));
     modal.hide();
 }
@@ -268,14 +290,24 @@ function confirmarEliminar(id) {
 }
 
 // Eliminar nota
-function eliminarNota(id) {
+async function eliminarNota(id) {
     const index = notas.findIndex(n => n.id === id);
-    if (index !== -1) {
+    if (index === -1) return;
+    const nota = notas[index];
+    const authed = (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser);
+    const puedeCloud = !!(window.walletDB && window.walletDB.deleteNote && authed);
+    try {
+        if (puedeCloud && nota._cloud) {
+            await window.walletDB.deleteNote(nota.id);
+        }
         notas.splice(index, 1);
-        guardarNotasEnStorage();
+        if (!puedeCloud) guardarNotasEnStorage();
         actualizarVista();
         filtrarNotas();
         mostrarAlerta('Nota eliminada correctamente', 'success');
+    } catch(e){
+        console.error('Error eliminando nota nube', e);
+        mostrarAlerta('No se pudo eliminar en la nube', 'danger');
     }
 }
 

@@ -8,92 +8,60 @@ const gastosPorPagina = 10;
 let gastoEditando = null;
 
 // Inicialización
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('=== Sistema de gastos iniciado ===');
-    cargarGastos();
+document.addEventListener('DOMContentLoaded', async function() {
+  try {
+    // Esperar auth para garantizar uid antes de listar gastos
+    const auth = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth() : null;
+    if (auth && !auth.currentUser) {
+      await new Promise(resolve => auth.onAuthStateChanged(()=>resolve()));
+    }
+    await cargarGastosDesdeFirestore();
     inicializarEventListeners();
-    actualizarInterfaz();
     configurarFiltros();
-    console.log('=== Inicialización completada ===');
+    actualizarInterfaz();
+  } catch(e){ console.error('Error inicializando gastos:', e); }
 });
 
 // Actualizar datos cuando la ventana recibe el foco (por si viene desde otra página)
-window.addEventListener('focus', function() {
-    console.log('Ventana recibió el foco, recargando gastos...');
-    cargarGastos();
-    actualizarInterfaz();
+window.addEventListener('focus', async function() {
+  await cargarGastosDesdeFirestore();
+  actualizarInterfaz();
 });
 
 // Recargar al volver a la página
-window.addEventListener('pageshow', function(event) {
-    console.log('Evento pageshow detectado, recargando gastos...');
-    cargarGastos();
-    actualizarInterfaz();
+window.addEventListener('pageshow', async function() {
+  await cargarGastosDesdeFirestore();
+  actualizarInterfaz();
 });
 
 // Actualizar cada 2 segundos para detectar cambios en localStorage
-setInterval(function() {
-    const gastosActuales = JSON.parse(localStorage.getItem('gastos') || '[]');
-    if (gastosActuales.length !== gastos.length) {
-        console.log('Cambios detectados en localStorage, recargando...');
-        cargarGastos();
-        actualizarInterfaz();
-    }
-}, 2000);
+// Eliminado polling localStorage: solo Firestore
 
 // ===== GESTIÓN DE DATOS =====
-function cargarGastos() {
-    try {
-        const gastosGuardados = localStorage.getItem('gastos');
-        console.log('Intentando cargar gastos desde localStorage...');
-        
-        if (gastosGuardados && gastosGuardados !== 'null' && gastosGuardados !== 'undefined') {
-      gastos = JSON.parse(gastosGuardados) || [];
-      // Migración: asegurar que cada gasto tenga un id único
-      let actualizado = false;
-      gastos = gastos.map(g => {
-        if (!g.id) {
-          actualizado = true;
-          return { ...g, id: (Date.now().toString(36) + Math.random().toString(36).slice(2,8)) };
-        }
-        return g;
-      });
-      if (actualizado) {
-        try { localStorage.setItem('gastos', JSON.stringify(gastos)); } catch {}
-      }
-      console.log(`✓ Gastos cargados exitosamente: ${gastos.length} registros`);
-        } else {
-            gastos = [];
-            console.log('No hay gastos guardados. Iniciando con array vacío.');
-        }
-        
-        gastosFiltrados = [...gastos];
-        console.log(`Total de gastos disponibles: ${gastos.length}`);
-        
-    } catch (error) {
-        console.error('Error al cargar gastos:', error);
-        gastos = [];
-        gastosFiltrados = [];
+async function cargarGastosDesdeFirestore() {
+  try {
+    if (!window.walletDB) throw new Error('DB no disponible');
+    const auth = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth() : null;
+    if (!auth) throw new Error('Auth no disponible');
+    // Esperar usuario si aún no está listo (persistencia retrasada tras carga de página)
+    if (!auth.currentUser) {
+      await new Promise(resolve => auth.onAuthStateChanged(() => resolve()));
     }
+    if (!auth.currentUser) {
+      // No lanzamos error duro para evitar spam en eventos pageshow/focus
+      console.warn('Gastos: usuario no autenticado todavía');
+      return; // Salida silenciosa, interfaz puede mostrar estado vacío
+    }
+    gastos = await window.walletDB.listExpenses();
+  } catch(e){
+    console.error('Error cargando gastos Firestore:', e);
+    mostrarNotificacion(e.message || 'Error cargando gastos');
+    gastos = [];
+  }
+  gastosFiltrados = [...gastos];
 }
 
-function guardarGastos() {
-    try {
-        localStorage.setItem('gastos', JSON.stringify(gastos));
-        console.log(`✓ Gastos guardados correctamente: ${gastos.length} registros`);
-        
-        // Verificar que se guardó correctamente
-        const verificacion = localStorage.getItem('gastos');
-        if (verificacion) {
-            console.log('✓ Verificación exitosa: los datos persisten en localStorage');
-        } else {
-            console.error('⚠️ ADVERTENCIA: Los datos NO se guardaron correctamente');
-        }
-    } catch (error) {
-        console.error('❌ Error al guardar gastos:', error);
-        alert('Error al guardar los datos. Por favor, intenta nuevamente.');
-    }
-}
+// Eliminada función guardarGastos (solo Firestore)
 
 // ===== EVENT LISTENERS =====
 function inicializarEventListeners() {
@@ -551,7 +519,7 @@ function cambiarPagina(nuevaPagina) {
 }
 
 // ===== ELIMINAR GASTO =====
-function eliminarGasto(id) {
+async function eliminarGasto(id) {
     const gasto = gastos.find(g => g.id === id);
     if (!gasto) {
         console.error('Gasto no encontrado con ID:', id);
@@ -559,20 +527,18 @@ function eliminarGasto(id) {
     }
 
     if (confirm(`¿Estás seguro de eliminar el gasto "${gasto.descripcion}"?`)) {
-        console.log(`Eliminando gasto con ID: ${id}`);
-        gastos = gastos.filter(g => g.id !== id);
-        
-        // Guardar inmediatamente
-        guardarGastos();
-        
-        // Actualizar lista filtrada
-        gastosFiltrados = [...gastos];
-        
-        // Actualizar interfaz
-        actualizarInterfaz();
-        mostrarNotificacion('Gasto eliminado correctamente');
-        
-        console.log(`Total de gastos después de eliminar: ${gastos.length}`);
+    try {
+      console.log(`Eliminando gasto con ID: ${id}`);
+      if (window.walletDB && gasto.id) {
+        await window.walletDB.deleteExpense(gasto.id);
+        await cargarGastosDesdeFirestore();
+      }
+      actualizarInterfaz();
+      mostrarNotificacion('Gasto eliminado correctamente');
+    } catch (e) {
+      console.error('Error al eliminar gasto:', e);
+      mostrarNotificacion('Error al eliminar el gasto');
+    }
     }
 }
 
@@ -874,18 +840,7 @@ function configurarEventosBotones() {
 }
 
 // ===== FUNCIÓN PARA ELIMINAR GASTO =====
-function eliminarGasto(idx) {
-  // Borra un gasto por índice y recalcula métricas
-  const confirmacion = confirm('¿Estás seguro de que deseas eliminar este gasto?\n\nEsta acción no se puede deshacer.');
-  if (confirmacion) {
-    let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
-    gastos.splice(idx, 1);
-    localStorage.setItem('gastos', JSON.stringify(gastos));
-    renderGastos();
-    calcularResumen();
-    mostrarMensaje('¡Gasto eliminado exitosamente!', 'success');
-  }
-}
+// Reemplazado por versión con Firestore (ver eliminarGasto(idOrIndex) al final)
 
 // ===== FUNCIÓN PARA MOSTRAR FORMULARIO AGREGAR =====
 function mostrarFormularioAgregar() {
@@ -1095,45 +1050,40 @@ function validarFormulario(formData) {
 }
 
 // ===== FUNCIÓN PARA GUARDAR NUEVO GASTO =====
-function guardarNuevoGasto(formData) {
+async function guardarNuevoGasto(formData) {
   // Inserta nuevo objeto gasto en localStorage
-  let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
-  
-  const nuevoGasto = {
-    id: (Date.now().toString(36) + Math.random().toString(36).slice(2,8)),
-    categoria: formData.get('categoria'),
-    metodo: formData.get('metodo'),
-    monto: parseFloat(formData.get('monto')),
-    fecha: formData.get('fecha'),
-    descripcion: formData.get('descripcion').trim(),
-    esRecurrente: formData.get('esRecurrente') === 'true',
-    frecuencia: formData.get('frecuencia'),
-    cuenta: formData.get('cuenta').trim(),
-    fechaCreacion: new Date().toISOString()
-  };
-  
-  gastos.push(nuevoGasto);
-  localStorage.setItem('gastos', JSON.stringify(gastos));
-  // Refrescar interfaz canónica
-  try { cargarGastos(); } catch {}
-  gastosFiltrados = [...gastos];
-  actualizarInterfaz();
-  mostrarMensaje('¡Gasto agregado exitosamente!', 'success');
+  try {
+    if (window.walletDB) {
+      const data = {
+        categoria: formData.get('categoria'),
+        metodo: formData.get('metodo'),
+        monto: parseFloat(formData.get('monto')),
+        fecha: formData.get('fecha'),
+        descripcion: (formData.get('descripcion') || '').trim(),
+        esRecurrente: formData.get('esRecurrente') === 'true',
+        frecuencia: formData.get('frecuencia') || '',
+        cuenta: (formData.get('cuenta') || '').trim()
+      };
+      const id = await window.walletDB.addExpense(data);
+      await cargarGastosDesdeFirestore();
+      mostrarMensaje('¡Gasto agregado exitosamente!', 'success');
+    }
+  } catch (e) {
+    console.error('Error guardando gasto:', e);
+    mostrarMensaje('Error al guardar el gasto', 'error');
+  }
 }
 
 // ===== FUNCIÓN PARA ACTUALIZAR GASTO =====
-function actualizarGasto(idx, formData) {
+async function actualizarGasto(idx, formData) {
   // Sustituye datos de un gasto existente por índice
-  let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
-  
-  if (!gastos[idx]) {
-    console.error('Índice de gasto inválido para actualizar:', idx);
-    mostrarMensaje('No se pudo actualizar el gasto (índice inválido)', 'error');
+  const original = gastos[idx];
+  if (!original) {
+    mostrarMensaje('No se encontró el gasto a actualizar', 'error');
     return;
   }
-
-  gastos[idx] = {
-    ...gastos[idx],
+  const actualizado = {
+    ...original,
     categoria: formData.get('categoria'),
     metodo: formData.get('metodo'),
     monto: parseFloat(formData.get('monto')),
@@ -1144,19 +1094,23 @@ function actualizarGasto(idx, formData) {
     cuenta: formData.get('cuenta').trim(),
     fechaModificacion: new Date().toISOString()
   };
-  
-  localStorage.setItem('gastos', JSON.stringify(gastos));
-  // Refrescar interfaz canónica
-  try { cargarGastos(); } catch {}
-  gastosFiltrados = [...gastos];
-  actualizarInterfaz();
-  mostrarMensaje('¡Gasto actualizado exitosamente!', 'success');
+  try {
+    if (actualizado.id && window.walletDB) {
+      await window.walletDB.updateExpense(actualizado.id, actualizado);
+      await cargarGastosDesdeFirestore();
+    }
+    actualizarInterfaz();
+    mostrarMensaje('¡Gasto actualizado exitosamente!', 'success');
+  } catch (e) {
+    console.error('Error actualizando gasto:', e);
+    mostrarMensaje('Error al actualizar el gasto', 'error');
+  }
 }
 
 // ===== FUNCIÓN PARA CALCULAR RESUMEN =====
 function calcularResumen() {
   // Recalcula KPIs mostrados en tarjetas (total, categoría principal, etc.)
-  const gastos = JSON.parse(localStorage.getItem('gastos')) || [];
+  const gastos = gastosFiltrados;
   
   // Calcular total de gastos
   const totalGastos = gastos.reduce((total, gasto) => total + gasto.monto, 0);
@@ -1334,26 +1288,24 @@ function aplicarFiltros() {
 }
 
 // Eliminar gasto por ID (coincide con el HTML que llama eliminarGasto('id'))
-function eliminarGasto(idOrIndex) {
-  // Acepta un id (string) o un índice numérico (compatibilidad con render alterno)
+async function eliminarGasto(idOrIndex) {
   let gasto = gastos.find(g => g.id === idOrIndex);
   if (!gasto) {
     const idx = parseInt(idOrIndex, 10);
-    if (!isNaN(idx) && idx >= 0 && idx < gastos.length) {
-      gasto = gastos[idx];
+    if (!isNaN(idx) && idx >= 0 && idx < gastos.length) gasto = gastos[idx];
+  }
+  if (!gasto) return mostrarMensaje('No se encontró el gasto', 'error');
+  if (!confirm(`¿Eliminar el gasto "${gasto.descripcion}"?`)) return;
+  try {
+    if (gasto.id && window.walletDB) {
+      await window.walletDB.deleteExpense(gasto.id);
+      await cargarGastosDesdeFirestore();
     }
-  }
-  if (!gasto) {
-    console.error('Gasto no encontrado para eliminar:', idOrIndex);
-    mostrarMensaje('No se encontró el gasto a eliminar', 'error');
-    return;
-  }
-  if (confirm(`¿Eliminar el gasto "${gasto.descripcion}"?`)) {
-    gastos = gastos.filter(g => g.id !== gasto.id);
-    guardarGastos();
-    gastosFiltrados = [...gastos];
     actualizarInterfaz();
-    mostrarNotificacion('Gasto eliminado correctamente');
+    mostrarMensaje('Gasto eliminado', 'success');
+  } catch(e){
+    console.error('Error eliminando gasto:', e);
+    mostrarMensaje('Error al eliminar', 'error');
   }
 }
 

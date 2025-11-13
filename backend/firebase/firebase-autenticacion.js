@@ -241,6 +241,10 @@ try {
     window.firebaseAuth = new FirebaseAuth();
     console.log('FirebaseAuth creado exitosamente:', window.firebaseAuth);
     console.log('Métodos disponibles:', Object.getOwnPropertyNames(Object.getPrototypeOf(window.firebaseAuth)));
+    // Inicialización automática para asegurar auth antes de otros scripts
+    if (window.firebaseAuth && !window.firebaseAuth.initialized) {
+        window.firebaseAuth.init().catch(err => console.warn('Auto init auth falló:', err.message));
+    }
 } catch (error) {
     console.error('Error al crear FirebaseAuth:', error);
 }

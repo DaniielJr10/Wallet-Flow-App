@@ -1,0 +1,13 @@
+(function(){ function editarInversion(id){ const inv=window.inversionesState.state.inversionesOriginales.find(i=> i.id===id); if(!inv) return window.inversionesMessages.mostrar('No encontrada','error'); const wrap=document.createElement('div'); wrap.id='modalEditarInversion'; wrap.className='modal-overlay'; wrap.innerHTML=`<div class='modal-form'><form id='formEditarInversion' autocomplete='off'>
+    <h2>Editar Inversión</h2>
+    <label>Tipo<input type='text' id='editTipoInversion' value='${inv.tipo||''}' required></label>
+    <label>Monto<input type='number' id='editMontoInversion' value='${inv.monto||0}' min='0' step='0.01' required></label>
+    <label>Fecha Inicio<input type='date' id='editFechaInicioInversion' value='${inv.fechaInicio||inv.fecha||''}' required></label>
+    <label>Fecha Fin<input type='date' id='editFechaFinInversion' value='${inv.fechaFin||''}'></label>
+    <label>Riesgo<select id='editRiesgoInversion'><option value='bajo' ${inv.riesgo==='bajo'?'selected':''}>Bajo</option><option value='medio' ${inv.riesgo==='medio'?'selected':''}>Medio</option><option value='alto' ${inv.riesgo==='alto'?'selected':''}>Alto</option></select></label>
+    <label>Rendimiento Esperado (%)<input type='number' id='editRendimientoEsperadoInversion' value='${inv.rendimientoEsperado||0}' min='0' step='0.01'></label>
+    <label>Descripción<textarea id='editDescripcionInversion'>${inv.descripcion||''}</textarea></label>
+    <div class='botones'><button type='submit' class='btn btn-success btn-sm'>Guardar</button><button type='button' id='cancelarEditarInversion' class='btn btn-secondary btn-sm'>Cancelar</button></div>
+  </form></div>`; document.body.appendChild(wrap); const form=document.getElementById('formEditarInversion'); const cancelar=document.getElementById('cancelarEditarInversion'); cancelar&& (cancelar.onclick=()=> cerrar()); wrap.addEventListener('click',e=>{ if(e.target===wrap) cerrar(); }); form.onsubmit= async e=>{ e.preventDefault(); const datos={ tipo:val('editTipoInversion').trim(), monto:parseFloat(val('editMontoInversion')), fechaInicio:val('editFechaInicioInversion'), fechaFin:val('editFechaFinInversion')||'', riesgo:val('editRiesgoInversion'), rendimientoEsperado:parseFloat(val('editRendimientoEsperadoInversion')||'0'), descripcion:val('editDescripcionInversion').trim() }; if(!datos.tipo || isNaN(datos.monto)){ window.inversionesMessages.mostrar('Datos inválidos','error'); return; } await window.inversionesService.actualizarInversion(inv.id, datos); cerrar(); }; function val(id){ return document.getElementById(id).value; } function cerrar(){ wrap.remove(); } }
+  window.inversionesEdit={ editarInversion };
+})();

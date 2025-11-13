@@ -1,79 +1,55 @@
-function renderizarCuentas() {
+// Cuentas Firestore-only
+let cuentasCache = [];
+
+async function waitForDB(maxMs=5000){
+  const start=Date.now();
+  while((!window.walletDB) && Date.now()-start < maxMs){
+    await new Promise(r=>setTimeout(r,100));
+  }
+  return !!window.walletDB;
+}
+
+async function cargarCuentasDesdeFirestore(){
+  try {
+    const ok = await waitForDB();
+    if(!ok || !window.walletDB) throw new Error('DB no disponible');
+    await window.walletDB.init();
+    const auth = (typeof firebase!=='undefined' && firebase.auth)? firebase.auth(): null;
+    if(auth && !auth.currentUser) await new Promise(r=>auth.onAuthStateChanged(()=>r()));
+    if(!auth || !auth.currentUser){ console.warn('Cuentas: usuario no autenticado aún'); return; }
+    cuentasCache = await window.walletDB.listAccounts();
+  } catch(e){ console.error('Error cargando cuentas Firestore:', e); cuentasCache=[]; }
+}
+
+function renderizarCuentas(){
   const contenedorCuentas = document.getElementById('contenedorCuentas');
-  contenedorCuentas.innerHTML = ''; // Limpiar el contenedor antes de renderizar
-
-  const cuentas = JSON.parse(localStorage.getItem('cuentas')) || [];
-
-  cuentas.forEach((cuenta, index) => {
-    // Crear la tarjeta
-    const tarjeta = document.createElement('div');
-    tarjeta.className = 'col-md-4 mb-4'; // Clase de Bootstrap para columnas y margen inferior
-    tarjeta.innerHTML = `
-      <div class="account-card">
-        <div class="card-header-custom">
-          <div class="account-icon">
-            <i class="bi ${getAccountIcon(cuenta.tipo)}"></i>
-          </div>
-          <div class="account-status">
-            ${cuenta.esPrincipal ? '<span class="badge-principal"><i class="bi bi-star-fill"></i> Principal</span>' : ''}
-          </div>
-        </div>
-        
-        <div class="card-content">
-          <h3 class="account-name">${cuenta.nombre}</h3>
-          <div class="account-type">${cuenta.tipo}</div>
-          
-          <div class="account-details">
-            <div class="detail-item">
-              <span class="detail-label">
-                <i class="bi bi-credit-card-2-front"></i>
-                Número de cuenta
-              </span>
-              <span class="detail-value">${cuenta.numero}</span>
-            </div>
-            
-            <div class="detail-item balance-item">
-              <span class="detail-label">
-                <i class="bi bi-cash-stack"></i>
-                Saldo disponible
-              </span>
-              <span class="detail-value balance-value">$${formatCurrency(cuenta.saldoInicial)}</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="card-actions">
-          <button class="btn-action btn-edit" data-index="${index}">
-            <i class="bi bi-pencil-square"></i>
-            <span>Editar</span>
-          </button>
-          <button class="btn-action btn-delete" data-index="${index}">
-            <i class="bi bi-trash"></i>
-            <span>Eliminar</span>
-          </button>
+  if(!contenedorCuentas) return;
+  contenedorCuentas.innerHTML='';
+  cuentasCache.forEach((cuenta)=>{
+    const tarjeta=document.createElement('div');
+    tarjeta.className='col-md-4 mb-4';
+    tarjeta.innerHTML=`<div class="account-card">
+      <div class="card-header-custom">
+        <div class="account-icon"><i class="bi ${getAccountIcon(cuenta.tipo)}"></i></div>
+        <div class="account-status">${cuenta.esPrincipal? '<span class="badge-principal"><i class="bi bi-star-fill"></i> Principal</span>':''}</div>
+      </div>
+      <div class="card-content">
+        <h3 class="account-name">${cuenta.nombre||'-'}</h3>
+        <div class="account-type">${cuenta.tipo||'-'}</div>
+        <div class="account-details">
+          <div class="detail-item"><span class="detail-label"><i class="bi bi-credit-card-2-front"></i> Número de cuenta</span><span class="detail-value">${cuenta.numero||'-'}</span></div>
+          <div class="detail-item balance-item"><span class="detail-label"><i class="bi bi-cash-stack"></i> Saldo disponible</span><span class="detail-value balance-value">$${formatCurrency(cuenta.saldo||0)}</span></div>
         </div>
       </div>
-    `;
+      <div class="card-actions">
+        <button class="btn-action btn-edit" data-id="${cuenta.id}"><i class="bi bi-pencil-square"></i><span>Editar</span></button>
+        <button class="btn-action btn-delete" data-id="${cuenta.id}"><i class="bi bi-trash"></i><span>Eliminar</span></button>
+      </div>
+    </div>`;
     contenedorCuentas.appendChild(tarjeta);
   });
-
-  // Agregar eventos a los botones de eliminar
-  const botonesEliminar = document.querySelectorAll('.btn-delete');
-  botonesEliminar.forEach((boton) => {
-    boton.addEventListener('click', function () {
-      const index = this.getAttribute('data-index');
-      eliminarCuenta(index);
-    });
-  });
-
-  // Agregar eventos a los botones de editar
-  const botonesEditar = document.querySelectorAll('.btn-edit');
-  botonesEditar.forEach((boton) => {
-    boton.addEventListener('click', function () {
-      const index = this.getAttribute('data-index');
-      editarCuenta(index);
-    });
-  });
+  document.querySelectorAll('.btn-delete').forEach(btn=>btn.addEventListener('click',()=>eliminarCuenta(btn.getAttribute('data-id'))));
+  document.querySelectorAll('.btn-edit').forEach(btn=>btn.addEventListener('click',()=>editarCuenta(btn.getAttribute('data-id'))));
 }
 
 // Función auxiliar para obtener el icono según el tipo de cuenta
@@ -98,62 +74,38 @@ function formatCurrency(amount) {
 }
 
 // Función para eliminar una cuenta con confirmación
-function eliminarCuenta(index) {
-  const confirmacion = confirm('¿Estás seguro de que deseas eliminar esta cuenta?');
-  if (confirmacion) {
-    const cuentas = JSON.parse(localStorage.getItem('cuentas')) || [];
-    cuentas.splice(index, 1); // Eliminar la cuenta del array
-    localStorage.setItem('cuentas', JSON.stringify(cuentas)); // Actualizar localStorage
-    renderizarCuentas(); // Volver a renderizar las tarjetas
-    alert('¡Cuenta eliminada exitosamente!'); // Mensaje de éxito
-  }
+async function eliminarCuenta(id){
+  const cuenta = cuentasCache.find(c=>c.id===id);
+  if(!cuenta) return;
+  const confirmacion = confirm(`¿Eliminar cuenta "${cuenta.nombre}"?`);
+  if(!confirmacion) return;
+  try {
+    await waitForDB();
+    await window.walletDB.init();
+    await window.walletDB.deleteAccount(id);
+    await cargarCuentasDesdeFirestore();
+    renderizarCuentas();
+    if(typeof mostrarNotificacion==='function') mostrarNotificacion('Cuenta eliminada','success');
+  } catch(e){ console.error('Error eliminando cuenta:', e); if(typeof mostrarNotificacion==='function') mostrarNotificacion('Error al eliminar','danger'); }
 }
 
 // Función para editar una cuenta
-function editarCuenta(index) {
-  const cuentas = JSON.parse(localStorage.getItem('cuentas')) || [];
-  const cuenta = cuentas[index];
-
-  // Mostrar el modal con los datos de la cuenta
-  const modal = new bootstrap.Modal(document.getElementById('modalAgregarCuenta'));
+function editarCuenta(id){
+  const cuenta = cuentasCache.find(c=>c.id===id);
+  if(!cuenta) return;
+  const modalEl=document.getElementById('modalAgregarCuenta');
+  if(!modalEl) return;
+  const modal=new bootstrap.Modal(modalEl);
   modal.show();
-
-  // Rellenar el formulario con los datos de la cuenta
-  document.getElementById('nombreCuenta').value = cuenta.nombre;
-  document.getElementById('tipoCuenta').value = cuenta.tipo;
-  document.getElementById('numeroCuenta').value = cuenta.numero;
-  document.getElementById('saldoInicial').value = cuenta.saldoInicial;
-  document.getElementById('cuentaPrincipal').checked = cuenta.esPrincipal;
-
-  // Actualizar el título del modal
-  document.getElementById('modalEditarCuentaLabel').textContent = 'Editar Cuenta';
-
-  // Actualizar la cuenta al guardar
-  const form = document.getElementById('formAgregarCuenta');
-  form.onsubmit = function (e) {
-    e.preventDefault();
-    
-    // Validar que se haya seleccionado un tipo
-    const tipoSeleccionado = document.getElementById('tipoCuenta').value;
-    if (!tipoSeleccionado) {
-      showFormError('Por favor selecciona un tipo de cuenta');
-      return;
-    }
-
-    cuentas[index] = {
-      nombre: document.getElementById('nombreCuenta').value,
-      tipo: tipoSeleccionado,
-      numero: document.getElementById('numeroCuenta').value,
-      saldoInicial: parseFloat(document.getElementById('saldoInicial').value),
-      esPrincipal: document.getElementById('cuentaPrincipal').checked
-    };
-    
-    localStorage.setItem('cuentas', JSON.stringify(cuentas));
-    modal.hide();
-    form.reset();
-    renderizarCuentas();
-    showSuccessMessage('¡Cuenta actualizada exitosamente!');
-  };
+  document.getElementById('nombreCuenta').value = cuenta.nombre||'';
+  document.getElementById('tipoCuenta').value = cuenta.tipo||'';
+  document.getElementById('numeroCuenta').value = cuenta.numero||'';
+  document.getElementById('saldoInicial').value = cuenta.saldo||0;
+  document.getElementById('cuentaPrincipal').checked = !!cuenta.esPrincipal;
+  document.getElementById('modalEditarCuentaLabel').textContent='Editar Cuenta';
+  let hiddenId=document.getElementById('hiddenAccountId');
+  if(!hiddenId){ hiddenId=document.createElement('input'); hiddenId.type='hidden'; hiddenId.id='hiddenAccountId'; document.getElementById('formAgregarCuenta').appendChild(hiddenId); }
+  hiddenId.value=id;
 }
 
 // Función para mostrar mensajes de error
@@ -198,8 +150,46 @@ function showSuccessMessage(message) {
   }, 3000);
 }
 
-// Renderizar las cuentas al cargar la página
-document.addEventListener('DOMContentLoaded', renderizarCuentas);
+// Renderizar y preparar submit al cargar
+document.addEventListener('DOMContentLoaded', async () => {
+  window.renderizarCuentas = renderizarCuentas;
+  await cargarCuentasDesdeFirestore();
+  renderizarCuentas();
+  const form=document.getElementById('formAgregarCuenta');
+  if(form){
+    form.addEventListener('submit', async e=>{
+      e.preventDefault();
+      const tipoSeleccionado = document.getElementById('tipoCuenta').value;
+      if(!tipoSeleccionado){ showFormError('Por favor selecciona un tipo de cuenta'); return; }
+      try {
+        await waitForDB();
+        await window.walletDB.init();
+        const payload={
+          nombre: document.getElementById('nombreCuenta').value.trim(),
+          tipo: tipoSeleccionado,
+          numero: document.getElementById('numeroCuenta').value.trim(),
+          saldo: parseFloat(document.getElementById('saldoInicial').value)||0,
+          esPrincipal: document.getElementById('cuentaPrincipal').checked,
+          moneda: 'COP'
+        };
+        const hiddenId=document.getElementById('hiddenAccountId');
+        if(hiddenId && hiddenId.value){
+          await window.walletDB.updateAccount(hiddenId.value, payload);
+        } else {
+          await window.walletDB.addAccount(payload);
+        }
+        await cargarCuentasDesdeFirestore();
+        renderizarCuentas();
+        form.reset();
+        if(hiddenId) hiddenId.remove();
+        const modalEl=document.getElementById('modalAgregarCuenta');
+        if(modalEl){try{bootstrap.Modal.getInstance(modalEl)?.hide();}catch(_){modalEl.classList.add('d-none');}}
+        if(typeof mostrarNotificacion==='function') mostrarNotificacion('Cuenta guardada','success'); else showSuccessMessage('¡Cuenta guardada exitosamente!');
+        document.getElementById('modalEditarCuentaLabel').textContent='Gestionar Cuenta';
+      } catch(err){ console.error('Error guardando cuenta:', err); if(typeof mostrarNotificacion==='function') mostrarNotificacion('Error al guardar','danger'); else showFormError('Error al guardar cuenta'); }
+    });
+  }
+});
 
 // Configurar botón de agregar cuenta (tanto header como empty-state) y crear nueva cuenta
 document.addEventListener('DOMContentLoaded', function () {
@@ -302,21 +292,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Escuchar evento personalizado para refrescar la lista cuando un formulario externo guarde una cuenta
-window.addEventListener('cuenta:guardada', function (e) {
-  try {
-    renderizarCuentas();
-    // Si el modal de bootstrap está abierto, cerrarlo
-    const modalEl = document.getElementById('modalAgregarCuenta')
-    if (modalEl) {
-      try {
-        const bs = bootstrap.Modal.getInstance(modalEl)
-        if (bs) bs.hide()
-      } catch (err) {
-        // fallback: remover clase d-none
-        modalEl.classList.add('d-none')
-      }
-    }
-  } catch (err) {
-    console.error('Error manejando cuenta:guardada', err)
-  }
-})
+window.addEventListener('cuenta:guardada', async ()=>{
+  await cargarCuentasDesdeFirestore();
+  renderizarCuentas();
+});
