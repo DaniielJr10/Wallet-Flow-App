@@ -1,6 +1,6 @@
 // Inicializar el formulario de cuentas
 function initFormularioCuenta() {
-
+  // Elementos del formulario y modal
   const modal = document.getElementById('modalAgregarCuenta');
   const form = document.getElementById('formAgregarCuenta');
   const cancelarBtn = document.getElementById('cancelarCuenta');
@@ -37,8 +37,8 @@ function initFormularioCuenta() {
 
   // Evento para manejar el envío del formulario
   if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault(); // Evitar el comportamiento predeterminado del formulario
 
       // Obtener los datos del formulario
       const datosCuenta = {
@@ -49,21 +49,28 @@ function initFormularioCuenta() {
         esPrincipal: document.getElementById('cuentaPrincipal').checked
       };
 
-     
-      let cuentas = JSON.parse(localStorage.getItem('cuentas')) || [];
-      cuentas.push(datosCuenta);
-      localStorage.setItem('cuentas', JSON.stringify(cuentas));
-
-      // Mostrar mensaje de éxito
-      alert('¡Cuenta guardada exitosamente!');
-
-      // Cerrar y limpiar el modal
-      cerrarModal();
-      // Notificar a la página que se guardó una cuenta para permitir refrescar listas
       try {
-        window.dispatchEvent(new CustomEvent('cuenta:guardada', { detail: datosCuenta }));
+        if (window.cuentasService && typeof window.cuentasService.agregarCuenta === 'function') {
+          await window.cuentasService.agregarCuenta(datosCuenta);
+        } else if (window.walletDB && typeof window.walletDB.addAccount === 'function') {
+          await window.walletDB.addAccount(datosCuenta);
+        } else {
+          throw new Error('Servicio de cuentas no disponible');
+        }
+
+        // Cerrar y limpiar el modal
+        cerrarModal();
+
+        // Notificar otras pantallas (vía callback opcional)
+        if (typeof callbackRender === 'function') {
+          try { callbackRender(); } catch (_) {}
+        }
+
+        // Mensaje de éxito
+        alert('¡Cuenta guardada exitosamente!');
       } catch (e) {
-        console.warn('No se pudo despachar el evento cuenta:guardada', e);
+        console.error('Error guardando cuenta en formulario', e);
+        alert('Error al guardar cuenta');
       }
     });
   }

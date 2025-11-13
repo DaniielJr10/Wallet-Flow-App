@@ -57,37 +57,48 @@ function initFormularioDeuda(callbackRender) {
   }
   // Envío del formulario
   if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault()
-      const datos = {
-        acreedor: document.getElementById("addAcreedorDeuda").value,
-        monto: document.getElementById("addMontoDeuda").value,
-        fechaInicio: document.getElementById("addFechaInicioDeuda").value,
-        estado: document.getElementById("addEstadoDeuda").value,
-        fechaVencimiento: document.getElementById("addFechaVencimientoDeuda").value,
-        tasaInteres: document.getElementById("addTasaInteresDeuda").value,
-        descripcion: document.getElementById("addDescripcionDeuda").value,
-      }
-      // Guardar en localStorage
-      const deudas = JSON.parse(localStorage.getItem("deudas")) || []
-      datos.id = Date.now();
-      deudas.push(datos)
-      localStorage.setItem("deudas", JSON.stringify(deudas))
-      
-    
-      alert("¡Deuda guardada exitosamente!")
-      cerrarModalDeuda()
-      
+    // Evita enlazar el submit más de una vez
+    if (form.dataset.inited !== '1') {
+      form.dataset.inited = '1'
+      form.addEventListener("submit", async (e) => {
+        console.trace('submit handler triggered: fordeudas.js')
+        e.preventDefault()
+        const datos = {
+          acreedor: document.getElementById("addAcreedorDeuda").value,
+          monto: document.getElementById("addMontoDeuda").value,
+          fechaInicio: document.getElementById("addFechaInicioDeuda").value,
+          estado: document.getElementById("addEstadoDeuda").value,
+          fechaVencimiento: document.getElementById("addFechaVencimientoDeuda").value,
+          tasaInteres: document.getElementById("addTasaInteresDeuda").value,
+          descripcion: document.getElementById("addDescripcionDeuda").value,
+        }
 
-      if (callbackRender) {
-        callbackRender()
-      }
-      
-   
-      if (typeof mostrarNotificacion === 'function') {
-        mostrarNotificacion('Deuda guardada correctamente', 'success');
-      }
-    })
+        try {
+          // Usar el servicio centralizado (evita mezclar localStorage y DB)
+          if (window.deudasService && typeof window.deudasService.agregarDeuda === 'function') {
+            await window.deudasService.agregarDeuda(datos)
+          } else if (window.walletDB && typeof window.walletDB.addDebt === 'function') {
+            await window.walletDB.addDebt(datos)
+          } else {
+            throw new Error('Servicio de deudas no disponible')
+          }
+
+          // Success
+          if (typeof mostrarNotificacion === 'function') mostrarNotificacion('Deuda guardada correctamente', 'success')
+          else alert('¡Deuda guardada exitosamente!')
+
+          cerrarModalDeuda()
+
+          // Actualizar la pantalla si hay callback de renderizado
+          if (callbackRender) callbackRender()
+        } catch (err) {
+          console.error('Error guardando deuda:', err)
+          if (typeof mostrarNotificacion === 'function') mostrarNotificacion(err.message || 'Error al guardar deuda', 'danger')
+          else alert('Error al guardar deuda')
+        }
+      })
+    }
+
   }
   // Función para cerrar y limpiar el modal
   function cerrarModalDeuda() {

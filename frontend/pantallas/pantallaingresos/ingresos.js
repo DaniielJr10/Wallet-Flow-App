@@ -44,12 +44,19 @@ document.addEventListener('DOMContentLoaded', function () {
       initAccionesTabla();
     }
   
-  // Configurar botón para abrir modal
+  // Configurar botón para abrir modal (replace to remove other listeners)
   const btnAgregarIngreso = document.getElementById('btnAgregarIngreso');
   if (btnAgregarIngreso) {
-    btnAgregarIngreso.addEventListener('click', function() {
-      abrirModalIngreso();
-    });
+    const replacement = btnAgregarIngreso.cloneNode(true);
+    btnAgregarIngreso.parentNode.replaceChild(replacement, btnAgregarIngreso);
+    replacement.onclick = function() {
+      const modal = document.getElementById('modalAgregarIngreso');
+      if (modal) {
+        modal.classList.remove('d-none');
+        const fechaHoy = new Date().toISOString().split('T')[0];
+        document.getElementById('addFechaIngreso').value = fechaHoy;
+      }
+    }
   }
 
   function abrirModalIngreso() {
@@ -872,7 +879,39 @@ function initFormularioIngreso() {
     }
   };
 
-  form.addEventListener('submit', handleSubmit);
+  // Attach submit handler only once to avoid duplicates
+  if (form.dataset.inited !== '1') {
+    form.dataset.inited = '1'
+    form.addEventListener('submit', async function(e){
+      console.trace('submit handler triggered: ingresos.js')
+      // prefer central service when available
+      try{
+        e.preventDefault(); e.stopPropagation();
+        const isAuthed = (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser);
+        if (!isAuthed) throw new Error('Debes iniciar sesión para guardar en Firebase');
+        const datos = {
+          categoria: document.getElementById('addCategoriaIngreso').value,
+          metodo: document.getElementById('addMetodoIngreso').value,
+          monto: document.getElementById('addMontoIngreso').value,
+          fecha: document.getElementById('addFechaIngreso').value,
+          descripcion: document.getElementById('addDescripcionIngreso').value,
+          esRecurrente: checkRecurrente.checked,
+          frecuencia: document.getElementById('addFrecuenciaIngreso').value,
+          tieneCuenta: checkCuenta.checked,
+          cuenta: document.getElementById('addCuentaAsociadaIngreso').value
+        };
+        if (window.ingresosService && typeof window.ingresosService.agregarIngreso === 'function') {
+          await window.ingresosService.agregarIngreso(datos);
+        } else {
+          if (!window.walletDB) throw new Error('Debes iniciar sesión para guardar en Firebase');
+          await window.walletDB.addIncome(datos);
+          if (typeof window.renderIngresos === 'function') await window.renderIngresos();
+        }
+        cerrarModalIngreso();
+        mostrarMensajeExitoInterno();
+      }catch(e){ console.error('Error guardando ingreso en Firestore:', e); mostrarMensaje(e.message || 'Error guardando el ingreso', 'danger'); }
+    });
+  }
 
   // Función para mostrar mensaje de éxito
   function mostrarMensajeExitoInterno() {

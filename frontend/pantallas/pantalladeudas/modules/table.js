@@ -2,8 +2,15 @@
   function renderTabla(){
     const { state }=window.deudasState; const tbody=document.querySelector('#tablaDeudas tbody'); const tabla=document.getElementById('tablaDeudas'); const mensajeVacio=document.getElementById('mensajeVacio'); if(!tbody) return;
     tbody.innerHTML=''; const datos=state.deudasFiltradas;
-    if(!datos.length){ if(mensajeVacio) mensajeVacio.style.display='block'; if(tabla) tabla.style.display='none'; adjuntarBotonAgregar(); return; }
-    if(mensajeVacio) mensajeVacio.style.display='none'; if(tabla) tabla.style.display='table';
+    if(!datos.length){
+      // Hide the large empty-message card — show empty table header instead
+      if(mensajeVacio) mensajeVacio.style.display='none';
+      if(tabla) tabla.style.display='table';
+      adjuntarBotonAgregar();
+      return;
+    }
+    if(mensajeVacio) mensajeVacio.style.display='none';
+    if(tabla) tabla.style.display='table';
     datos.forEach((d)=>{
       const tr=document.createElement('tr');
       let estadoClass='estado-pendiente'; let estadoTexto='Pendiente';
