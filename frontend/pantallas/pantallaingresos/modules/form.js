@@ -19,12 +19,24 @@
     cancelar?.addEventListener('click',()=> cerrarModalIngreso());
     document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !modal.classList.contains('d-none')) cerrarModalIngreso(); });
     modal.addEventListener('click', e=>{ if(e.target===modal) cerrarModalIngreso(); });
-    form.addEventListener('submit', async e=>{
-      e.preventDefault(); e.stopPropagation();
-      const datos={ categoria:document.getElementById('addCategoriaIngreso').value, metodo:document.getElementById('addMetodoIngreso').value, monto:document.getElementById('addMontoIngreso').value, fecha:document.getElementById('addFechaIngreso').value, descripcion:document.getElementById('addDescripcionIngreso').value, esRecurrente:checkRec.checked, frecuencia:document.getElementById('addFrecuenciaIngreso').value, tieneCuenta:checkCuenta.checked, cuenta:document.getElementById('addCuentaAsociadaIngreso').value };
-      if(!datos.categoria||!datos.metodo||!datos.fecha||!datos.monto||parseFloat(datos.monto)<=0){ window.ingresosMessages.mostrarMensaje('Completa datos obligatorios','danger'); step2.classList.add('hidden'); step1.classList.remove('hidden'); return; }
-      try{ const isAuthed=(typeof firebase!=='undefined' && firebase.auth && firebase.auth().currentUser); if(!window.walletDB || !isAuthed) throw new Error('Inicia sesión'); await window.walletDB.addIncome(datos); cerrarModalIngreso(); await window.ingresosService.cargarIngresosDesdeDB(); window.ingresosMessages.mostrarMensaje('Ingreso guardado','success'); }catch(err){ console.error(err); window.ingresosMessages.mostrarMensaje(err.message||'Error guardando','danger'); }
-    });
+    // attach submit handler only once to avoid duplicate adds
+    if (form.dataset.inited !== '1') {
+      form.dataset.inited = '1'
+      form.addEventListener('submit', async e=>{
+        console.trace('submit handler triggered: ingresos form')
+        e.preventDefault(); e.stopPropagation();
+        const datos={ categoria:document.getElementById('addCategoriaIngreso').value, metodo:document.getElementById('addMetodoIngreso').value, monto:document.getElementById('addMontoIngreso').value, fecha:document.getElementById('addFechaIngreso').value, descripcion:document.getElementById('addDescripcionIngreso').value, esRecurrente:checkRec.checked, frecuencia:document.getElementById('addFrecuenciaIngreso').value, tieneCuenta:checkCuenta.checked, cuenta:document.getElementById('addCuentaAsociadaIngreso').value };
+        if(!datos.categoria||!datos.metodo||!datos.fecha||!datos.monto||parseFloat(datos.monto)<=0){ window.ingresosMessages.mostrarMensaje('Completa datos obligatorios','danger'); step2.classList.add('hidden'); step1.classList.remove('hidden'); return; }
+        try{ const isAuthed=(typeof firebase!=='undefined' && firebase.auth && firebase.auth().currentUser); if(!isAuthed) throw new Error('Inicia sesión');
+            if (window.ingresosService && typeof window.ingresosService.agregarIngreso === 'function') {
+              await window.ingresosService.agregarIngreso(datos);
+            } else {
+              if(!window.walletDB) throw new Error('DB no disponible'); await window.walletDB.addIncome(datos); await window.ingresosService.cargarIngresosDesdeDB();
+            }
+            cerrarModalIngreso();
+        }catch(err){ console.error(err); window.ingresosMessages.mostrarMensaje(err.message||'Error guardando','danger'); }
+      });
+    }
     function cerrarModalIngreso(){ modal.classList.add('d-none'); form.reset(); step2.classList.add('hidden'); step1.classList.remove('hidden'); freqOpt.classList.remove('visible'); cuentaOpt.classList.remove('visible'); modal.dataset.initialized='false'; }
     window.ingresosForm = { cerrarModalIngreso };
   }

@@ -11,5 +11,9 @@
     window.ingresosSummary.actualizarResumenes(datos);
     window.ingresosTable.renderTablaConPaginacion();
   }
-  window.ingresosService = { cargarIngresosDesdeDB };
+  async function agregarIngreso(data){
+    try{ if(!window.walletDB) throw new Error('DB no disponible'); await window.walletDB.addIncome(data); await cargarIngresosDesdeDB(); window.ingresosMessages.mostrarMensaje('Ingreso agregado','success'); }
+    catch(e){ console.error(e); window.ingresosMessages.mostrarMensaje(e.message||'Error agregando','danger'); }
+  }
+  window.ingresosService = { cargarIngresosDesdeDB, agregarIngreso };
 })();
